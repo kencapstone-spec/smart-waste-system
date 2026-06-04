@@ -19,6 +19,11 @@ class SemaphoreService
 
     public function sendSms(string $phone, string $message): bool
     {
+        if ($this->apiKey === 'your_api_key_here' || empty($this->apiKey)) {
+            Log::info("DEV MODE - SMS to {$phone}: {$message}");
+            return true;
+        }
+
         try {
             $response = Http::post($this->apiUrl, [
                 'apikey' => $this->apiKey,

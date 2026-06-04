@@ -7,6 +7,7 @@
         <title>{{ config('app.name', 'Smart Waste System') }}</title>
 
         @fonts
+        @routes
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @inertiaHead
     </head>
