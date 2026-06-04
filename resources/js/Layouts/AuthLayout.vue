@@ -113,9 +113,10 @@ const userInitial = computed(() => auth.value.user?.name?.charAt(0).toUpperCase(
 
 const superAdminNav = [
     { label: 'Dashboard', href: route('dashboard'), icon: '🏠' },
-    { label: 'Users', href: '#', icon: '👥' },
-    { label: 'Barangay Settings', href: '#', icon: '⚙️' },
-    { label: 'System Logs', href: '#', icon: '📋' },
+    { label: 'Users', href: route('super-admin.users.index'), icon: '👥' },
+    { label: 'Zones', href: route('super-admin.zones.index'), icon: '🗺️' },
+    { label: 'Streets', href: route('super-admin.streets.index'), icon: '🛣️' },
+    { label: 'System Logs', href: route('super-admin.system-logs.index'), icon: '📋' },
 ]
 
 const officialNav = [
@@ -147,7 +148,13 @@ const navItems = computed(() => {
     return residentNav
 })
 
-const isActive = (href) => window.location.pathname === new URL(href, window.location.origin).pathname
+const isActive = (href) => {
+    try {
+        return window.location.pathname === new URL(href, window.location.origin).pathname
+    } catch {
+        return false
+    }
+}
 
 const logoutForm = useForm({})
 const logout = () => logoutForm.post(route('logout'))

@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\SuperAdmin\UserController;
+use App\Http\Controllers\SuperAdmin\ZoneController;
+use App\Http\Controllers\SuperAdmin\StreetController;
+use App\Http\Controllers\SuperAdmin\SystemLogController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,4 +30,12 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 
     Route::post('/logout', [OtpController::class, 'logout'])->name('logout');
+
+    // Super Admin routes
+    Route::middleware('role:super_admin')->prefix('super-admin')->name('super-admin.')->group(function () {
+        Route::resource('users', UserController::class)->except('show');
+        Route::resource('zones', ZoneController::class)->except('show', 'create', 'edit');
+        Route::resource('streets', StreetController::class)->except('show', 'create', 'edit');
+        Route::get('system-logs', [SystemLogController::class, 'index'])->name('system-logs.index');
+    });
 });
