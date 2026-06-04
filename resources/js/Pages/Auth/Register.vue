@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <GuestLayout>
         <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
             <h1 class="text-2xl font-semibold text-gray-800 mb-2">Create Account</h1>
             <p class="text-gray-500 text-sm mb-6">Smart Waste Collection System</p>
@@ -68,8 +68,8 @@
         </div>
 
         <!-- Success Modal -->
-        <div v-if="showSuccessModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-sm mx-4 text-center">
+        <Modal :show="showSuccessModal" :closeable="false" max-width="sm">
+            <div class="text-center py-4">
                 <div class="text-green-500 text-5xl mb-4">✓</div>
                 <h2 class="text-xl font-semibold text-gray-800 mb-2">Registration Submitted</h2>
                 <p class="text-gray-500 text-sm mb-6">
@@ -82,13 +82,15 @@
                     Back to Login
                 </a>
             </div>
-        </div>
-    </div>
+        </Modal>
+    </GuestLayout>
 </template>
 
 <script setup>
 import { ref, watch } from 'vue'
 import { useForm, usePage } from '@inertiajs/vue3'
+import GuestLayout from '@/Layouts/GuestLayout.vue'
+import Modal from '@/Components/Modal.vue'
 
 const props = defineProps({
     streets: Array,

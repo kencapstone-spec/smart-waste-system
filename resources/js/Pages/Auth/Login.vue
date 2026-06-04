@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <GuestLayout>
         <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
             <h1 class="text-2xl font-semibold text-gray-800 mb-2">Sign In</h1>
             <p class="text-gray-500 text-sm mb-6">Smart Waste Collection System</p>
@@ -32,46 +32,45 @@
         </div>
 
         <!-- OTP Modal -->
-        <div v-if="showOtpModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-sm mx-4">
-                <h2 class="text-xl font-semibold text-gray-800 mb-2">Enter OTP</h2>
-                <p class="text-gray-500 text-sm mb-6">
-                    We sent a 6-digit code to <span class="font-medium text-gray-700">{{ loginForm.phone }}</span>
-                </p>
+        <Modal :show="showOtpModal" title="Enter OTP" @close="showOtpModal = false">
+            <p class="text-gray-500 text-sm mb-6">
+                We sent a 6-digit code to <span class="font-medium text-gray-700">{{ loginForm.phone }}</span>
+            </p>
 
-                <form @submit.prevent="verifyOtp">
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">OTP Code</label>
-                        <input
-                            v-model="otpForm.code"
-                            type="text"
-                            maxlength="6"
-                            placeholder="000000"
-                            class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 tracking-widest text-center"
-                        />
-                        <p v-if="otpForm.errors.code" class="text-red-500 text-xs mt-1">{{ otpForm.errors.code }}</p>
-                    </div>
+            <form @submit.prevent="verifyOtp">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">OTP Code</label>
+                    <input
+                        v-model="otpForm.code"
+                        type="text"
+                        maxlength="6"
+                        placeholder="000000"
+                        class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 tracking-widest text-center"
+                    />
+                    <p v-if="otpForm.errors.code" class="text-red-500 text-xs mt-1">{{ otpForm.errors.code }}</p>
+                </div>
 
-                    <button
-                        type="submit"
-                        :disabled="otpForm.processing"
-                        class="w-full bg-green-600 text-white py-2 rounded-md text-sm font-medium hover:bg-green-700 transition"
-                    >
-                        Verify OTP
-                    </button>
-                </form>
+                <button
+                    type="submit"
+                    :disabled="otpForm.processing"
+                    class="w-full bg-green-600 text-white py-2 rounded-md text-sm font-medium hover:bg-green-700 transition"
+                >
+                    Verify OTP
+                </button>
+            </form>
 
-                <p class="text-center text-sm text-gray-500 mt-4">
-                    <button @click="showOtpModal = false" class="text-green-600 hover:underline">Back</button>
-                </p>
-            </div>
-        </div>
-    </div>
+            <template #footer>
+                <button @click="showOtpModal = false" class="text-sm text-gray-500 hover:text-gray-700">Back</button>
+            </template>
+        </Modal>
+    </GuestLayout>
 </template>
 
 <script setup>
 import { ref, watch } from 'vue'
 import { useForm, usePage } from '@inertiajs/vue3'
+import GuestLayout from '@/Layouts/GuestLayout.vue'
+import Modal from '@/Components/Modal.vue'
 
 const page = usePage()
 const showOtpModal = ref(false)
