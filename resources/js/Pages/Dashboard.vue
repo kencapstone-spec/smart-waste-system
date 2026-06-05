@@ -1,145 +1,172 @@
 <template>
     <AuthLayout page-title="Dashboard">
+        
+        <!-- Welcome Header (All roles) -->
+        <div class="mb-8">
+            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+                Welcome back, <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-900 to-red-700">{{ auth.user.name.split(' ')[0] }}</span>! 👋
+            </h2>
+            <p class="text-gray-500 mt-2">Here is what's happening today.</p>
+        </div>
+
         <!-- Super Admin Dashboard -->
-        <div v-if="auth.user.role === 'super_admin'" class="space-y-6">
+        <div v-if="auth.user.role === 'super_admin'" class="space-y-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <p class="text-sm text-gray-500 mb-1">Total Users</p>
-                    <p class="text-3xl font-bold text-gray-800">{{ stats.totalUsers }}</p>
-                    <p class="text-xs text-gray-400 mt-1">Barangay officials & personnel</p>
+                <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] hover:shadow-[0_8px_32px_rgba(225,29,72,0.08)] transition-shadow">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center text-2xl mb-4">👥</div>
+                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Users</p>
+                    <p class="text-4xl font-extrabold text-gray-900">{{ stats.totalUsers }}</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <p class="text-sm text-gray-500 mb-1">Total Residents</p>
-                    <p class="text-3xl font-bold text-gray-800">{{ stats.totalResidents }}</p>
-                    <p class="text-xs text-gray-400 mt-1">Registered in the system</p>
+                <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] hover:shadow-[0_8px_32px_rgba(225,29,72,0.08)] transition-shadow">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center text-2xl mb-4">🏠</div>
+                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Residents</p>
+                    <p class="text-4xl font-extrabold text-gray-900">{{ stats.totalResidents }}</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <p class="text-sm text-gray-500 mb-1">System Zones</p>
-                    <p class="text-3xl font-bold text-gray-800">{{ stats.totalZones }}</p>
-                    <p class="text-xs text-gray-400 mt-1">Active zones</p>
+                <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] hover:shadow-[0_8px_32px_rgba(225,29,72,0.08)] transition-shadow">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center text-2xl mb-4">🗺️</div>
+                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">System Zones</p>
+                    <p class="text-4xl font-extrabold text-gray-900">{{ stats.totalZones }}</p>
                 </div>
             </div>
         </div>
 
         <!-- Barangay Official Dashboard -->
-        <div v-else-if="auth.user.role === 'barangay_official'" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <p class="text-sm text-gray-500 mb-1">Active Schedules</p>
-                    <p class="text-3xl font-bold text-gray-800">{{ stats.activeSchedules }}</p>
+        <div v-else-if="auth.user.role === 'barangay_official'" class="space-y-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] text-center relative overflow-hidden">
+                    <p class="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Active Schedules</p>
+                    <p class="text-3xl md:text-4xl font-extrabold text-gray-900">{{ stats.activeSchedules }}</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <p class="text-sm text-gray-500 mb-1">Pending Reports</p>
-                    <p class="text-3xl font-bold text-yellow-600">{{ stats.pendingReports }}</p>
+                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] text-center relative overflow-hidden group">
+                    <p class="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Pending Reports</p>
+                    <p class="text-3xl md:text-4xl font-extrabold text-amber-500 group-hover:scale-110 transition-transform">{{ stats.pendingReports }}</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <p class="text-sm text-gray-500 mb-1">Pending Residents</p>
-                    <p class="text-3xl font-bold text-orange-500">{{ stats.pendingResidents }}</p>
+                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] text-center relative overflow-hidden group">
+                    <p class="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Pending Residents</p>
+                    <p class="text-3xl md:text-4xl font-extrabold text-rose-500 group-hover:scale-110 transition-transform">{{ stats.pendingResidents }}</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <p class="text-sm text-gray-500 mb-1">Active Residents</p>
-                    <p class="text-3xl font-bold text-green-600">{{ stats.activeResidents }}</p>
+                <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-3xl p-6 shadow-lg shadow-emerald-500/20 text-center text-white relative overflow-hidden">
+                    <p class="text-xs md:text-sm font-semibold text-emerald-100 uppercase tracking-wider mb-2">Active Residents</p>
+                    <p class="text-3xl md:text-4xl font-extrabold">{{ stats.activeResidents }}</p>
                 </div>
             </div>
+            
+            <h3 class="text-xl font-bold text-gray-900 mb-4 mt-8">Quick Actions</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <a :href="route('official.schedules.index')" class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4 hover:shadow-md transition">
-                    <span class="text-2xl">📅</span>
+                <a :href="route('official.schedules.index')" class="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-100 hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center text-2xl transition-colors">📅</div>
                     <div>
-                        <p class="font-medium text-gray-800">Manage Schedules</p>
-                        <p class="text-xs text-gray-400">Create & update collection schedules</p>
+                        <p class="font-bold text-gray-900">Manage Schedules</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Create & update schedules</p>
                     </div>
                 </a>
-                <a :href="route('official.reports.index')" class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4 hover:shadow-md transition">
-                    <span class="text-2xl">📝</span>
+                <a :href="route('official.reports.index')" class="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-100 hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center text-2xl transition-colors">📝</div>
                     <div>
-                        <p class="font-medium text-gray-800">View Reports</p>
-                        <p class="text-xs text-gray-400">Respond to resident reports</p>
+                        <p class="font-bold text-gray-900">View Reports</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Respond to resident issues</p>
                     </div>
                 </a>
-                <a :href="route('official.residents.index')" class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4 hover:shadow-md transition">
-                    <span class="text-2xl">👥</span>
+                <a :href="route('official.residents.index')" class="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-100 hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center text-2xl transition-colors">👥</div>
                     <div>
-                        <p class="font-medium text-gray-800">Manage Residents</p>
-                        <p class="text-xs text-gray-400">Approve or reject registrations</p>
+                        <p class="font-bold text-gray-900">Manage Residents</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Approve registrations</p>
                     </div>
                 </a>
             </div>
         </div>
 
         <!-- Personnel Dashboard -->
-        <div v-else-if="auth.user.role === 'personnel'" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <p class="text-sm text-gray-500 mb-1">Assigned Schedules</p>
-                    <p class="text-3xl font-bold text-gray-800">{{ stats.assignedSchedules }}</p>
+        <div v-else-if="auth.user.role === 'personnel'" class="space-y-8">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] text-center relative">
+                    <p class="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">My Schedules</p>
+                    <p class="text-3xl md:text-4xl font-extrabold text-gray-900">{{ stats.assignedSchedules }}</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <p class="text-sm text-gray-500 mb-1">Tasks Today</p>
-                    <p class="text-3xl font-bold text-blue-600">{{ stats.tasksToday }}</p>
+                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] text-center relative group">
+                    <p class="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Tasks Today</p>
+                    <p class="text-3xl md:text-4xl font-extrabold text-blue-600 group-hover:scale-110 transition-transform">{{ stats.tasksToday }}</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <p class="text-sm text-gray-500 mb-1">Completed Tasks</p>
-                    <p class="text-3xl font-bold text-green-600">{{ stats.completedTasks }}</p>
+                <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-3xl p-6 shadow-lg shadow-emerald-500/20 text-center text-white relative col-span-2 md:col-span-1">
+                    <p class="text-xs md:text-sm font-semibold text-emerald-100 uppercase tracking-wider mb-2">Completed</p>
+                    <p class="text-3xl md:text-4xl font-extrabold">{{ stats.completedTasks }}</p>
                 </div>
             </div>
+            
+            <h3 class="text-xl font-bold text-gray-900 mb-4 mt-8">Quick Actions</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <a :href="route('personnel.schedules.index')" class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4 hover:shadow-md transition">
-                    <span class="text-2xl">📅</span>
+                <a :href="route('personnel.schedules.index')" class="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-100 hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center text-2xl transition-colors">📅</div>
                     <div>
-                        <p class="font-medium text-gray-800">My Schedules</p>
-                        <p class="text-xs text-gray-400">View assigned collection schedules</p>
+                        <p class="font-bold text-gray-900">View Schedules</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Check your upcoming routes</p>
                     </div>
                 </a>
-                <a :href="route('personnel.tasks.index')" class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4 hover:shadow-md transition">
-                    <span class="text-2xl">✅</span>
+                <a :href="route('personnel.tasks.index')" class="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-100 hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center text-2xl transition-colors">✅</div>
                     <div>
-                        <p class="font-medium text-gray-800">Collection Tasks</p>
-                        <p class="text-xs text-gray-400">Update status & award points</p>
+                        <p class="font-bold text-gray-900">Update Tasks</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Mark completed & award points</p>
                     </div>
                 </a>
             </div>
         </div>
 
         <!-- Resident Dashboard -->
-        <div v-else class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-green-600 rounded-lg shadow-sm p-6 text-white">
-                    <p class="text-sm text-green-100 mb-1">My Points Balance</p>
-                    <p class="text-4xl font-bold">{{ stats.totalPoints }}</p>
-                    <p class="text-xs text-green-200 mt-1">Keep up the good work!</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <p class="text-sm text-gray-500 mb-1">Reports Submitted</p>
-                    <p class="text-3xl font-bold text-gray-800">{{ stats.totalReports }}</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <p class="text-sm text-gray-500 mb-1">Account Status</p>
-                    <span class="px-3 py-1 rounded-full text-sm font-medium capitalize"
-                        :class="auth.user.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'">
-                        {{ auth.user.status }}
-                    </span>
+        <div v-else class="space-y-8">
+            <!-- Points Card -->
+            <div class="relative bg-gradient-to-br from-rose-950 via-rose-900 to-red-900 rounded-3xl p-8 overflow-hidden shadow-2xl shadow-rose-900/20 text-white">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div>
+                        <p class="text-rose-200/80 font-medium tracking-wide text-sm mb-2">AVAILABLE POINTS</p>
+                        <div class="flex items-center gap-3">
+                            <span class="text-4xl animate-bounce">⭐</span>
+                            <span class="text-5xl md:text-6xl font-extrabold tracking-tight">{{ stats.totalPoints }}</span>
+                        </div>
+                    </div>
+                    <div class="md:text-right">
+                        <a :href="route('resident.rewards.index')" class="inline-block bg-white text-rose-900 px-6 py-3 rounded-xl font-bold text-sm shadow-lg hover:bg-rose-50 transition-colors">
+                            Redeem Rewards
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <a :href="route('resident.schedules.index')" class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4 hover:shadow-md transition">
-                    <span class="text-2xl">📅</span>
+
+            <div class="grid grid-cols-2 gap-4 md:gap-6">
+                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)]">
+                    <div class="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center text-xl mb-4">📝</div>
+                    <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Reports</p>
+                    <p class="text-2xl font-extrabold text-gray-900">{{ stats.totalReports }}</p>
+                </div>
+                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)]">
+                    <div class="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center text-xl mb-4">🔐</div>
+                    <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Status</p>
+                    <div class="mt-1">
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-bold capitalize"
+                            :class="auth.user.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'">
+                            {{ auth.user.status }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="text-xl font-bold text-gray-900 mb-4 mt-8">Quick Navigation</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a :href="route('resident.schedules.index')" class="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-100 hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center text-2xl transition-colors">📅</div>
                     <div>
-                        <p class="font-medium text-gray-800">Collection Schedules</p>
-                        <p class="text-xs text-gray-400">View schedules for your street</p>
+                        <p class="font-bold text-gray-900">Collection Schedules</p>
+                        <p class="text-xs text-gray-500 mt-0.5">When is the garbage truck coming?</p>
                     </div>
                 </a>
-                <a :href="route('resident.reports.index')" class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4 hover:shadow-md transition">
-                    <span class="text-2xl">📝</span>
+                <a :href="route('resident.reports.index')" class="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-100 hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center text-2xl transition-colors">📝</div>
                     <div>
-                        <p class="font-medium text-gray-800">My Reports</p>
-                        <p class="text-xs text-gray-400">Submit & track your reports</p>
-                    </div>
-                </a>
-                <a :href="route('resident.points.index')" class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4 hover:shadow-md transition">
-                    <span class="text-2xl">⭐</span>
-                    <div>
-                        <p class="font-medium text-gray-800">My Points</p>
-                        <p class="text-xs text-gray-400">View your points history</p>
+                        <p class="font-bold text-gray-900">Submit Report</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Report missed collections or issues</p>
                     </div>
                 </a>
             </div>

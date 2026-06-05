@@ -1,119 +1,178 @@
 <template>
     <AuthLayout page-title="My Reports">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg font-semibold text-gray-700">My Submitted Reports</h2>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+            <div>
+                <h2 class="text-2xl font-extrabold text-gray-900">My Reports</h2>
+                <p class="text-sm text-gray-500 mt-1">Track your submitted issues and concerns</p>
+            </div>
             <button
                 @click="showCreateModal = true"
-                class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700 transition"
-            >+ Submit Report</button>
+                class="bg-rose-900 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-rose-800 transition-all shadow-lg shadow-rose-900/20 flex items-center justify-center gap-2 group"
+            >
+                <span class="text-lg group-hover:rotate-90 transition-transform">➕</span>
+                Submit Report
+            </button>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+        <!-- Desktop Table -->
+        <div class="hidden md:block bg-white rounded-3xl shadow-[0_4px_24px_rgba(225,29,72,0.04)] border border-gray-100 overflow-hidden mb-8">
             <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b">
+                <thead class="bg-gray-50/50 border-b border-gray-100">
                     <tr>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Type</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Description</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Status</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Date</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Actions</th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Type</th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Description</th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Status</th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Date</th>
+                        <th class="text-right px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    <tr v-for="report in reports.data" :key="report.id" class="hover:bg-gray-50">
-                        <td class="px-6 py-4">
-                            <span :class="typeClass(report.type)" class="px-2 py-1 rounded-full text-xs font-medium">
+                    <tr v-for="report in reports.data" :key="report.id" class="hover:bg-rose-50/30 transition-colors">
+                        <td class="px-8 py-5">
+                            <span :class="typeClass(report.type)" class="px-3 py-1.5 rounded-lg text-xs font-bold">
                                 {{ report.type === 'missed_collection' ? 'Missed Collection' : 'Illegal Dumping' }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-gray-600 max-w-xs truncate">{{ report.description }}</td>
-                        <td class="px-6 py-4">
-                            <span :class="statusClass(report.status)" class="px-2 py-1 rounded-full text-xs font-medium capitalize">{{ report.status }}</span>
+                        <td class="px-8 py-5 text-gray-600 font-medium max-w-xs truncate">{{ report.description }}</td>
+                        <td class="px-8 py-5">
+                            <span :class="statusClass(report.status)" class="px-3 py-1.5 rounded-lg text-xs font-bold capitalize">{{ report.status }}</span>
                         </td>
-                        <td class="px-6 py-4 text-gray-500">{{ formatDate(report.created_at) }}</td>
-                        <td class="px-6 py-4">
-                            <button @click="viewReport(report)" class="text-blue-600 hover:underline text-xs">View</button>
+                        <td class="px-8 py-5 text-gray-500 font-medium">{{ formatDate(report.created_at) }}</td>
+                        <td class="px-8 py-5 text-right">
+                            <button @click="viewReport(report)" class="text-rose-600 hover:text-rose-800 font-bold text-sm bg-rose-50 hover:bg-rose-100 px-4 py-2 rounded-lg transition-colors">View Details</button>
                         </td>
                     </tr>
                     <tr v-if="reports.data.length === 0">
-                        <td colspan="5" class="px-6 py-8 text-center text-gray-400">No reports submitted yet.</td>
+                        <td colspan="5" class="px-8 py-16 text-center text-gray-400">
+                            <div class="text-4xl mb-4 opacity-50">📝</div>
+                            <p class="font-medium text-base">No reports submitted yet.</p>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
+        <!-- Mobile Stacked Cards -->
+        <div class="md:hidden space-y-4 mb-8">
+            <div v-for="report in reports.data" :key="report.id" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col gap-4">
+                <div class="flex justify-between items-start">
+                    <span :class="typeClass(report.type)" class="px-3 py-1 rounded-lg text-[10px] font-bold">
+                        {{ report.type === 'missed_collection' ? 'Missed Collection' : 'Illegal Dumping' }}
+                    </span>
+                    <span :class="statusClass(report.status)" class="px-3 py-1 rounded-lg text-[10px] font-bold capitalize">
+                        {{ report.status }}
+                    </span>
+                </div>
+                
+                <div>
+                    <p class="text-gray-900 font-medium text-sm line-clamp-2 mb-2">{{ report.description }}</p>
+                    <p class="text-xs text-gray-400 font-medium">{{ formatDate(report.created_at) }}</p>
+                </div>
+                
+                <div class="pt-3 border-t border-gray-50 flex justify-end">
+                    <button @click="viewReport(report)" class="text-rose-600 font-bold text-xs bg-rose-50 px-4 py-2 rounded-lg">View Details</button>
+                </div>
+            </div>
+            
+            <div v-if="reports.data.length === 0" class="py-12 text-center text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">
+                <div class="text-4xl mb-3 opacity-50">📝</div>
+                <p class="font-medium text-sm">No reports submitted yet.</p>
+            </div>
+        </div>
+
         <!-- Submit Report Modal -->
         <Modal :show="showCreateModal" title="Submit a Report" max-width="lg" @close="showCreateModal = false">
-            <form @submit.prevent="submitReport" class="space-y-4">
+            <form @submit.prevent="submitReport" class="space-y-5 p-2">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Report Type</label>
-                    <select v-model="reportForm.type" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
-                        <option value="">Select type</option>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Report Type</label>
+                    <select v-model="reportForm.type" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-900/10 focus:border-rose-900 transition-all font-medium appearance-none">
+                        <option value="" disabled>Select the type of issue</option>
                         <option value="missed_collection">Missed Garbage Collection</option>
                         <option value="illegal_dumping">Illegal Dumping</option>
                     </select>
-                    <p v-if="reportForm.errors.type" class="text-red-500 text-xs mt-1">{{ reportForm.errors.type }}</p>
+                    <p v-if="reportForm.errors.type" class="text-red-500 text-xs mt-2 font-medium">{{ reportForm.errors.type }}</p>
                 </div>
+                
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea v-model="reportForm.description" rows="4" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Describe the issue in detail..."></textarea>
-                    <p v-if="reportForm.errors.description" class="text-red-500 text-xs mt-1">{{ reportForm.errors.description }}</p>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Description</label>
+                    <textarea v-model="reportForm.description" rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-900/10 focus:border-rose-900 transition-all font-medium resize-none" placeholder="Describe what happened or what you saw in detail..."></textarea>
+                    <p v-if="reportForm.errors.description" class="text-red-500 text-xs mt-2 font-medium">{{ reportForm.errors.description }}</p>
                 </div>
+                
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Photo (optional)</label>
-                    <input type="file" accept="image/*" multiple @change="handlePhotos" class="w-full text-sm text-gray-600" />
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                    <div class="flex gap-2">
-                        <button type="button" @click="getLocation" class="px-3 py-2 bg-gray-100 text-gray-700 rounded-md text-sm hover:bg-gray-200 transition">
-                            📍 Use My Location
-                        </button>
-                        <span v-if="reportForm.latitude" class="text-xs text-gray-500 self-center">
-                            {{ reportForm.latitude }}, {{ reportForm.longitude }}
-                        </span>
-                        <span v-else class="text-xs text-gray-400 self-center">No location set</span>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Photo Evidence (optional)</label>
+                    <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors relative cursor-pointer group">
+                        <input type="file" accept="image/*" multiple @change="handlePhotos" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                        <div class="text-center">
+                            <span class="text-2xl mb-2 block opacity-50 group-hover:scale-110 transition-transform">📸</span>
+                            <span class="text-sm font-medium text-gray-600">Tap to attach photos</span>
+                            <p v-if="reportForm.photos.length" class="text-xs text-rose-600 font-bold mt-2">{{ reportForm.photos.length }} file(s) selected</p>
+                        </div>
                     </div>
                 </div>
-                <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" @click="showCreateModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
-                    <button type="submit" :disabled="reportForm.processing" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700 disabled:opacity-60">Submit</button>
+                
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Incident Location</label>
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                        <button type="button" @click="getLocation" class="w-full sm:w-auto px-4 py-3 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-gray-800 transition-colors shadow-md flex items-center justify-center gap-2">
+                            <span>📍</span> Use My Current Location
+                        </button>
+                        <div class="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-xs font-medium text-gray-500 flex items-center justify-center sm:justify-start">
+                            <span v-if="reportForm.latitude" class="text-emerald-600 font-bold">
+                                Location Acquired: {{ reportForm.latitude.toFixed(4) }}, {{ reportForm.longitude.toFixed(4) }}
+                            </span>
+                            <span v-else>No location set</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-100 mt-6">
+                    <button type="button" @click="showCreateModal = false" class="w-full sm:w-auto px-6 py-3 text-sm text-gray-600 font-bold hover:bg-gray-50 rounded-xl transition-all">Cancel</button>
+                    <button type="submit" :disabled="reportForm.processing" class="w-full sm:w-auto bg-rose-900 text-white px-8 py-3 rounded-xl text-sm font-bold hover:bg-rose-800 transition-all shadow-lg shadow-rose-900/20 disabled:opacity-60 flex justify-center items-center">
+                        Submit Report
+                    </button>
                 </div>
             </form>
         </Modal>
 
         <!-- View Report Modal -->
         <Modal :show="showViewModal" title="Report Details" max-width="lg" @close="showViewModal = false">
-            <div v-if="selectedReport" class="space-y-4 text-sm">
-                <div class="grid grid-cols-2 gap-4">
+            <div v-if="selectedReport" class="p-2">
+                <div class="flex justify-between items-start mb-6 pb-6 border-b border-gray-100">
                     <div>
-                        <p class="text-xs text-gray-400 mb-1">Type</p>
-                        <span :class="typeClass(selectedReport.type)" class="px-2 py-1 rounded-full text-xs font-medium">
-                            {{ selectedReport.type === 'missed_collection' ? 'Missed Collection' : 'Illegal Dumping' }}
-                        </span>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Status</p>
+                        <span :class="statusClass(selectedReport.status)" class="px-3 py-1.5 rounded-lg text-xs font-bold capitalize">{{ selectedReport.status }}</span>
                     </div>
-                    <div>
-                        <p class="text-xs text-gray-400 mb-1">Status</p>
-                        <span :class="statusClass(selectedReport.status)" class="px-2 py-1 rounded-full text-xs font-medium capitalize">{{ selectedReport.status }}</span>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-400 mb-1">Date Submitted</p>
-                        <p class="text-gray-700">{{ formatDate(selectedReport.created_at) }}</p>
+                    <div class="text-right">
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Date Submitted</p>
+                        <p class="text-gray-900 font-bold text-sm">{{ formatDate(selectedReport.created_at) }}</p>
                     </div>
                 </div>
-                <div>
-                    <p class="text-xs text-gray-400 mb-1">Description</p>
-                    <p class="text-gray-700 bg-gray-50 p-3 rounded-md">{{ selectedReport.description }}</p>
+                
+                <div class="mb-6">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Report Type</p>
+                    <span :class="typeClass(selectedReport.type)" class="px-3 py-1.5 rounded-lg text-xs font-bold inline-block mb-4">
+                        {{ selectedReport.type === 'missed_collection' ? 'Missed Collection' : 'Illegal Dumping' }}
+                    </span>
+                    
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2 mt-2">Description</p>
+                    <p class="text-gray-800 bg-gray-50 p-4 rounded-2xl text-sm font-medium leading-relaxed border border-gray-100">{{ selectedReport.description }}</p>
                 </div>
-                <div v-if="selectedReport.photos?.length > 0">
-                    <p class="text-xs text-gray-400 mb-2">Photos</p>
-                    <div class="flex gap-2 flex-wrap">
-                        <img v-for="photo in selectedReport.photos" :key="photo.id" :src="'/storage/' + photo.photo_path" class="w-24 h-24 object-cover rounded-md border" />
+                
+                <div v-if="selectedReport.photos?.length > 0" class="mb-6">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Photo Evidence</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <img v-for="photo in selectedReport.photos" :key="photo.id" :src="'/storage/' + photo.photo_path" class="w-full h-24 object-cover rounded-xl border border-gray-200 shadow-sm" />
                     </div>
                 </div>
-                <div v-if="selectedReport.official_response" class="bg-green-50 p-3 rounded-md">
-                    <p class="text-xs text-gray-400 mb-1">Official Response</p>
-                    <p class="text-gray-700">{{ selectedReport.official_response }}</p>
+                
+                <div v-if="selectedReport.official_response" class="bg-emerald-50/50 p-5 rounded-2xl border border-emerald-100 mt-6">
+                    <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-2 flex items-center gap-1"><span>💬</span> Official Response</p>
+                    <p class="text-emerald-900 font-medium text-sm leading-relaxed">{{ selectedReport.official_response }}</p>
+                </div>
+                
+                <div class="pt-6 mt-6 border-t border-gray-100 flex justify-end">
+                    <button @click="showViewModal = false" class="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-sm rounded-xl transition-colors">Close</button>
                 </div>
             </div>
         </Modal>
@@ -143,14 +202,14 @@ const reportForm = useForm({
 })
 
 const typeClass = (type) => ({
-    missed_collection: 'bg-orange-100 text-orange-700',
-    illegal_dumping: 'bg-red-100 text-red-700',
+    missed_collection: 'bg-amber-100 text-amber-700',
+    illegal_dumping: 'bg-rose-100 text-rose-700',
 }[type] ?? 'bg-gray-100 text-gray-700')
 
 const statusClass = (status) => ({
-    pending: 'bg-yellow-100 text-yellow-700',
+    pending: 'bg-amber-100 text-amber-700',
     reviewed: 'bg-blue-100 text-blue-700',
-    resolved: 'bg-green-100 text-green-700',
+    resolved: 'bg-emerald-100 text-emerald-700',
 }[status] ?? 'bg-gray-100 text-gray-700')
 
 const formatDate = (date) => new Date(date).toLocaleDateString('en-PH', {

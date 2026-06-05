@@ -1,45 +1,101 @@
 <template>
     <AuthLayout page-title="Waste Collection Schedules">
-        <div v-if="myStreet" class="mb-4 bg-green-50 border border-green-200 rounded-lg px-5 py-3 text-sm text-green-800">
-            Showing schedules for <span class="font-semibold">{{ myStreet.name }}</span>
-            <span v-if="myStreet.zone"> — {{ myStreet.zone.name }}</span>
+        
+        <div v-if="myStreet" class="mb-8 bg-gradient-to-r from-emerald-50 to-emerald-100 border border-emerald-200 rounded-2xl p-6 text-sm text-emerald-900 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 bg-emerald-200/50 rounded-full flex items-center justify-center text-2xl shrink-0">📍</div>
+            <div>
+                <p class="text-emerald-700/80 font-semibold uppercase tracking-wider text-xs mb-0.5">Your Location</p>
+                <p class="font-bold text-lg">
+                    {{ myStreet.name }}
+                    <span v-if="myStreet.zone" class="font-medium text-emerald-800"> — {{ myStreet.zone.name }}</span>
+                </p>
+            </div>
         </div>
-        <div v-else class="mb-4 bg-yellow-50 border border-yellow-200 rounded-lg px-5 py-3 text-sm text-yellow-800">
-            You are not assigned to a street yet. Please contact the Barangay Office.
+        <div v-else class="mb-8 bg-gradient-to-r from-amber-50 to-amber-100 border border-amber-200 rounded-2xl p-6 text-sm text-amber-900 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 bg-amber-200/50 rounded-full flex items-center justify-center text-2xl shrink-0">⚠️</div>
+            <div>
+                <p class="font-bold text-lg">Location Not Assigned</p>
+                <p class="text-amber-800/80 mt-0.5">You are not assigned to a street yet. Please contact the Barangay Office.</p>
+            </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+        <h3 class="text-xl font-bold text-gray-900 mb-6">Upcoming Collections</h3>
+
+        <!-- Desktop Table -->
+        <div class="hidden md:block bg-white rounded-3xl shadow-[0_4px_24px_rgba(225,29,72,0.04)] border border-gray-100 overflow-hidden mb-8">
             <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b">
+                <thead class="bg-gray-50/50 border-b border-gray-100">
                     <tr>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Title</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Frequency</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Collection Time</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Start Date</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">End Date</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Personnel</th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Title & Time</th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Frequency</th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Dates</th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Personnel</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    <tr v-for="schedule in schedules" :key="schedule.id" class="hover:bg-gray-50">
-                        <td class="px-6 py-4 font-medium text-gray-800">{{ schedule.title }}</td>
-                        <td class="px-6 py-4">
-                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 capitalize">{{ schedule.frequency }}</span>
+                    <tr v-for="schedule in schedules" :key="schedule.id" class="hover:bg-rose-50/30 transition-colors">
+                        <td class="px-8 py-5">
+                            <p class="font-bold text-gray-900 text-base mb-1">{{ schedule.title }}</p>
+                            <p class="text-rose-600 font-semibold text-sm flex items-center gap-1">
+                                <span>🕒</span> {{ schedule.collection_time }}
+                            </p>
                         </td>
-                        <td class="px-6 py-4 text-gray-600">{{ schedule.collection_time }}</td>
-                        <td class="px-6 py-4 text-gray-500">{{ formatDate(schedule.start_date) }}</td>
-                        <td class="px-6 py-4 text-gray-500">{{ schedule.end_date ? formatDate(schedule.end_date) : '—' }}</td>
-                        <td class="px-6 py-4 text-gray-600">
-                            <span v-for="a in schedule.assignments" :key="a.id" class="block">{{ a.personnel?.name }}</span>
-                            <span v-if="!schedule.assignments?.length">—</span>
+                        <td class="px-8 py-5">
+                            <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-100 text-rose-700 capitalize">{{ schedule.frequency }}</span>
+                        </td>
+                        <td class="px-8 py-5">
+                            <p class="text-gray-900 font-medium text-sm mb-0.5">Start: {{ formatDate(schedule.start_date) }}</p>
+                            <p class="text-gray-500 text-xs">End: {{ schedule.end_date ? formatDate(schedule.end_date) : 'Ongoing' }}</p>
+                        </td>
+                        <td class="px-8 py-5 text-gray-600">
+                            <span v-for="a in schedule.assignments" :key="a.id" class="block font-medium">{{ a.personnel?.name }}</span>
+                            <span v-if="!schedule.assignments?.length" class="text-gray-400 italic">Unassigned</span>
                         </td>
                     </tr>
                     <tr v-if="schedules.length === 0">
-                        <td colspan="6" class="px-6 py-8 text-center text-gray-400">No schedules found for your street.</td>
+                        <td colspan="4" class="px-8 py-16 text-center text-gray-400">
+                            <div class="text-4xl mb-4 opacity-50">📅</div>
+                            <p class="font-medium text-base">No schedules found for your street.</p>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+
+        <!-- Mobile Stacked Cards -->
+        <div class="md:hidden space-y-4 mb-8">
+            <div v-for="schedule in schedules" :key="schedule.id" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col gap-4 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4">
+                    <span class="px-3 py-1 rounded-lg text-[10px] font-bold bg-rose-100 text-rose-700 capitalize">{{ schedule.frequency }}</span>
+                </div>
+                
+                <div class="pr-20">
+                    <h4 class="font-extrabold text-gray-900 text-lg mb-1">{{ schedule.title }}</h4>
+                    <p class="text-rose-600 font-bold text-sm flex items-center gap-1.5">
+                        <span class="text-lg">🕒</span> {{ schedule.collection_time }}
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3 pt-3 border-t border-gray-50">
+                    <div>
+                        <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Start Date</p>
+                        <p class="text-sm font-medium text-gray-900">{{ formatDate(schedule.start_date) }}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Personnel</p>
+                        <p class="text-sm font-medium text-gray-900 truncate">
+                            {{ schedule.assignments?.map(a => a.personnel?.name).join(', ') || 'Unassigned' }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div v-if="schedules.length === 0" class="py-12 text-center text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">
+                <div class="text-4xl mb-3 opacity-50">📅</div>
+                <p class="font-medium text-sm">No schedules found for your street.</p>
+            </div>
+        </div>
+
     </AuthLayout>
 </template>
 
