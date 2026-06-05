@@ -7,13 +7,13 @@ use Illuminate\Support\Str;
 
 class OtpService
 {
-    public function generate(string $phone): string
+    public function generate(string $phone, ?string $customCode = null): string
     {
         OtpCode::where('phone', $phone)
             ->where('used', false)
             ->delete();
 
-        $code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $code = $customCode ?? str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
         OtpCode::create([
             'phone' => $phone,

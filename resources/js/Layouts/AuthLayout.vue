@@ -116,28 +116,33 @@ const superAdminNav = [
     { label: 'Users', href: route('super-admin.users.index'), icon: '👥' },
     { label: 'Zones', href: route('super-admin.zones.index'), icon: '🗺️' },
     { label: 'Streets', href: route('super-admin.streets.index'), icon: '🛣️' },
+    { label: 'Rewards', href: route('super-admin.rewards.index'), icon: '🎁' },
     { label: 'System Logs', href: route('super-admin.system-logs.index'), icon: '📋' },
+    { label: 'Profile Settings', href: route('profile.edit'), icon: '👤' },
 ]
 
 const officialNav = [
     { label: 'Dashboard', href: route('dashboard'), icon: '🏠' },
-    { label: 'Schedules', href: '#', icon: '📅' },
-    { label: 'Reports', href: '#', icon: '📝' },
-    { label: 'Residents', href: '#', icon: '👥' },
-    { label: 'PDF Reports', href: '#', icon: '📄' },
+    { label: 'Schedules', href: route('official.schedules.index'), icon: '📅' },
+    { label: 'Reports', href: route('official.reports.index'), icon: '📝' },
+    { label: 'Residents', href: route('official.residents.index'), icon: '👥' },
+    { label: 'Redemptions', href: route('official.redemptions.index'), icon: '🎁' },
+    { label: 'Profile Settings', href: route('profile.edit'), icon: '👤' },
 ]
 
 const personnelNav = [
     { label: 'Dashboard', href: route('dashboard'), icon: '🏠' },
-    { label: 'My Schedules', href: '#', icon: '📅' },
-    { label: 'Collection Tasks', href: '#', icon: '✅' },
+    { label: 'Collection Tasks', href: route('personnel.tasks.index'), icon: '✅' },
+    { label: 'Profile Settings', href: route('profile.edit'), icon: '👤' },
 ]
 
 const residentNav = [
     { label: 'Dashboard', href: route('dashboard'), icon: '🏠' },
-    { label: 'Schedules', href: '#', icon: '📅' },
-    { label: 'My Reports', href: '#', icon: '📝' },
-    { label: 'My Points', href: '#', icon: '⭐' },
+    { label: 'Schedules', href: route('resident.schedules.index'), icon: '📅' },
+    { label: 'My Reports', href: route('resident.reports.index'), icon: '📝' },
+    { label: 'My Points', href: route('resident.points.index'), icon: '⭐' },
+    { label: 'Rewards', href: route('resident.rewards.index'), icon: '🎁' },
+    { label: 'Profile Settings', href: route('profile.edit'), icon: '👤' },
 ]
 
 const navItems = computed(() => {

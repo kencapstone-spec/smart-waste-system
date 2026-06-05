@@ -12,7 +12,8 @@ class RegisterController extends Controller
 {
     public function show()
     {
-        return Inertia::render('Auth/Register', [
+        return Inertia::render('Auth/AuthScreen', [
+            'activeTab' => 'register',
             'streets' => Street::with('zone')->orderBy('name')->get(['id', 'name', 'zone_id']),
         ]);
     }

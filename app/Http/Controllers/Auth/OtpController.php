@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
+use App\Models\Street;
+
 class OtpController extends Controller
 {
     public function __construct(
@@ -19,7 +21,10 @@ class OtpController extends Controller
 
     public function showLoginForm()
     {
-        return Inertia::render('Auth/Login');
+        return Inertia::render('Auth/AuthScreen', [
+            'activeTab' => 'login',
+            'streets' => Street::with('zone')->orderBy('name')->get(['id', 'name', 'zone_id']),
+        ]);
     }
 
     public function sendOtp(Request $request)
@@ -42,8 +47,13 @@ class OtpController extends Controller
             return back()->withErrors(['phone' => 'Your account has been rejected.']);
         }
 
-        $code = $this->otpService->generate($request->phone);
-        $this->semaphoreService->sendOtp($request->phone, $code);
+        // In local dev, skip real SMS — use code 123456
+        if (app()->environment('local')) {
+            $this->otpService->generate($request->phone, '123456');
+        } else {
+            $code = $this->otpService->generate($request->phone);
+            $this->semaphoreService->sendOtp($request->phone, $code);
+        }
 
         return back()->with('otpSent', true);
     }
@@ -55,7 +65,12 @@ class OtpController extends Controller
             'code' => ['required', 'string', 'size:6'],
         ]);
 
-        $valid = $this->otpService->verify($request->phone, $request->code);
+        // In local dev, accept 123456 as valid OTP
+        if (app()->environment('local') && $request->code === '123456') {
+            $valid = true;
+        } else {
+            $valid = $this->otpService->verify($request->phone, $request->code);
+        }
 
         if (!$valid) {
             return back()->withErrors(['code' => 'Invalid or expired OTP.']);
