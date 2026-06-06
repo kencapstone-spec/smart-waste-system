@@ -3,43 +3,44 @@
         <div class="mb-6 flex gap-3">
             <button
                 @click="filter = 'all'"
-                :class="filter === 'all' ? 'bg-green-600 text-white' : 'bg-white text-gray-600 border'"
+                :class="filter === 'all' ? 'bg-green-600 text-white' : 'bg-white text-rose-950/80 border'"
                 class="px-4 py-2 rounded-md text-sm font-medium transition"
             >All</button>
             <button
                 @click="filter = 'pending'"
-                :class="filter === 'pending' ? 'bg-yellow-500 text-white' : 'bg-white text-gray-600 border'"
+                :class="filter === 'pending' ? 'bg-yellow-500 text-white' : 'bg-white text-rose-950/80 border'"
                 class="px-4 py-2 rounded-md text-sm font-medium transition"
             >Pending</button>
             <button
                 @click="filter = 'active'"
-                :class="filter === 'active' ? 'bg-green-600 text-white' : 'bg-white text-gray-600 border'"
+                :class="filter === 'active' ? 'bg-green-600 text-white' : 'bg-white text-rose-950/80 border'"
                 class="px-4 py-2 rounded-md text-sm font-medium transition"
             >Active</button>
             <button
                 @click="filter = 'rejected'"
-                :class="filter === 'rejected' ? 'bg-red-500 text-white' : 'bg-white text-gray-600 border'"
+                :class="filter === 'rejected' ? 'bg-red-500 text-white' : 'bg-white text-rose-950/80 border'"
                 class="px-4 py-2 rounded-md text-sm font-medium transition"
             >Rejected</button>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b">
+        <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
+            <div class="overflow-x-auto pb-4">
+                <table class="w-full text-sm whitespace-nowrap">
+                <thead class="border-b border-rose-100/50">
                     <tr>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Name</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Phone</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Street</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Status</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Registered</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Actions</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Name</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Phone</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Street</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Status</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Registered</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    <tr v-for="resident in filteredResidents" :key="resident.id" class="hover:bg-gray-50">
-                        <td class="px-6 py-4 text-gray-800 font-medium">{{ resident.name }}</td>
-                        <td class="px-6 py-4 text-gray-600">{{ resident.phone }}</td>
-                        <td class="px-6 py-4 text-gray-600">{{ resident.street?.name ?? '—' }}</td>
+                    <tr v-for="resident in filteredResidents" :key="resident.id" class="hover:bg-rose-50/50 transition-colors">
+                        <td class="px-6 py-4 text-rose-950 font-semibold">{{ resident.name }}</td>
+                        <td class="px-6 py-4 text-rose-950/80">{{ resident.phone }}</td>
+                        <td class="px-6 py-4 text-rose-950/80">{{ resident.street?.name ?? '—' }}</td>
                         <td class="px-6 py-4">
                             <span :class="statusClass(resident.status)" class="px-2 py-1 rounded-full text-xs font-medium capitalize">
                                 {{ resident.status }}
@@ -74,6 +75,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <!-- View Resident Modal -->
@@ -109,7 +111,7 @@
                 <div class="border-t pt-4 flex gap-3 justify-end">
                     <template v-if="selectedResident.status === 'pending'">
                         <button @click="rejectResident(selectedResident)" class="bg-red-500 text-white px-4 py-2 rounded-md text-sm hover:bg-red-600 transition">Reject</button>
-                        <button @click="approveResident(selectedResident)" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700 transition">Approve</button>
+                        <button @click="approveResident(selectedResident)" class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all transition">Approve</button>
                     </template>
                     <template v-if="selectedResident.status === 'active'">
                         <button @click="deactivateResident(selectedResident)" class="bg-orange-500 text-white px-4 py-2 rounded-md text-sm hover:bg-orange-600 transition">Deactivate</button>
@@ -121,27 +123,27 @@
 
         <!-- Approve Confirmation Modal -->
         <Modal :show="showApproveModal" title="Approve Resident" @close="showApproveModal = false">
-            <p class="text-gray-600 text-sm mb-6">Approve <span class="font-semibold">{{ selectedResident?.name }}</span>? They will receive an SMS notification.</p>
+            <p class="text-rose-950/80 text-sm mb-6">Approve <span class="font-semibold">{{ selectedResident?.name }}</span>? They will receive an SMS notification.</p>
             <div class="flex justify-end gap-3">
-                <button @click="showApproveModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
-                <button @click="submitApprove" :disabled="actionForm.processing" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700">Approve</button>
+                <button @click="showApproveModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
+                <button @click="submitApprove" :disabled="actionForm.processing" class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all">Approve</button>
             </div>
         </Modal>
 
         <!-- Reject Confirmation Modal -->
         <Modal :show="showRejectModal" title="Reject Resident" @close="showRejectModal = false">
-            <p class="text-gray-600 text-sm mb-6">Reject <span class="font-semibold">{{ selectedResident?.name }}</span>? They will receive an SMS notification.</p>
+            <p class="text-rose-950/80 text-sm mb-6">Reject <span class="font-semibold">{{ selectedResident?.name }}</span>? They will receive an SMS notification.</p>
             <div class="flex justify-end gap-3">
-                <button @click="showRejectModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
+                <button @click="showRejectModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
                 <button @click="submitReject" :disabled="actionForm.processing" class="bg-red-500 text-white px-4 py-2 rounded-md text-sm hover:bg-red-600">Reject</button>
             </div>
         </Modal>
 
         <!-- Deactivate Confirmation Modal -->
         <Modal :show="showDeactivateModal" title="Deactivate Resident" @close="showDeactivateModal = false">
-            <p class="text-gray-600 text-sm mb-6">Deactivate <span class="font-semibold">{{ selectedResident?.name }}</span>? This will change their status to rejected and they will be notified via SMS.</p>
+            <p class="text-rose-950/80 text-sm mb-6">Deactivate <span class="font-semibold">{{ selectedResident?.name }}</span>? This will change their status to rejected and they will be notified via SMS.</p>
             <div class="flex justify-end gap-3">
-                <button @click="showDeactivateModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
+                <button @click="showDeactivateModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
                 <button @click="submitDeactivate" :disabled="actionForm.processing" class="bg-orange-500 text-white px-4 py-2 rounded-md text-sm hover:bg-orange-600">Deactivate</button>
             </div>
         </Modal>
@@ -153,7 +155,7 @@
                 <p class="text-red-500 text-xs">Warning: This will permanently delete their account and any associated points/records. This action cannot be undone.</p>
             </div>
             <div class="flex justify-end gap-3">
-                <button @click="showDeleteModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
+                <button @click="showDeleteModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
                 <button @click="submitDelete" :disabled="actionForm.processing" class="bg-red-600 text-white px-4 py-2 rounded-md text-sm hover:bg-red-700">Yes, Delete</button>
             </div>
         </Modal>

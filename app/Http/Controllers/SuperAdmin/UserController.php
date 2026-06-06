@@ -56,7 +56,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'regex:/^(09|\+639)[0-9]{9}$/', 'unique:users,phone,' . $user->id],
+            'phone' => ['required', 'string', 'regex:/^(09|\+639)[0-9]{9}$/', 'unique:users,phone,'.$user->id],
             'role' => ['required', 'in:barangay_official,personnel'],
             'status' => ['required', 'in:active,pending,rejected'],
         ]);

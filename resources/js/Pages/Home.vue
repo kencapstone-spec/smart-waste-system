@@ -20,7 +20,7 @@
                 <div class="hidden md:flex items-center gap-8 text-sm font-medium">
                     <a v-for="link in navLinks" :key="link.id" :href="'#' + link.id"
                         class="transition-colors duration-300 hover:opacity-80"
-                        :class="scrolled ? 'text-gray-600 hover:text-rose-900' : 'text-white/80 hover:text-white'"
+                        :class="scrolled ? 'text-rose-950/80 hover:text-rose-900' : 'text-white/80 hover:text-white'"
                         @click.prevent="scrollToSection(link.id)">
                         {{ link.label }}
                     </a>
@@ -358,7 +358,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="border-t border-gray-800 pt-8 text-center text-xs text-gray-600">
+                <div class="border-t border-gray-800 pt-8 text-center text-xs text-rose-950/80">
                     © {{ new Date().getFullYear() }} SmartWaste System. All rights reserved.
                 </div>
             </div>
@@ -430,19 +430,5 @@ const roles = [
 </script>
 
 <style scoped>
-@keyframes float {
-    0%, 100% { transform: translateY(0) }
-    50% { transform: translateY(-20px) }
-}
-@keyframes float-delayed {
-    0%, 100% { transform: translateY(0) }
-    50% { transform: translateY(-15px) }
-}
-@keyframes float-slow {
-    0%, 100% { transform: translateY(0) }
-    50% { transform: translateY(-10px) }
-}
-.animate-float { animation: float 6s ease-in-out infinite; }
-.animate-float-delayed { animation: float-delayed 8s ease-in-out infinite 1s; }
-.animate-float-slow { animation: float-slow 10s ease-in-out infinite 2s; }
+/* Scoped styles intentionally left empty as animations moved to app.css */
 </style>

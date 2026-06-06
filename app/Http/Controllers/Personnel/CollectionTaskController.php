@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Personnel;
 
 use App\Http\Controllers\Controller;
 use App\Models\CollectionTask;
-use App\Models\CollectionTaskPhoto;
 use App\Models\Point;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class CollectionTaskController extends Controller
@@ -40,6 +38,7 @@ class CollectionTaskController extends Controller
                 $resident->task_points = $resident->points
                     ->where('collection_task_id', $task->id)
                     ->sum('points');
+
                 return $resident;
             });
 
@@ -56,12 +55,13 @@ class CollectionTaskController extends Controller
         $residents = User::with('points')
             ->where('role', 'resident')
             ->where('status', 'active')
-            ->whereHas('street', fn($q) => $q->where('id', $task->schedule->street_id))
+            ->whereHas('street', fn ($q) => $q->where('id', $task->schedule->street_id))
             ->get()
             ->map(function ($resident) use ($task) {
                 $resident->task_points = $resident->points
                     ->where('collection_task_id', $task->id)
                     ->sum('points');
+
                 return $resident;
             });
 

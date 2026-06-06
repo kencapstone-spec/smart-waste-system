@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class Street extends Model
 {
+    use LogsActivity;
+
     protected $fillable = ['zone_id', 'name'];
 
     public function zone()

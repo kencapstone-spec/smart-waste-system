@@ -22,7 +22,7 @@
         <div class="mb-12">
             <h3 class="text-xl font-bold text-gray-900 mb-6">Available Rewards</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div v-for="reward in rewards" :key="reward.id" class="bg-white rounded-3xl shadow-[0_4px_24px_rgba(225,29,72,0.04)] border border-gray-100 overflow-hidden hover:shadow-[0_8px_32px_rgba(225,29,72,0.08)] transition-all duration-300 group hover:-translate-y-1 flex flex-col">
+                <div v-for="reward in rewards" :key="reward.id" class="bg-white/70 backdrop-blur-2xl rounded-3xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden hover:shadow-[0_8px_32px_rgba(225,29,72,0.08)] transition-all duration-300 group hover:-translate-y-1 flex flex-col">
                     <div class="h-40 bg-gradient-to-br from-rose-50 to-gray-50 flex items-center justify-center text-5xl relative overflow-hidden">
                         <div class="absolute inset-0 bg-rose-900/5 group-hover:bg-rose-900/0 transition-colors"></div>
                         <span class="transform group-hover:scale-110 transition-transform duration-500">🎁</span>
@@ -65,9 +65,10 @@
         <h3 class="text-xl font-bold text-gray-900 mb-6">Redemption History</h3>
         
         <!-- Desktop Table -->
-        <div class="hidden md:block bg-white rounded-3xl shadow-[0_4px_24px_rgba(225,29,72,0.04)] border border-gray-100 overflow-hidden mb-8">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50/50 border-b border-gray-100">
+        <div class="hidden md:block bg-white/70 backdrop-blur-2xl rounded-3xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden mb-8">
+            <div class="overflow-x-auto pb-4">
+                <table class="w-full text-sm whitespace-nowrap">
+                <thead class="bg-white/40 border-b border-white/50 backdrop-blur-sm">
                     <tr>
                         <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Date</th>
                         <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Reward</th>
@@ -77,7 +78,7 @@
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     <tr v-for="redemption in redemptions" :key="redemption.id" class="hover:bg-rose-50/30 transition-colors">
-                        <td class="px-8 py-5 text-gray-600 font-medium">{{ new Date(redemption.created_at).toLocaleDateString() }}</td>
+                        <td class="px-8 py-5 text-rose-950/70 font-semibold">{{ new Date(redemption.created_at).toLocaleDateString() }}</td>
                         <td class="px-8 py-5 text-gray-900 font-bold">{{ redemption.reward.name }}</td>
                         <td class="px-8 py-5 font-extrabold text-amber-500">-{{ redemption.points_spent }} ⭐</td>
                         <td class="px-8 py-5">
@@ -95,11 +96,12 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <!-- Mobile Cards for History -->
         <div class="md:hidden space-y-4 mb-8">
-            <div v-for="redemption in redemptions" :key="redemption.id" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col gap-3">
+            <div v-for="redemption in redemptions" :key="redemption.id" class="bg-white/70 backdrop-blur-2xl rounded-2xl p-5 border border-white/60 shadow-md shadow-rose-900/5 flex flex-col gap-3">
                 <div class="flex justify-between items-start">
                     <div>
                         <p class="text-xs text-gray-500 font-medium mb-1">{{ new Date(redemption.created_at).toLocaleDateString() }}</p>
@@ -125,7 +127,7 @@
         <!-- Confirm Redemption Modal -->
         <Modal :show="showConfirmModal" title="Confirm Redemption" max-width="md" @close="closeModal">
             <div class="p-2">
-                <div class="mb-6 text-gray-600 text-center text-lg">
+                <div class="mb-6 text-rose-950/80 text-center text-lg">
                     Redeem <strong>"{{ selectedReward?.name }}"</strong>?
                 </div>
                 
@@ -144,7 +146,7 @@
                     <button @click="confirmRedeem" class="w-full bg-rose-900 text-white px-6 py-4 rounded-xl text-sm font-bold hover:bg-rose-800 transition-all duration-300 shadow-lg shadow-rose-900/20">
                         Confirm Redemption
                     </button>
-                    <button @click="closeModal" class="w-full px-6 py-4 text-sm text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all font-bold">
+                    <button @click="closeModal" class="w-full px-6 py-4 text-sm text-gray-500 hover:text-gray-900 hover:bg-rose-50/50 transition-colors rounded-xl transition-all font-bold">
                         Cancel
                     </button>
                 </div>

@@ -3,23 +3,23 @@
 use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SuperAdmin\UserController;
-use App\Http\Controllers\SuperAdmin\ZoneController;
-use App\Http\Controllers\SuperAdmin\StreetController;
-use App\Http\Controllers\SuperAdmin\SystemLogController;
-use App\Http\Controllers\SuperAdmin\RewardController as SuperAdminRewardController;
-use App\Http\Controllers\Official\ScheduleController;
-use App\Http\Controllers\Official\ReportController;
-use App\Http\Controllers\Official\ResidentController;
 use App\Http\Controllers\Official\PdfReportController;
 use App\Http\Controllers\Official\RedemptionController;
-use App\Http\Controllers\Personnel\ScheduleController as PersonnelScheduleController;
+use App\Http\Controllers\Official\ReportController;
+use App\Http\Controllers\Official\ResidentController;
+use App\Http\Controllers\Official\ScheduleController;
 use App\Http\Controllers\Personnel\CollectionTaskController;
-use App\Http\Controllers\Resident\ScheduleController as ResidentScheduleController;
-use App\Http\Controllers\Resident\ReportController as ResidentReportController;
+use App\Http\Controllers\Personnel\ScheduleController as PersonnelScheduleController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Resident\PointController;
+use App\Http\Controllers\Resident\ReportController as ResidentReportController;
 use App\Http\Controllers\Resident\RewardController as ResidentRewardController;
+use App\Http\Controllers\Resident\ScheduleController as ResidentScheduleController;
+use App\Http\Controllers\SuperAdmin\RewardController as SuperAdminRewardController;
+use App\Http\Controllers\SuperAdmin\StreetController;
+use App\Http\Controllers\SuperAdmin\SystemLogController;
+use App\Http\Controllers\SuperAdmin\UserController;
+use App\Http\Controllers\SuperAdmin\ZoneController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -30,7 +30,7 @@ Route::get('/', function () {
 // Guest routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [OtpController::class, 'showLoginForm'])->name('login');
-    Route::post('/login/send-otp', [OtpController::class, 'sendOtp'])->name('login.send-otp');
+    Route::post('/login/send-otp', [OtpController::class, 'sendOtp'])->middleware('throttle:3,1')->name('login.send-otp');
     Route::post('/login/verify-otp', [OtpController::class, 'verifyOtp'])->name('login.verify-otp');
 
     Route::get('/register', [RegisterController::class, 'show'])->name('register');

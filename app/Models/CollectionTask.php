@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class CollectionTask extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'schedule_id',
         'personnel_id',

@@ -21,30 +21,30 @@ class DashboardController extends Controller
 
         if ($user->isSuperAdmin()) {
             $stats = [
-                'totalUsers'     => User::whereIn('role', ['barangay_official', 'personnel'])->count(),
+                'totalUsers' => User::whereIn('role', ['barangay_official', 'personnel'])->count(),
                 'totalResidents' => User::where('role', 'resident')->count(),
-                'totalZones'     => Zone::count(),
+                'totalZones' => Zone::count(),
             ];
         } elseif ($user->isAdmin()) {
             $stats = [
-                'activeSchedules'  => Schedule::where('status', 'active')->count(),
-                'pendingReports'   => Report::where('status', 'pending')->count(),
+                'activeSchedules' => Schedule::where('status', 'active')->count(),
+                'pendingReports' => Report::where('status', 'pending')->count(),
                 'pendingResidents' => User::where('role', 'resident')->where('status', 'pending')->count(),
-                'activeResidents'  => User::where('role', 'resident')->where('status', 'active')->count(),
+                'activeResidents' => User::where('role', 'resident')->where('status', 'active')->count(),
             ];
         } elseif ($user->isPersonnel()) {
             $stats = [
                 'assignedSchedules' => ScheduleAssignment::where('personnel_id', $user->id)->count(),
-                'tasksToday'        => CollectionTask::where('personnel_id', $user->id)
+                'tasksToday' => CollectionTask::where('personnel_id', $user->id)
                     ->whereDate('collection_date', today())
                     ->count(),
-                'completedTasks'    => CollectionTask::where('personnel_id', $user->id)
+                'completedTasks' => CollectionTask::where('personnel_id', $user->id)
                     ->where('status', 'completed')
                     ->count(),
             ];
         } elseif ($user->isResident()) {
             $stats = [
-                'totalPoints'  => Point::where('resident_id', $user->id)->sum('points'),
+                'totalPoints' => Point::where('resident_id', $user->id)->sum('points'),
                 'totalReports' => Report::where('resident_id', $user->id)->count(),
             ];
         }

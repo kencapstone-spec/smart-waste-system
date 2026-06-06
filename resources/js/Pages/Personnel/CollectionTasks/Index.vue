@@ -1,26 +1,27 @@
 <template>
     <AuthLayout page-title="Collection Tasks">
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
             <div class="px-6 py-4 border-b">
                 <h2 class="text-base font-semibold text-gray-700">My Collection Tasks</h2>
             </div>
 
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b">
+            <div class="overflow-x-auto pb-4">
+                <table class="w-full text-sm whitespace-nowrap">
+                <thead class="border-b border-rose-100/50">
                     <tr>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Date</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Schedule</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Street</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Status</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Remarks</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Actions</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Date</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Schedule</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Street</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Status</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Remarks</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    <tr v-for="task in tasks.data" :key="task.id" class="hover:bg-gray-50">
+                    <tr v-for="task in tasks.data" :key="task.id" class="hover:bg-rose-50/50 transition-colors">
                         <td class="px-6 py-4 text-gray-800">{{ formatDate(task.collection_date) }}</td>
-                        <td class="px-6 py-4 text-gray-600">{{ task.schedule?.title ?? '—' }}</td>
-                        <td class="px-6 py-4 text-gray-600">{{ task.schedule?.street?.name ?? '—' }}</td>
+                        <td class="px-6 py-4 text-rose-950/80">{{ task.schedule?.title ?? '—' }}</td>
+                        <td class="px-6 py-4 text-rose-950/80">{{ task.schedule?.street?.name ?? '—' }}</td>
                         <td class="px-6 py-4">
                             <span :class="statusClass(task.status)" class="px-2 py-1 rounded-full text-xs font-medium capitalize">
                                 {{ task.status }}
@@ -37,6 +38,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <!-- Update Status Modal -->
@@ -44,7 +46,7 @@
             <form @submit.prevent="submitUpdate" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                    <select v-model="updateForm.status" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <select v-model="updateForm.status" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
                         <option value="pending">Pending</option>
                         <option value="completed">Completed</option>
                         <option value="missed">Missed</option>
@@ -53,16 +55,16 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Remarks (optional)</label>
-                    <textarea v-model="updateForm.remarks" rows="3" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Add notes about this collection..."></textarea>
+                    <textarea v-model="updateForm.remarks" rows="3" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" placeholder="Add notes about this collection..."></textarea>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Photo Proof (optional)</label>
-                    <input type="file" accept="image/*" multiple @change="handlePhotos" class="w-full text-sm text-gray-600" />
+                    <input type="file" accept="image/*" multiple @change="handlePhotos" class="w-full text-sm text-rose-950/80" />
                     <p v-if="updateForm.errors.photos" class="text-red-500 text-xs mt-1">{{ updateForm.errors.photos }}</p>
                 </div>
                 <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" @click="showUpdateModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
-                    <button type="submit" :disabled="updateForm.processing" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700 disabled:opacity-60">Save</button>
+                    <button type="button" @click="showUpdateModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
+                    <button type="submit" :disabled="updateForm.processing" class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all disabled:opacity-60">Save</button>
                 </div>
             </form>
         </Modal>
@@ -79,16 +81,17 @@
                     Loading residents...
                 </div>
                 <div v-else-if="currentResidents.length > 0">
-                    <table class="w-full text-sm">
-                        <thead class="bg-gray-50 border-b">
+                    <div class="overflow-x-auto pb-4">
+                        <table class="w-full text-sm whitespace-nowrap">
+                        <thead class="border-b border-rose-100/50">
                             <tr>
-                                <th class="text-left px-4 py-2 text-gray-600 font-medium">Resident</th>
-                                <th class="text-left px-4 py-2 text-gray-600 font-medium">Points This Task</th>
-                                <th class="text-left px-4 py-2 text-gray-600 font-medium">Action</th>
+                                <th class="text-left px-4 py-2 text-rose-950/70 font-semibold">Resident</th>
+                                <th class="text-left px-4 py-2 text-rose-950/70 font-semibold">Points This Task</th>
+                                <th class="text-left px-4 py-2 text-rose-950/70 font-semibold">Action</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            <tr v-for="resident in currentResidents" :key="resident.id" class="hover:bg-gray-50">
+                            <tr v-for="resident in currentResidents" :key="resident.id" class="hover:bg-rose-50/50 transition-colors">
                                 <td class="px-4 py-3 font-medium text-gray-800">
                                     {{ resident.name }}
                                     <div class="text-xs text-gray-500 font-normal">{{ resident.phone }}</div>
@@ -108,6 +111,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
                 <div v-else class="py-12 text-center text-gray-400 text-sm border rounded-lg bg-gray-50">
                     No active residents found on this street.
@@ -115,7 +119,7 @@
             </div>
             
             <div class="flex justify-end gap-3 p-4 border-t bg-gray-50">
-                <button type="button" @click="showPointsModal = false" class="text-sm text-gray-500 hover:text-gray-700 font-medium">Close</button>
+                <button type="button" @click="showPointsModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors font-medium">Close</button>
             </div>
         </Modal>
     </AuthLayout>

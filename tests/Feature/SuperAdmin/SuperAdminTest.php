@@ -4,8 +4,6 @@ namespace Tests\Feature\SuperAdmin;
 
 use App\Models\User;
 use App\Models\Zone;
-use App\Models\Street;
-use App\Models\SystemLog;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -53,15 +51,15 @@ class SuperAdminTest extends TestCase
     public function test_super_admin_can_create_official(): void
     {
         $response = $this->actingAs($this->superAdmin())->post('/super-admin/users', [
-            'name'  => 'Maria Santos',
+            'name' => 'Maria Santos',
             'phone' => '09181234567',
-            'role'  => 'barangay_official',
+            'role' => 'barangay_official',
         ]);
 
         $response->assertRedirect('/super-admin/users');
         $this->assertDatabaseHas('users', [
-            'phone'  => '09181234567',
-            'role'   => 'barangay_official',
+            'phone' => '09181234567',
+            'role' => 'barangay_official',
             'status' => 'active',
         ]);
     }
@@ -69,9 +67,9 @@ class SuperAdminTest extends TestCase
     public function test_super_admin_can_create_personnel(): void
     {
         $response = $this->actingAs($this->superAdmin())->post('/super-admin/users', [
-            'name'  => 'Pedro Reyes',
+            'name' => 'Pedro Reyes',
             'phone' => '09191234567',
-            'role'  => 'personnel',
+            'role' => 'personnel',
         ]);
 
         $response->assertRedirect('/super-admin/users');
@@ -81,9 +79,9 @@ class SuperAdminTest extends TestCase
     public function test_create_user_fails_with_invalid_phone(): void
     {
         $response = $this->actingAs($this->superAdmin())->post('/super-admin/users', [
-            'name'  => 'Test User',
+            'name' => 'Test User',
             'phone' => '1234',
-            'role'  => 'personnel',
+            'role' => 'personnel',
         ]);
         $response->assertSessionHasErrors('phone');
     }
@@ -91,9 +89,9 @@ class SuperAdminTest extends TestCase
     public function test_create_user_fails_with_invalid_role(): void
     {
         $response = $this->actingAs($this->superAdmin())->post('/super-admin/users', [
-            'name'  => 'Test User',
+            'name' => 'Test User',
             'phone' => '09171234567',
-            'role'  => 'resident',  // not allowed via super admin
+            'role' => 'resident',  // not allowed via super admin
         ]);
         $response->assertSessionHasErrors('role');
     }
@@ -103,9 +101,9 @@ class SuperAdminTest extends TestCase
         $user = User::factory()->personnel()->create();
 
         $response = $this->actingAs($this->superAdmin())->put("/super-admin/users/{$user->id}", [
-            'name'   => 'Updated Name',
-            'phone'  => $user->phone,
-            'role'   => 'barangay_official',
+            'name' => 'Updated Name',
+            'phone' => $user->phone,
+            'role' => 'barangay_official',
             'status' => 'active',
         ]);
 
@@ -165,7 +163,7 @@ class SuperAdminTest extends TestCase
     {
         $zone = Zone::create(['name' => 'Zone 1']);
         $response = $this->actingAs($this->superAdmin())->post('/super-admin/streets', [
-            'name'    => 'Rizal St.',
+            'name' => 'Rizal St.',
             'zone_id' => $zone->id,
         ]);
         $response->assertRedirect();

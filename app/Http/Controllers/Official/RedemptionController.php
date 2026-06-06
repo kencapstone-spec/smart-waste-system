@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Official;
 use App\Http\Controllers\Controller;
 use App\Models\Redemption;
 use App\Services\SemaphoreService;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class RedemptionController extends Controller
 {
@@ -20,7 +19,7 @@ class RedemptionController extends Controller
             ->paginate(15);
 
         return Inertia::render('Official/Redemptions/Index', [
-            'redemptions' => $redemptions
+            'redemptions' => $redemptions,
         ]);
     }
 
@@ -28,7 +27,7 @@ class RedemptionController extends Controller
     {
         $redemption->update([
             'status' => 'approved',
-            'processed_by' => Auth::id()
+            'processed_by' => Auth::id(),
         ]);
 
         $this->semaphoreService->sendSms(
@@ -43,7 +42,7 @@ class RedemptionController extends Controller
     {
         $redemption->update([
             'status' => 'rejected',
-            'processed_by' => Auth::id()
+            'processed_by' => Auth::id(),
         ]);
 
         // Return stock

@@ -12,17 +12,17 @@
         <!-- Super Admin Dashboard -->
         <div v-if="auth.user.role === 'super_admin'" class="space-y-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] hover:shadow-[0_8px_32px_rgba(225,29,72,0.08)] transition-shadow">
+                <div class="bg-white/70 backdrop-blur-2xl rounded-3xl p-8 border border-white/60 shadow-xl shadow-rose-900/5 hover:shadow-[0_8px_32px_rgba(225,29,72,0.08)] transition-shadow">
                     <div class="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center text-2xl mb-4">👥</div>
                     <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Users</p>
                     <p class="text-4xl font-extrabold text-gray-900">{{ stats.totalUsers }}</p>
                 </div>
-                <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] hover:shadow-[0_8px_32px_rgba(225,29,72,0.08)] transition-shadow">
+                <div class="bg-white/70 backdrop-blur-2xl rounded-3xl p-8 border border-white/60 shadow-xl shadow-rose-900/5 hover:shadow-[0_8px_32px_rgba(225,29,72,0.08)] transition-shadow">
                     <div class="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center text-2xl mb-4">🏠</div>
                     <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Residents</p>
                     <p class="text-4xl font-extrabold text-gray-900">{{ stats.totalResidents }}</p>
                 </div>
-                <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] hover:shadow-[0_8px_32px_rgba(225,29,72,0.08)] transition-shadow">
+                <div class="bg-white/70 backdrop-blur-2xl rounded-3xl p-8 border border-white/60 shadow-xl shadow-rose-900/5 hover:shadow-[0_8px_32px_rgba(225,29,72,0.08)] transition-shadow">
                     <div class="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center text-2xl mb-4">🗺️</div>
                     <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">System Zones</p>
                     <p class="text-4xl font-extrabold text-gray-900">{{ stats.totalZones }}</p>
@@ -33,15 +33,15 @@
         <!-- Barangay Official Dashboard -->
         <div v-else-if="auth.user.role === 'barangay_official'" class="space-y-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] text-center relative overflow-hidden">
+                <div class="bg-white/70 backdrop-blur-2xl rounded-3xl p-6 border border-white/60 shadow-xl shadow-rose-900/5 text-center relative overflow-hidden">
                     <p class="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Active Schedules</p>
                     <p class="text-3xl md:text-4xl font-extrabold text-gray-900">{{ stats.activeSchedules }}</p>
                 </div>
-                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] text-center relative overflow-hidden group">
+                <div class="bg-white/70 backdrop-blur-2xl rounded-3xl p-6 border border-white/60 shadow-xl shadow-rose-900/5 text-center relative overflow-hidden group">
                     <p class="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Pending Reports</p>
                     <p class="text-3xl md:text-4xl font-extrabold text-amber-500 group-hover:scale-110 transition-transform">{{ stats.pendingReports }}</p>
                 </div>
-                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] text-center relative overflow-hidden group">
+                <div class="bg-white/70 backdrop-blur-2xl rounded-3xl p-6 border border-white/60 shadow-xl shadow-rose-900/5 text-center relative overflow-hidden group">
                     <p class="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Pending Residents</p>
                     <p class="text-3xl md:text-4xl font-extrabold text-rose-500 group-hover:scale-110 transition-transform">{{ stats.pendingResidents }}</p>
                 </div>
@@ -53,21 +53,21 @@
             
             <h3 class="text-xl font-bold text-gray-900 mb-4 mt-8">Quick Actions</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <a :href="route('official.schedules.index')" class="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-100 hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                <a :href="route('official.schedules.index')" class="bg-white/70 backdrop-blur-2xl rounded-2xl p-6 border border-white/60 hover:border-white hover:bg-white/90 hover:shadow-2xl hover:shadow-rose-900/10 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
                     <div class="w-14 h-14 rounded-xl bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center text-2xl transition-colors">📅</div>
                     <div>
                         <p class="font-bold text-gray-900">Manage Schedules</p>
                         <p class="text-xs text-gray-500 mt-0.5">Create & update schedules</p>
                     </div>
                 </a>
-                <a :href="route('official.reports.index')" class="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-100 hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                <a :href="route('official.reports.index')" class="bg-white/70 backdrop-blur-2xl rounded-2xl p-6 border border-white/60 hover:border-white hover:bg-white/90 hover:shadow-2xl hover:shadow-rose-900/10 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
                     <div class="w-14 h-14 rounded-xl bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center text-2xl transition-colors">📝</div>
                     <div>
                         <p class="font-bold text-gray-900">View Reports</p>
                         <p class="text-xs text-gray-500 mt-0.5">Respond to resident issues</p>
                     </div>
                 </a>
-                <a :href="route('official.residents.index')" class="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-100 hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                <a :href="route('official.residents.index')" class="bg-white/70 backdrop-blur-2xl rounded-2xl p-6 border border-white/60 hover:border-white hover:bg-white/90 hover:shadow-2xl hover:shadow-rose-900/10 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
                     <div class="w-14 h-14 rounded-xl bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center text-2xl transition-colors">👥</div>
                     <div>
                         <p class="font-bold text-gray-900">Manage Residents</p>
@@ -80,11 +80,11 @@
         <!-- Personnel Dashboard -->
         <div v-else-if="auth.user.role === 'personnel'" class="space-y-8">
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] text-center relative">
+                <div class="bg-white/70 backdrop-blur-2xl rounded-3xl p-6 border border-white/60 shadow-xl shadow-rose-900/5 text-center relative">
                     <p class="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">My Schedules</p>
                     <p class="text-3xl md:text-4xl font-extrabold text-gray-900">{{ stats.assignedSchedules }}</p>
                 </div>
-                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)] text-center relative group">
+                <div class="bg-white/70 backdrop-blur-2xl rounded-3xl p-6 border border-white/60 shadow-xl shadow-rose-900/5 text-center relative group">
                     <p class="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Tasks Today</p>
                     <p class="text-3xl md:text-4xl font-extrabold text-blue-600 group-hover:scale-110 transition-transform">{{ stats.tasksToday }}</p>
                 </div>
@@ -96,14 +96,14 @@
             
             <h3 class="text-xl font-bold text-gray-900 mb-4 mt-8">Quick Actions</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <a :href="route('personnel.schedules.index')" class="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-100 hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                <a :href="route('personnel.schedules.index')" class="bg-white/70 backdrop-blur-2xl rounded-2xl p-6 border border-white/60 hover:border-white hover:bg-white/90 hover:shadow-2xl hover:shadow-rose-900/10 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
                     <div class="w-14 h-14 rounded-xl bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center text-2xl transition-colors">📅</div>
                     <div>
                         <p class="font-bold text-gray-900">View Schedules</p>
                         <p class="text-xs text-gray-500 mt-0.5">Check your upcoming routes</p>
                     </div>
                 </a>
-                <a :href="route('personnel.tasks.index')" class="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-100 hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                <a :href="route('personnel.tasks.index')" class="bg-white/70 backdrop-blur-2xl rounded-2xl p-6 border border-white/60 hover:border-white hover:bg-white/90 hover:shadow-2xl hover:shadow-rose-900/10 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
                     <div class="w-14 h-14 rounded-xl bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center text-2xl transition-colors">✅</div>
                     <div>
                         <p class="font-bold text-gray-900">Update Tasks</p>
@@ -136,12 +136,12 @@
             </div>
 
             <div class="grid grid-cols-2 gap-4 md:gap-6">
-                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)]">
+                <div class="bg-white/70 backdrop-blur-2xl rounded-3xl p-6 border border-white/60 shadow-xl shadow-rose-900/5">
                     <div class="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center text-xl mb-4">📝</div>
                     <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Reports</p>
                     <p class="text-2xl font-extrabold text-gray-900">{{ stats.totalReports }}</p>
                 </div>
-                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_24px_rgba(225,29,72,0.04)]">
+                <div class="bg-white/70 backdrop-blur-2xl rounded-3xl p-6 border border-white/60 shadow-xl shadow-rose-900/5">
                     <div class="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center text-xl mb-4">🔐</div>
                     <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Status</p>
                     <div class="mt-1">
@@ -155,14 +155,14 @@
             
             <h3 class="text-xl font-bold text-gray-900 mb-4 mt-8">Quick Navigation</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <a :href="route('resident.schedules.index')" class="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-100 hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                <a :href="route('resident.schedules.index')" class="bg-white/70 backdrop-blur-2xl rounded-2xl p-6 border border-white/60 hover:border-white hover:bg-white/90 hover:shadow-2xl hover:shadow-rose-900/10 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
                     <div class="w-14 h-14 rounded-xl bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center text-2xl transition-colors">📅</div>
                     <div>
                         <p class="font-bold text-gray-900">Collection Schedules</p>
                         <p class="text-xs text-gray-500 mt-0.5">When is the garbage truck coming?</p>
                     </div>
                 </a>
-                <a :href="route('resident.reports.index')" class="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-100 hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                <a :href="route('resident.reports.index')" class="bg-white/70 backdrop-blur-2xl rounded-2xl p-6 border border-white/60 hover:border-white hover:bg-white/90 hover:shadow-2xl hover:shadow-rose-900/10 hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
                     <div class="w-14 h-14 rounded-xl bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center text-2xl transition-colors">📝</div>
                     <div>
                         <p class="font-bold text-gray-900">Submit Report</p>

@@ -1,7 +1,7 @@
 <template>
     <AuthLayout page-title="Profile Settings">
         <div class="max-w-2xl mx-auto">
-            <div class="bg-white rounded-3xl shadow-[0_4px_24px_rgba(225,29,72,0.04)] border border-gray-100 p-6 sm:p-10 mb-8 overflow-hidden relative">
+            <div class="bg-white/70 backdrop-blur-2xl rounded-3xl shadow-xl shadow-rose-900/5 border border-white/60 p-6 sm:p-10 mb-8 overflow-hidden relative">
                 <!-- Background decoration -->
                 <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-rose-50 to-transparent rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
 

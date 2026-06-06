@@ -7,3 +7,21 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@layer utilities {
+    @keyframes float {
+        0%, 100% { transform: translateY(0) }
+        50% { transform: translateY(-20px) }
+    }
+    @keyframes float-delayed {
+        0%, 100% { transform: translateY(0) }
+        50% { transform: translateY(-15px) }
+    }
+    @keyframes float-slow {
+        0%, 100% { transform: translateY(0) }
+        50% { transform: translateY(-10px) }
+    }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-float-delayed { animation: float-delayed 8s ease-in-out infinite 1s; }
+    .animate-float-slow { animation: float-slow 10s ease-in-out infinite 2s; }
+}

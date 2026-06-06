@@ -1,7 +1,7 @@
 <template>
     <AuthLayout page-title="Report Details">
         <div class="mb-6">
-            <Link :href="route('official.reports.index')" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition">
+            <Link :href="route('official.reports.index')" class="inline-flex items-center gap-2 text-sm text-rose-900/60 hover:text-rose-900 transition-colors transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
@@ -29,7 +29,7 @@
 
                     <div v-if="report.latitude && report.longitude">
                         <p class="text-xs text-gray-400 mb-1">Location</p>
-                        <p class="text-sm text-gray-600">{{ report.latitude }}, {{ report.longitude }}</p>
+                        <p class="text-sm text-rose-950/80">{{ report.latitude }}, {{ report.longitude }}</p>
                     </div>
 
                     <div v-if="report.photos?.length > 0">
@@ -61,13 +61,13 @@
                                 v-model="respondForm.official_response"
                                 rows="4"
                                 placeholder="Write your official response..."
-                                class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                                class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"
                             ></textarea>
                             <p v-if="respondForm.errors.official_response" class="text-red-500 text-xs mt-1">{{ respondForm.errors.official_response }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Update Status</label>
-                            <select v-model="respondForm.status" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <select v-model="respondForm.status" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
                                 <option value="reviewed">Mark as Reviewed</option>
                                 <option value="resolved">Mark as Resolved</option>
                             </select>
@@ -92,11 +92,11 @@
                         </div>
                         <div>
                             <dt class="text-xs text-gray-400 mb-0.5">Phone</dt>
-                            <dd class="text-gray-600">{{ report.resident?.phone }}</dd>
+                            <dd class="text-rose-950/80">{{ report.resident?.phone }}</dd>
                         </div>
                         <div>
                             <dt class="text-xs text-gray-400 mb-0.5">Date Submitted</dt>
-                            <dd class="text-gray-600">{{ formatDate(report.created_at) }}</dd>
+                            <dd class="text-rose-950/80">{{ formatDate(report.created_at) }}</dd>
                         </div>
                     </dl>
                 </div>

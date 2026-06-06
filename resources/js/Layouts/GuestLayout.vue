@@ -8,8 +8,8 @@
         </div>
 
         <!-- Floating orbs -->
-        <div class="absolute top-20 right-20 w-96 h-96 bg-rose-400/20 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-20 left-10 w-72 h-72 bg-red-400/15 rounded-full blur-3xl"></div>
+        <div class="absolute top-20 right-20 w-96 h-96 bg-rose-400/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-20 left-10 w-72 h-72 bg-red-400/15 rounded-full blur-3xl animate-float-delayed"></div>
         
         <div class="relative z-10 w-full flex justify-center px-4 lg:px-8">
             <slot />

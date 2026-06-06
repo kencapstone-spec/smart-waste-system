@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Resident;
 
 use App\Http\Controllers\Controller;
-use App\Models\Reward;
-use App\Models\Redemption;
 use App\Models\Point;
+use App\Models\Redemption;
+use App\Models\Reward;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class RewardController extends Controller
 {
@@ -25,7 +26,7 @@ class RewardController extends Controller
         return Inertia::render('Resident/Rewards/Index', [
             'rewards' => $rewards,
             'redemptions' => $redemptions,
-            'availablePoints' => $availablePoints
+            'availablePoints' => $availablePoints,
         ]);
     }
 
@@ -33,26 +34,38 @@ class RewardController extends Controller
     {
         $user = Auth::user();
 
-        if (!$reward->is_active || $reward->stock <= 0) {
-            return back()->withErrors(['reward' => 'This reward is currently unavailable.']);
+        // Wrap the critical section in a transaction to prevent race conditions
+        $result = DB::transaction(function () use ($user, $reward) {
+            // Lock the reward row to prevent concurrent redemptions of the same stock
+            $lockedReward = Reward::where('id', $reward->id)->lockForUpdate()->first();
+
+            if (! $lockedReward->is_active || $lockedReward->stock <= 0) {
+                return ['error' => 'reward', 'message' => 'This reward is currently unavailable.'];
+            }
+
+            $totalPoints = Point::where('resident_id', $user->id)->sum('points');
+            $spentPoints = Redemption::where('resident_id', $user->id)->whereIn('status', ['pending', 'approved'])->sum('points_spent');
+            $availablePoints = $totalPoints - $spentPoints;
+
+            if ($availablePoints < $lockedReward->points_required) {
+                return ['error' => 'points', 'message' => 'Insufficient points to redeem this reward.'];
+            }
+
+            Redemption::create([
+                'resident_id' => $user->id,
+                'reward_id' => $lockedReward->id,
+                'points_spent' => $lockedReward->points_required,
+                'status' => 'pending',
+            ]);
+
+            $lockedReward->decrement('stock');
+
+            return ['success' => true];
+        });
+
+        if (isset($result['error'])) {
+            return back()->withErrors([$result['error'] => $result['message']]);
         }
-
-        $totalPoints = Point::where('resident_id', $user->id)->sum('points');
-        $spentPoints = Redemption::where('resident_id', $user->id)->whereIn('status', ['pending', 'approved'])->sum('points_spent');
-        $availablePoints = $totalPoints - $spentPoints;
-
-        if ($availablePoints < $reward->points_required) {
-            return back()->withErrors(['points' => 'Insufficient points to redeem this reward.']);
-        }
-
-        Redemption::create([
-            'resident_id' => $user->id,
-            'reward_id' => $reward->id,
-            'points_spent' => $reward->points_required,
-            'status' => 'pending'
-        ]);
-
-        $reward->decrement('stock');
 
         return back()->with('success', 'Reward redemption requested successfully!');
     }

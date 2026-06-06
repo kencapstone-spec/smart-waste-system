@@ -1,30 +1,31 @@
 <template>
     <AuthLayout page-title="Zone Management">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg font-semibold text-gray-700">Zones</h2>
+            <h2 class="text-xl font-bold text-rose-950 tracking-tight">Zones</h2>
             <button
                 @click="showCreateModal = true"
-                class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700 transition"
+                class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all transition"
             >
                 + Add Zone
             </button>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b">
+        <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
+            <div class="overflow-x-auto pb-4">
+                <table class="w-full text-sm whitespace-nowrap">
+                <thead class="border-b border-rose-100/50">
                     <tr>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Name</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Description</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Streets</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Actions</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Name</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Description</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Streets</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    <tr v-for="zone in zones" :key="zone.id" class="hover:bg-gray-50">
-                        <td class="px-6 py-4 text-gray-800 font-medium">{{ zone.name }}</td>
-                        <td class="px-6 py-4 text-gray-600">{{ zone.description ?? '—' }}</td>
-                        <td class="px-6 py-4 text-gray-600">{{ zone.streets_count }}</td>
+                    <tr v-for="zone in zones" :key="zone.id" class="hover:bg-rose-50/50 transition-colors">
+                        <td class="px-6 py-4 text-rose-950 font-semibold">{{ zone.name }}</td>
+                        <td class="px-6 py-4 text-rose-950/80">{{ zone.description ?? '—' }}</td>
+                        <td class="px-6 py-4 text-rose-950/80">{{ zone.streets_count }}</td>
                         <td class="px-6 py-4 flex gap-2">
                             <button @click="editZone(zone)" class="text-blue-600 hover:underline text-xs">Edit</button>
                             <button @click="confirmDelete(zone)" class="text-red-500 hover:underline text-xs">Delete</button>
@@ -35,6 +36,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <!-- Create Modal -->
@@ -42,16 +44,16 @@
             <form @submit.prevent="submitCreate" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                    <input v-model="createForm.name" type="text" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+                    <input v-model="createForm.name" type="text" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
                     <p v-if="createForm.errors.name" class="text-red-500 text-xs mt-1">{{ createForm.errors.name }}</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea v-model="createForm.description" rows="3" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+                    <textarea v-model="createForm.description" rows="3" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"></textarea>
                 </div>
                 <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" @click="showCreateModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
-                    <button type="submit" :disabled="createForm.processing" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700">Save</button>
+                    <button type="button" @click="showCreateModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
+                    <button type="submit" :disabled="createForm.processing" class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all">Save</button>
                 </div>
             </form>
         </Modal>
@@ -61,25 +63,25 @@
             <form @submit.prevent="submitEdit" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                    <input v-model="editForm.name" type="text" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+                    <input v-model="editForm.name" type="text" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
                     <p v-if="editForm.errors.name" class="text-red-500 text-xs mt-1">{{ editForm.errors.name }}</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea v-model="editForm.description" rows="3" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+                    <textarea v-model="editForm.description" rows="3" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"></textarea>
                 </div>
                 <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" @click="showEditModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
-                    <button type="submit" :disabled="editForm.processing" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700">Update</button>
+                    <button type="button" @click="showEditModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
+                    <button type="submit" :disabled="editForm.processing" class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all">Update</button>
                 </div>
             </form>
         </Modal>
 
         <!-- Delete Modal -->
         <Modal :show="showDeleteModal" title="Delete Zone" @close="showDeleteModal = false">
-            <p class="text-gray-600 text-sm mb-6">Are you sure you want to delete <span class="font-semibold">{{ selectedZone?.name }}</span>? All streets in this zone will also be deleted.</p>
+            <p class="text-rose-950/80 text-sm mb-6">Are you sure you want to delete <span class="font-semibold">{{ selectedZone?.name }}</span>? All streets in this zone will also be deleted.</p>
             <div class="flex justify-end gap-3">
-                <button @click="showDeleteModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
+                <button @click="showDeleteModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
                 <button @click="submitDelete" class="bg-red-500 text-white px-4 py-2 rounded-md text-sm hover:bg-red-600">Delete</button>
             </div>
         </Modal>

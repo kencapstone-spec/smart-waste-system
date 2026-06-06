@@ -1,37 +1,38 @@
 <template>
     <AuthLayout page-title="Schedule Management">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg font-semibold text-gray-700">Collection Schedules</h2>
+            <h2 class="text-xl font-bold text-rose-950 tracking-tight">Collection Schedules</h2>
             <button
                 @click="showCreateModal = true"
-                class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700 transition"
+                class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all transition"
             >
                 + Add Schedule
             </button>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b">
+        <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
+            <div class="overflow-x-auto pb-4">
+                <table class="w-full text-sm whitespace-nowrap">
+                <thead class="border-b border-rose-100/50">
                     <tr>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Title</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Street</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Frequency</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Start Date</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Time</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Status</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Actions</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Title</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Street</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Frequency</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Start Date</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Time</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Status</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    <tr v-for="schedule in schedules.data" :key="schedule.id" class="hover:bg-gray-50">
-                        <td class="px-6 py-4 text-gray-800 font-medium">{{ schedule.title }}</td>
-                        <td class="px-6 py-4 text-gray-600">{{ schedule.street.name }}</td>
-                        <td class="px-6 py-4 capitalize text-gray-600">{{ schedule.frequency }}</td>
-                        <td class="px-6 py-4 text-gray-600">{{ schedule.start_date }}</td>
-                        <td class="px-6 py-4 text-gray-600">{{ schedule.collection_time }}</td>
+                    <tr v-for="schedule in schedules.data" :key="schedule.id" class="hover:bg-rose-50/50 transition-colors">
+                        <td class="px-6 py-4 text-rose-950 font-semibold">{{ schedule.title }}</td>
+                        <td class="px-6 py-4 text-rose-950/80">{{ schedule.street.name }}</td>
+                        <td class="px-6 py-4 capitalize text-rose-950/80">{{ schedule.frequency }}</td>
+                        <td class="px-6 py-4 text-rose-950/80">{{ schedule.start_date }}</td>
+                        <td class="px-6 py-4 text-rose-950/80">{{ schedule.collection_time }}</td>
                         <td class="px-6 py-4">
-                            <span :class="schedule.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'" class="px-2 py-1 rounded-full text-xs font-medium capitalize">
+                            <span :class="schedule.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-rose-950/80'" class="px-2 py-1 rounded-full text-xs font-medium capitalize">
                                 {{ schedule.status }}
                             </span>
                         </td>
@@ -46,6 +47,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <!-- Create Modal -->
@@ -53,12 +55,12 @@
             <form @submit.prevent="submitCreate" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                    <input v-model="createForm.title" type="text" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+                    <input v-model="createForm.title" type="text" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
                     <p v-if="createForm.errors.title" class="text-red-500 text-xs mt-1">{{ createForm.errors.title }}</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Street</label>
-                    <select v-model="createForm.street_id" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <select v-model="createForm.street_id" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
                         <option value="">Select street</option>
                         <option v-for="street in streets" :key="street.id" :value="street.id">
                             {{ street.name }} ({{ street.zone.name }})
@@ -68,12 +70,12 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea v-model="createForm.description" rows="2" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+                    <textarea v-model="createForm.description" rows="2" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"></textarea>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Frequency</label>
-                        <select v-model="createForm.frequency" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <select v-model="createForm.frequency" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
                             <option value="">Select frequency</option>
                             <option value="once">Once</option>
                             <option value="daily">Daily</option>
@@ -84,19 +86,19 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Collection Time</label>
-                        <input v-model="createForm.collection_time" type="time" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+                        <input v-model="createForm.collection_time" type="time" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
                         <p v-if="createForm.errors.collection_time" class="text-red-500 text-xs mt-1">{{ createForm.errors.collection_time }}</p>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
-                        <input v-model="createForm.start_date" type="date" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+                        <input v-model="createForm.start_date" type="date" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
                         <p v-if="createForm.errors.start_date" class="text-red-500 text-xs mt-1">{{ createForm.errors.start_date }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">End Date <span class="text-gray-400">(optional)</span></label>
-                        <input v-model="createForm.end_date" type="date" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+                        <input v-model="createForm.end_date" type="date" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
                     </div>
                 </div>
                 <div>
@@ -111,8 +113,8 @@
                     <p v-if="createForm.errors.personnel_ids" class="text-red-500 text-xs mt-1">{{ createForm.errors.personnel_ids }}</p>
                 </div>
                 <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" @click="showCreateModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
-                    <button type="submit" :disabled="createForm.processing" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700">Create</button>
+                    <button type="button" @click="showCreateModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
+                    <button type="submit" :disabled="createForm.processing" class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all">Create</button>
                 </div>
             </form>
         </Modal>
@@ -122,12 +124,12 @@
             <form @submit.prevent="submitEdit" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                    <input v-model="editForm.title" type="text" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+                    <input v-model="editForm.title" type="text" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
                     <p v-if="editForm.errors.title" class="text-red-500 text-xs mt-1">{{ editForm.errors.title }}</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Street</label>
-                    <select v-model="editForm.street_id" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <select v-model="editForm.street_id" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
                         <option v-for="street in streets" :key="street.id" :value="street.id">
                             {{ street.name }} ({{ street.zone.name }})
                         </option>
@@ -135,12 +137,12 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea v-model="editForm.description" rows="2" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+                    <textarea v-model="editForm.description" rows="2" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"></textarea>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Frequency</label>
-                        <select v-model="editForm.frequency" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <select v-model="editForm.frequency" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
                             <option value="once">Once</option>
                             <option value="daily">Daily</option>
                             <option value="weekly">Weekly</option>
@@ -149,22 +151,22 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Collection Time</label>
-                        <input v-model="editForm.collection_time" type="time" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+                        <input v-model="editForm.collection_time" type="time" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
-                        <input v-model="editForm.start_date" type="date" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+                        <input v-model="editForm.start_date" type="date" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">End Date <span class="text-gray-400">(optional)</span></label>
-                        <input v-model="editForm.end_date" type="date" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+                        <input v-model="editForm.end_date" type="date" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
                     </div>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                    <select v-model="editForm.status" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <select v-model="editForm.status" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
@@ -180,17 +182,17 @@
                     <p v-if="editForm.errors.personnel_ids" class="text-red-500 text-xs mt-1">{{ editForm.errors.personnel_ids }}</p>
                 </div>
                 <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" @click="showEditModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
-                    <button type="submit" :disabled="editForm.processing" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700">Update</button>
+                    <button type="button" @click="showEditModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
+                    <button type="submit" :disabled="editForm.processing" class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all">Update</button>
                 </div>
             </form>
         </Modal>
 
         <!-- Delete Modal -->
         <Modal :show="showDeleteModal" title="Delete Schedule" @close="showDeleteModal = false">
-            <p class="text-gray-600 text-sm mb-6">Are you sure you want to delete <span class="font-semibold">{{ selectedSchedule?.title }}</span>?</p>
+            <p class="text-rose-950/80 text-sm mb-6">Are you sure you want to delete <span class="font-semibold">{{ selectedSchedule?.title }}</span>?</p>
             <div class="flex justify-end gap-3">
-                <button @click="showDeleteModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
+                <button @click="showDeleteModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
                 <button @click="submitDelete" class="bg-red-500 text-white px-4 py-2 rounded-md text-sm hover:bg-red-600">Delete</button>
             </div>
         </Modal>
@@ -200,17 +202,18 @@
             <div v-if="loadingTasks" class="py-8 text-center text-sm text-gray-500">Loading tasks...</div>
             <div v-else>
                 <div class="max-h-[60vh] overflow-y-auto">
-                    <table class="w-full text-sm">
+                    <div class="overflow-x-auto pb-4">
+                        <table class="w-full text-sm whitespace-nowrap">
                         <thead class="bg-gray-50 border-b sticky top-0">
                             <tr>
-                                <th class="text-left px-4 py-3 text-gray-600 font-medium">Date</th>
-                                <th class="text-left px-4 py-3 text-gray-600 font-medium">Status</th>
-                                <th class="text-left px-4 py-3 text-gray-600 font-medium">Assigned To</th>
-                                <th class="text-left px-4 py-3 text-gray-600 font-medium">Reassign</th>
+                                <th class="text-left px-4 py-3 text-rose-950/70 font-semibold">Date</th>
+                                <th class="text-left px-4 py-3 text-rose-950/70 font-semibold">Status</th>
+                                <th class="text-left px-4 py-3 text-rose-950/70 font-semibold">Assigned To</th>
+                                <th class="text-left px-4 py-3 text-rose-950/70 font-semibold">Reassign</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            <tr v-for="task in currentTasks" :key="task.id" class="hover:bg-gray-50">
+                            <tr v-for="task in currentTasks" :key="task.id" class="hover:bg-rose-50/50 transition-colors">
                                 <td class="px-4 py-3 text-gray-800">{{ task.collection_date }}</td>
                                 <td class="px-4 py-3">
                                     <span :class="{
@@ -221,7 +224,7 @@
                                         {{ task.status }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-gray-600">{{ task.personnel.name }}</td>
+                                <td class="px-4 py-3 text-rose-950/80">{{ task.personnel.name }}</td>
                                 <td class="px-4 py-3">
                                     <div v-if="task.status === 'pending'" class="flex gap-2 items-center">
                                         <select 
@@ -248,9 +251,10 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
                 <div class="flex justify-end gap-3 pt-4 border-t mt-4">
-                    <button @click="showTasksModal = false" class="text-sm text-gray-500 hover:text-gray-700">Close</button>
+                    <button @click="showTasksModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Close</button>
                 </div>
             </div>
         </Modal>

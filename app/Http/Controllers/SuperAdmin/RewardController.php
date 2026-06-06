@@ -12,7 +12,7 @@ class RewardController extends Controller
     public function index()
     {
         return Inertia::render('SuperAdmin/Rewards/Index', [
-            'rewards' => Reward::latest()->paginate(15)
+            'rewards' => Reward::latest()->paginate(15),
         ]);
     }
 
@@ -23,7 +23,7 @@ class RewardController extends Controller
             'description' => ['nullable', 'string'],
             'points_required' => ['required', 'integer', 'min:1'],
             'stock' => ['required', 'integer', 'min:0'],
-            'is_active' => ['boolean']
+            'is_active' => ['boolean'],
         ]);
 
         Reward::create($validated);
@@ -38,7 +38,7 @@ class RewardController extends Controller
             'description' => ['nullable', 'string'],
             'points_required' => ['required', 'integer', 'min:1'],
             'stock' => ['required', 'integer', 'min:0'],
-            'is_active' => ['boolean']
+            'is_active' => ['boolean'],
         ]);
 
         $reward->update($validated);
@@ -49,6 +49,7 @@ class RewardController extends Controller
     public function destroy(Reward $reward)
     {
         $reward->delete();
+
         return back()->with('success', 'Reward deleted successfully.');
     }
 }

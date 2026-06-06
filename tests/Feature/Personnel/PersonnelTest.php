@@ -24,30 +24,30 @@ class PersonnelTest extends TestCase
 
     private function makeScheduleWithTask(User $personnel): CollectionTask
     {
-        $zone      = Zone::create(['name' => 'Zone 1']);
-        $street    = Street::create(['zone_id' => $zone->id, 'name' => 'Rizal St.']);
-        $official  = User::factory()->official()->create();
+        $zone = Zone::create(['name' => 'Zone 1']);
+        $street = Street::create(['zone_id' => $zone->id, 'name' => 'Rizal St.']);
+        $official = User::factory()->official()->create();
 
         $schedule = Schedule::create([
-            'street_id'       => $street->id,
-            'created_by'      => $official->id,
-            'title'           => 'Test Schedule',
-            'frequency'       => 'once',
-            'start_date'      => now()->toDateString(),
+            'street_id' => $street->id,
+            'created_by' => $official->id,
+            'title' => 'Test Schedule',
+            'frequency' => 'once',
+            'start_date' => now()->toDateString(),
             'collection_time' => '07:00',
-            'status'          => 'active',
+            'status' => 'active',
         ]);
 
         ScheduleAssignment::create([
-            'schedule_id'  => $schedule->id,
+            'schedule_id' => $schedule->id,
             'personnel_id' => $personnel->id,
         ]);
 
         return CollectionTask::create([
-            'schedule_id'     => $schedule->id,
-            'personnel_id'    => $personnel->id,
+            'schedule_id' => $schedule->id,
+            'personnel_id' => $personnel->id,
             'collection_date' => now()->toDateString(),
-            'status'          => 'pending',
+            'status' => 'pending',
         ]);
     }
 
@@ -97,17 +97,17 @@ class PersonnelTest extends TestCase
     public function test_personnel_can_update_task_status(): void
     {
         $personnel = $this->personnel();
-        $task      = $this->makeScheduleWithTask($personnel);
+        $task = $this->makeScheduleWithTask($personnel);
 
         $response = $this->actingAs($personnel)->post("/personnel/tasks/{$task->id}/update-status", [
-            'status'  => 'completed',
+            'status' => 'completed',
             'remarks' => 'All collected.',
         ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('collection_tasks', [
-            'id'      => $task->id,
-            'status'  => 'completed',
+            'id' => $task->id,
+            'status' => 'completed',
             'remarks' => 'All collected.',
         ]);
     }
@@ -117,7 +117,7 @@ class PersonnelTest extends TestCase
         Storage::fake('public');
 
         $personnel = $this->personnel();
-        $task      = $this->makeScheduleWithTask($personnel);
+        $task = $this->makeScheduleWithTask($personnel);
 
         $response = $this->actingAs($personnel)->post("/personnel/tasks/{$task->id}/update-status", [
             'status' => 'completed',
@@ -130,9 +130,9 @@ class PersonnelTest extends TestCase
 
     public function test_personnel_cannot_update_other_personnel_task(): void
     {
-        $personnel  = $this->personnel();
-        $other      = $this->personnel();
-        $task       = $this->makeScheduleWithTask($other); // belongs to $other
+        $personnel = $this->personnel();
+        $other = $this->personnel();
+        $task = $this->makeScheduleWithTask($other); // belongs to $other
 
         $response = $this->actingAs($personnel)->post("/personnel/tasks/{$task->id}/update-status", [
             'status' => 'completed',
@@ -144,7 +144,7 @@ class PersonnelTest extends TestCase
     public function test_personnel_update_task_requires_valid_status(): void
     {
         $personnel = $this->personnel();
-        $task      = $this->makeScheduleWithTask($personnel);
+        $task = $this->makeScheduleWithTask($personnel);
 
         $response = $this->actingAs($personnel)->post("/personnel/tasks/{$task->id}/update-status", [
             'status' => 'invalid_status',
@@ -160,33 +160,33 @@ class PersonnelTest extends TestCase
     public function test_personnel_can_award_points_to_resident(): void
     {
         $personnel = $this->personnel();
-        $task      = $this->makeScheduleWithTask($personnel);
-        $resident  = User::factory()->resident()->create();
+        $task = $this->makeScheduleWithTask($personnel);
+        $resident = User::factory()->resident()->create();
 
         $response = $this->actingAs($personnel)->post("/personnel/tasks/{$task->id}/award-points", [
             'resident_id' => $resident->id,
-            'points'      => 15,
-            'remarks'     => 'Good segregation',
+            'points' => 15,
+            'remarks' => 'Good segregation',
         ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('points', [
-            'resident_id'        => $resident->id,
-            'awarded_by'         => $personnel->id,
+            'resident_id' => $resident->id,
+            'awarded_by' => $personnel->id,
             'collection_task_id' => $task->id,
-            'points'             => 15,
+            'points' => 15,
         ]);
     }
 
     public function test_award_points_fails_with_zero_points(): void
     {
         $personnel = $this->personnel();
-        $task      = $this->makeScheduleWithTask($personnel);
-        $resident  = User::factory()->resident()->create();
+        $task = $this->makeScheduleWithTask($personnel);
+        $resident = User::factory()->resident()->create();
 
         $response = $this->actingAs($personnel)->post("/personnel/tasks/{$task->id}/award-points", [
             'resident_id' => $resident->id,
-            'points'      => 0,
+            'points' => 0,
         ]);
 
         $response->assertSessionHasErrors('points');
@@ -195,11 +195,11 @@ class PersonnelTest extends TestCase
     public function test_award_points_fails_with_nonexistent_resident(): void
     {
         $personnel = $this->personnel();
-        $task      = $this->makeScheduleWithTask($personnel);
+        $task = $this->makeScheduleWithTask($personnel);
 
         $response = $this->actingAs($personnel)->post("/personnel/tasks/{$task->id}/award-points", [
             'resident_id' => 99999,
-            'points'      => 10,
+            'points' => 10,
         ]);
 
         $response->assertSessionHasErrors('resident_id');

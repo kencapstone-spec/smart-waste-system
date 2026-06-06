@@ -2,7 +2,7 @@
     <AuthLayout page-title="Resident Details">
         <!-- Back button -->
         <div class="mb-6">
-            <Link :href="route('official.residents.index')" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition">
+            <Link :href="route('official.residents.index')" class="inline-flex items-center gap-2 text-sm text-rose-900/60 hover:text-rose-900 transition-colors transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
@@ -78,23 +78,24 @@
 
             <!-- Points History -->
             <div class="lg:col-span-2">
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
                     <div class="px-6 py-4 border-b">
                         <h3 class="text-base font-semibold text-gray-700">Points History</h3>
                     </div>
 
                     <div v-if="points.length > 0">
-                        <table class="w-full text-sm">
-                            <thead class="bg-gray-50 border-b">
+                        <div class="overflow-x-auto pb-4">
+                            <table class="w-full text-sm whitespace-nowrap">
+                            <thead class="border-b border-rose-100/50">
                                 <tr>
-                                    <th class="text-left px-6 py-3 text-gray-600 font-medium">Points</th>
-                                    <th class="text-left px-6 py-3 text-gray-600 font-medium">Awarded By</th>
-                                    <th class="text-left px-6 py-3 text-gray-600 font-medium">Remarks</th>
-                                    <th class="text-left px-6 py-3 text-gray-600 font-medium">Date</th>
+                                    <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Points</th>
+                                    <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Awarded By</th>
+                                    <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Remarks</th>
+                                    <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Date</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                <tr v-for="point in points" :key="point.id" class="hover:bg-gray-50">
+                                <tr v-for="point in points" :key="point.id" class="hover:bg-rose-50/50 transition-colors">
                                     <td class="px-6 py-4">
                                         <span class="inline-flex items-center gap-1 text-green-700 font-semibold">
                                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -103,12 +104,13 @@
                                             +{{ point.points }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 text-gray-600">{{ point.awarded_by?.name ?? '—' }}</td>
-                                    <td class="px-6 py-4 text-gray-600">{{ point.remarks ?? '—' }}</td>
+                                    <td class="px-6 py-4 text-rose-950/80">{{ point.awarded_by?.name ?? '—' }}</td>
+                                    <td class="px-6 py-4 text-rose-950/80">{{ point.remarks ?? '—' }}</td>
                                     <td class="px-6 py-4 text-gray-500">{{ formatDate(point.created_at) }}</td>
                                 </tr>
                             </tbody>
                         </table>
+                        </div>
                     </div>
 
                     <div v-else class="px-6 py-12 text-center text-gray-400">
@@ -123,22 +125,22 @@
 
         <!-- Approve Confirmation Modal -->
         <Modal :show="showApproveModal" title="Approve Resident" @close="showApproveModal = false">
-            <p class="text-gray-600 text-sm mb-6">
+            <p class="text-rose-950/80 text-sm mb-6">
                 Approve <span class="font-semibold">{{ resident.name }}</span>? They will receive an SMS notification.
             </p>
             <div class="flex justify-end gap-3">
-                <button @click="showApproveModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
-                <button @click="submitApprove" :disabled="actionForm.processing" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700 disabled:opacity-60">Approve</button>
+                <button @click="showApproveModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
+                <button @click="submitApprove" :disabled="actionForm.processing" class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all disabled:opacity-60">Approve</button>
             </div>
         </Modal>
 
         <!-- Reject Confirmation Modal -->
         <Modal :show="showRejectModal" title="Reject Resident" @close="showRejectModal = false">
-            <p class="text-gray-600 text-sm mb-6">
+            <p class="text-rose-950/80 text-sm mb-6">
                 Reject <span class="font-semibold">{{ resident.name }}</span>? They will receive an SMS notification.
             </p>
             <div class="flex justify-end gap-3">
-                <button @click="showRejectModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
+                <button @click="showRejectModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
                 <button @click="submitReject" :disabled="actionForm.processing" class="bg-red-500 text-white px-4 py-2 rounded-md text-sm hover:bg-red-600 disabled:opacity-60">Reject</button>
             </div>
         </Modal>

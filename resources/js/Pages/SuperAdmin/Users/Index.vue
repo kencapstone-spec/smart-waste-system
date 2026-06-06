@@ -1,31 +1,32 @@
 <template>
     <AuthLayout page-title="User Management">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg font-semibold text-gray-700">System Users</h2>
+            <h2 class="text-xl font-bold text-rose-950 tracking-tight">System Users</h2>
             <button
                 @click="showCreateModal = true"
-                class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700 transition"
+                class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all transition"
             >
                 + Add User
             </button>
         </div>
 
         <!-- Users Table -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b">
+        <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
+            <div class="overflow-x-auto pb-4">
+                <table class="w-full text-sm whitespace-nowrap">
+                <thead class="border-b border-rose-100/50">
                     <tr>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Name</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Phone</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Role</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Status</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Actions</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Name</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Phone</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Role</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Status</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    <tr v-for="user in users.data" :key="user.id" class="hover:bg-gray-50">
+                    <tr v-for="user in users.data" :key="user.id" class="hover:bg-rose-50/50 transition-colors">
                         <td class="px-6 py-4 text-gray-800">{{ user.name }}</td>
-                        <td class="px-6 py-4 text-gray-600">{{ user.phone }}</td>
+                        <td class="px-6 py-4 text-rose-950/80">{{ user.phone }}</td>
                         <td class="px-6 py-4">
                             <span class="capitalize px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
                                 {{ user.role.replace('_', ' ') }}
@@ -52,6 +53,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <!-- Create Modal -->
@@ -59,17 +61,17 @@
             <form @submit.prevent="submitCreate" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                    <input v-model="createForm.name" type="text" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+                    <input v-model="createForm.name" type="text" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
                     <p v-if="createForm.errors.name" class="text-red-500 text-xs mt-1">{{ createForm.errors.name }}</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                    <input v-model="createForm.phone" type="tel" placeholder="09XXXXXXXXX" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+                    <input v-model="createForm.phone" type="tel" placeholder="09XXXXXXXXX" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
                     <p v-if="createForm.errors.phone" class="text-red-500 text-xs mt-1">{{ createForm.errors.phone }}</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                    <select v-model="createForm.role" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <select v-model="createForm.role" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
                         <option value="">Select role</option>
                         <option value="barangay_official">Barangay Official</option>
                         <option value="personnel">Personnel</option>
@@ -77,8 +79,8 @@
                     <p v-if="createForm.errors.role" class="text-red-500 text-xs mt-1">{{ createForm.errors.role }}</p>
                 </div>
                 <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" @click="showCreateModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
-                    <button type="submit" :disabled="createForm.processing" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700">Save</button>
+                    <button type="button" @click="showCreateModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
+                    <button type="submit" :disabled="createForm.processing" class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all">Save</button>
                 </div>
             </form>
         </Modal>
@@ -88,17 +90,17 @@
             <form @submit.prevent="submitEdit" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                    <input v-model="editForm.name" type="text" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+                    <input v-model="editForm.name" type="text" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
                     <p v-if="editForm.errors.name" class="text-red-500 text-xs mt-1">{{ editForm.errors.name }}</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                    <input v-model="editForm.phone" type="tel" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+                    <input v-model="editForm.phone" type="tel" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
                     <p v-if="editForm.errors.phone" class="text-red-500 text-xs mt-1">{{ editForm.errors.phone }}</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                    <select v-model="editForm.role" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <select v-model="editForm.role" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
                         <option value="barangay_official">Barangay Official</option>
                         <option value="personnel">Personnel</option>
                     </select>
@@ -106,24 +108,24 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                    <select v-model="editForm.status" class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <select v-model="editForm.status" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
                         <option value="active">Active</option>
                         <option value="pending">Pending</option>
                         <option value="rejected">Rejected</option>
                     </select>
                 </div>
                 <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" @click="showEditModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
-                    <button type="submit" :disabled="editForm.processing" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700">Update</button>
+                    <button type="button" @click="showEditModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
+                    <button type="submit" :disabled="editForm.processing" class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all">Update</button>
                 </div>
             </form>
         </Modal>
 
         <!-- Delete Confirmation Modal -->
         <Modal :show="showDeleteModal" title="Delete User" @close="showDeleteModal = false">
-            <p class="text-gray-600 text-sm mb-6">Are you sure you want to delete <span class="font-semibold">{{ selectedUser?.name }}</span>? This action cannot be undone.</p>
+            <p class="text-rose-950/80 text-sm mb-6">Are you sure you want to delete <span class="font-semibold">{{ selectedUser?.name }}</span>? This action cannot be undone.</p>
             <div class="flex justify-end gap-3">
-                <button @click="showDeleteModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
+                <button @click="showDeleteModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
                 <button @click="submitDelete" class="bg-red-500 text-white px-4 py-2 rounded-md text-sm hover:bg-red-600">Delete</button>
             </div>
         </Modal>

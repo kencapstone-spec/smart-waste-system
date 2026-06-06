@@ -22,9 +22,10 @@
         <h3 class="text-xl font-bold text-gray-900 mb-6">Upcoming Collections</h3>
 
         <!-- Desktop Table -->
-        <div class="hidden md:block bg-white rounded-3xl shadow-[0_4px_24px_rgba(225,29,72,0.04)] border border-gray-100 overflow-hidden mb-8">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50/50 border-b border-gray-100">
+        <div class="hidden md:block bg-white/70 backdrop-blur-2xl rounded-3xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden mb-8">
+            <div class="overflow-x-auto pb-4">
+                <table class="w-full text-sm whitespace-nowrap">
+                <thead class="bg-white/40 border-b border-white/50 backdrop-blur-sm">
                     <tr>
                         <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Title & Time</th>
                         <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Frequency</th>
@@ -47,7 +48,7 @@
                             <p class="text-gray-900 font-medium text-sm mb-0.5">Start: {{ formatDate(schedule.start_date) }}</p>
                             <p class="text-gray-500 text-xs">End: {{ schedule.end_date ? formatDate(schedule.end_date) : 'Ongoing' }}</p>
                         </td>
-                        <td class="px-8 py-5 text-gray-600">
+                        <td class="px-8 py-5 text-rose-950/80">
                             <span v-for="a in schedule.assignments" :key="a.id" class="block font-medium">{{ a.personnel?.name }}</span>
                             <span v-if="!schedule.assignments?.length" class="text-gray-400 italic">Unassigned</span>
                         </td>
@@ -60,11 +61,12 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <!-- Mobile Stacked Cards -->
         <div class="md:hidden space-y-4 mb-8">
-            <div v-for="schedule in schedules" :key="schedule.id" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col gap-4 relative overflow-hidden">
+            <div v-for="schedule in schedules" :key="schedule.id" class="bg-white/70 backdrop-blur-2xl rounded-2xl p-5 border border-white/60 shadow-md shadow-rose-900/5 flex flex-col gap-4 relative overflow-hidden">
                 <div class="absolute top-0 right-0 p-4">
                     <span class="px-3 py-1 rounded-lg text-[10px] font-bold bg-rose-100 text-rose-700 capitalize">{{ schedule.frequency }}</span>
                 </div>

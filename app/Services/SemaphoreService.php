@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Log;
 class SemaphoreService
 {
     protected string $apiKey;
+
     protected string $senderName;
+
     protected string $apiUrl = 'https://api.semaphore.co/api/v4/messages';
 
     public function __construct()
@@ -21,6 +23,7 @@ class SemaphoreService
     {
         if ($this->apiKey === 'your_api_key_here' || empty($this->apiKey)) {
             Log::info("DEV MODE - SMS to {$phone}: {$message}");
+
             return true;
         }
 
@@ -34,7 +37,8 @@ class SemaphoreService
 
             return $response->successful();
         } catch (\Exception $e) {
-            Log::error('Semaphore SMS error: ' . $e->getMessage());
+            Log::error('Semaphore SMS error: '.$e->getMessage());
+
             return false;
         }
     }
@@ -42,6 +46,7 @@ class SemaphoreService
     public function sendOtp(string $phone, string $code): bool
     {
         $message = "Your Smart Waste System OTP is: {$code}. Valid for 10 minutes. Do not share this code.";
+
         return $this->sendSms($phone, $message);
     }
 
@@ -50,11 +55,11 @@ class SemaphoreService
         $phone = preg_replace('/\D/', '', $phone);
 
         if (str_starts_with($phone, '0')) {
-            $phone = '63' . substr($phone, 1);
+            $phone = '63'.substr($phone, 1);
         }
 
-        if (!str_starts_with($phone, '63')) {
-            $phone = '63' . $phone;
+        if (! str_starts_with($phone, '63')) {
+            $phone = '63'.$phone;
         }
 
         return $phone;

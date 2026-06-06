@@ -15,9 +15,10 @@
         </div>
 
         <!-- Desktop Table -->
-        <div class="hidden md:block bg-white rounded-3xl shadow-[0_4px_24px_rgba(225,29,72,0.04)] border border-gray-100 overflow-hidden mb-8">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50/50 border-b border-gray-100">
+        <div class="hidden md:block bg-white/70 backdrop-blur-2xl rounded-3xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden mb-8">
+            <div class="overflow-x-auto pb-4">
+                <table class="w-full text-sm whitespace-nowrap">
+                <thead class="bg-white/40 border-b border-white/50 backdrop-blur-sm">
                     <tr>
                         <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Type</th>
                         <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Description</th>
@@ -33,7 +34,7 @@
                                 {{ report.type === 'missed_collection' ? 'Missed Collection' : 'Illegal Dumping' }}
                             </span>
                         </td>
-                        <td class="px-8 py-5 text-gray-600 font-medium max-w-xs truncate">{{ report.description }}</td>
+                        <td class="px-8 py-5 text-rose-950/70 font-semibold max-w-xs truncate">{{ report.description }}</td>
                         <td class="px-8 py-5">
                             <span :class="statusClass(report.status)" class="px-3 py-1.5 rounded-lg text-xs font-bold capitalize">{{ report.status }}</span>
                         </td>
@@ -50,11 +51,12 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <!-- Mobile Stacked Cards -->
         <div class="md:hidden space-y-4 mb-8">
-            <div v-for="report in reports.data" :key="report.id" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col gap-4">
+            <div v-for="report in reports.data" :key="report.id" class="bg-white/70 backdrop-blur-2xl rounded-2xl p-5 border border-white/60 shadow-md shadow-rose-900/5 flex flex-col gap-4">
                 <div class="flex justify-between items-start">
                     <span :class="typeClass(report.type)" class="px-3 py-1 rounded-lg text-[10px] font-bold">
                         {{ report.type === 'missed_collection' ? 'Missed Collection' : 'Illegal Dumping' }}
@@ -105,7 +107,7 @@
                         <input type="file" accept="image/*" multiple @change="handlePhotos" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
                         <div class="text-center">
                             <span class="text-2xl mb-2 block opacity-50 group-hover:scale-110 transition-transform">📸</span>
-                            <span class="text-sm font-medium text-gray-600">Tap to attach photos</span>
+                            <span class="text-sm font-medium text-rose-950/80">Tap to attach photos</span>
                             <p v-if="reportForm.photos.length" class="text-xs text-rose-600 font-bold mt-2">{{ reportForm.photos.length }} file(s) selected</p>
                         </div>
                     </div>
@@ -127,7 +129,7 @@
                 </div>
                 
                 <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-100 mt-6">
-                    <button type="button" @click="showCreateModal = false" class="w-full sm:w-auto px-6 py-3 text-sm text-gray-600 font-bold hover:bg-gray-50 rounded-xl transition-all">Cancel</button>
+                    <button type="button" @click="showCreateModal = false" class="w-full sm:w-auto px-6 py-3 text-sm text-rose-950/80 font-bold hover:bg-rose-50/50 transition-colors rounded-xl transition-all">Cancel</button>
                     <button type="submit" :disabled="reportForm.processing" class="w-full sm:w-auto bg-rose-900 text-white px-8 py-3 rounded-xl text-sm font-bold hover:bg-rose-800 transition-all shadow-lg shadow-rose-900/20 disabled:opacity-60 flex justify-center items-center">
                         Submit Report
                     </button>
@@ -162,7 +164,7 @@
                 <div v-if="selectedReport.photos?.length > 0" class="mb-6">
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Photo Evidence</p>
                     <div class="grid grid-cols-3 gap-2">
-                        <img v-for="photo in selectedReport.photos" :key="photo.id" :src="'/storage/' + photo.photo_path" class="w-full h-24 object-cover rounded-xl border border-gray-200 shadow-sm" />
+                        <img v-for="photo in selectedReport.photos" :key="photo.id" @click="viewingPhoto = '/storage/' + photo.photo_path" :src="'/storage/' + photo.photo_path" class="w-full h-24 object-cover rounded-xl border border-gray-200 shadow-sm cursor-pointer hover:opacity-80 transition-opacity" />
                     </div>
                 </div>
                 
@@ -174,6 +176,14 @@
                 <div class="pt-6 mt-6 border-t border-gray-100 flex justify-end">
                     <button @click="showViewModal = false" class="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-sm rounded-xl transition-colors">Close</button>
                 </div>
+            </div>
+        </Modal>
+
+        <!-- Fullscreen Image Modal -->
+        <Modal :show="!!viewingPhoto" max-width="4xl" @close="viewingPhoto = null">
+            <div class="relative bg-black rounded-xl overflow-hidden p-1">
+                <button @click="viewingPhoto = null" class="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/80 rounded-full w-8 h-8 flex items-center justify-center transition-colors">✕</button>
+                <img :src="viewingPhoto" class="w-full h-auto max-h-[85vh] object-contain rounded-lg" />
             </div>
         </Modal>
     </AuthLayout>
@@ -192,6 +202,7 @@ const props = defineProps({
 const showCreateModal = ref(false)
 const showViewModal = ref(false)
 const selectedReport = ref(null)
+const viewingPhoto = ref(null)
 
 const reportForm = useForm({
     type: '',

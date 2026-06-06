@@ -25,10 +25,11 @@
         </div>
 
         <!-- Desktop Table -->
-        <div class="hidden md:block bg-white rounded-3xl shadow-[0_4px_24px_rgba(225,29,72,0.04)] border border-gray-100 overflow-hidden mb-8">
+        <div class="hidden md:block bg-white/70 backdrop-blur-2xl rounded-3xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden mb-8">
             <div v-if="points.length > 0">
-                <table class="w-full text-sm">
-                    <thead class="bg-gray-50/50 border-b border-gray-100">
+                <div class="overflow-x-auto pb-4">
+                    <table class="w-full text-sm whitespace-nowrap">
+                    <thead class="bg-white/40 border-b border-white/50 backdrop-blur-sm">
                         <tr>
                             <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Points</th>
                             <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Awarded By</th>
@@ -43,12 +44,13 @@
                                 <span class="text-emerald-600 font-extrabold text-base bg-emerald-50 px-3 py-1 rounded-lg">+{{ point.points }}</span>
                             </td>
                             <td class="px-8 py-5 text-gray-900 font-medium">{{ point.awarded_by?.name ?? '—' }}</td>
-                            <td class="px-8 py-5 text-gray-600">{{ point.collection_task?.schedule?.street?.name ?? '—' }}</td>
+                            <td class="px-8 py-5 text-rose-950/80">{{ point.collection_task?.schedule?.street?.name ?? '—' }}</td>
                             <td class="px-8 py-5 text-gray-500 italic">{{ point.remarks || 'No remarks' }}</td>
                             <td class="px-8 py-5 text-gray-500 font-medium">{{ formatDate(point.created_at) }}</td>
                         </tr>
                     </tbody>
                 </table>
+                </div>
             </div>
             <div v-else class="px-8 py-16 text-center text-gray-400">
                 <div class="text-4xl mb-4 opacity-50">🌱</div>
@@ -58,7 +60,7 @@
 
         <!-- Mobile Stacked Cards -->
         <div class="md:hidden space-y-4 mb-8">
-            <div v-for="point in points" :key="point.id" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col gap-3">
+            <div v-for="point in points" :key="point.id" class="bg-white/70 backdrop-blur-2xl rounded-2xl p-5 border border-white/60 shadow-md shadow-rose-900/5 flex flex-col gap-3">
                 <div class="flex justify-between items-start">
                     <div>
                         <p class="text-xs text-gray-500 font-medium mb-1">{{ formatDate(point.created_at) }}</p>
@@ -67,7 +69,7 @@
                     </div>
                     <span class="text-emerald-600 font-extrabold text-lg bg-emerald-50 px-3 py-1 rounded-lg">+{{ point.points }}</span>
                 </div>
-                <div v-if="point.remarks" class="pt-3 border-t border-gray-50 text-sm text-gray-600 italic">
+                <div v-if="point.remarks" class="pt-3 border-t border-gray-50 text-sm text-rose-950/80 italic">
                     "{{ point.remarks }}"
                 </div>
             </div>

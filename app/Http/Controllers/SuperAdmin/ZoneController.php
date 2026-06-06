@@ -33,7 +33,7 @@ class ZoneController extends Controller
     public function update(Request $request, Zone $zone)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:zones,name,' . $zone->id],
+            'name' => ['required', 'string', 'max:255', 'unique:zones,name,'.$zone->id],
             'description' => ['nullable', 'string', 'max:500'],
         ]);
 

@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\OtpCode;
-use Illuminate\Support\Str;
 
 class OtpService
 {
@@ -34,7 +33,7 @@ class OtpService
             ->latest()
             ->first();
 
-        if (!$otp) {
+        if (! $otp) {
             return false;
         }
 

@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Street;
 use App\Models\User;
 use App\Services\OtpService;
 use App\Services\SemaphoreService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-
-use App\Models\Street;
 
 class OtpController extends Controller
 {
@@ -35,7 +34,7 @@ class OtpController extends Controller
 
         $user = User::where('phone', $request->phone)->first();
 
-        if (!$user) {
+        if (! $user) {
             return back()->withErrors(['phone' => 'No account found with this phone number.']);
         }
 
@@ -72,7 +71,7 @@ class OtpController extends Controller
             $valid = $this->otpService->verify($request->phone, $request->code);
         }
 
-        if (!$valid) {
+        if (! $valid) {
             return back()->withErrors(['code' => 'Invalid or expired OTP.']);
         }
 

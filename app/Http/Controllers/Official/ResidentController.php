@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Official;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\Point;
+use App\Models\User;
 use App\Services\SemaphoreService;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ResidentController extends Controller
@@ -49,7 +48,7 @@ class ResidentController extends Controller
 
         $this->semaphoreService->sendSms(
             $resident->phone,
-            "Congratulations! Your Smart Waste System account has been approved. You can now log in."
+            'Congratulations! Your Smart Waste System account has been approved. You can now log in.'
         );
 
         return back()->with('success', 'Resident approved successfully.');
@@ -61,7 +60,7 @@ class ResidentController extends Controller
 
         $this->semaphoreService->sendSms(
             $resident->phone,
-            "Your Smart Waste System account registration has been rejected. Please contact the Barangay Office for more information."
+            'Your Smart Waste System account registration has been rejected. Please contact the Barangay Office for more information.'
         );
 
         return back()->with('success', 'Resident rejected.');
@@ -73,7 +72,7 @@ class ResidentController extends Controller
 
         $this->semaphoreService->sendSms(
             $resident->phone,
-            "Your Smart Waste System account has been deactivated. Please contact the Barangay Office if this is a mistake."
+            'Your Smart Waste System account has been deactivated. Please contact the Barangay Office if this is a mistake.'
         );
 
         return back()->with('success', 'Resident deactivated.');
@@ -82,6 +81,7 @@ class ResidentController extends Controller
     public function destroy(User $resident)
     {
         $resident->delete();
+
         return back()->with('success', 'Resident account deleted successfully.');
     }
 }

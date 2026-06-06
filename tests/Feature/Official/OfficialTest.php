@@ -2,10 +2,8 @@
 
 namespace Tests\Feature\Official;
 
-use App\Models\CollectionTask;
 use App\Models\Report;
 use App\Models\Schedule;
-use App\Models\ScheduleAssignment;
 use App\Models\Street;
 use App\Models\User;
 use App\Models\Zone;
@@ -24,6 +22,7 @@ class OfficialTest extends TestCase
     private function makeStreet(): Street
     {
         $zone = Zone::create(['name' => 'Zone 1']);
+
         return Street::create(['zone_id' => $zone->id, 'name' => 'Rizal St.']);
     }
 
@@ -55,19 +54,19 @@ class OfficialTest extends TestCase
 
     public function test_official_can_create_schedule(): void
     {
-        $official  = $this->official();
-        $street    = $this->makeStreet();
+        $official = $this->official();
+        $street = $this->makeStreet();
         $personnel = User::factory()->personnel()->create();
 
         $response = $this->actingAs($official)->post('/official/schedules', [
-            'street_id'      => $street->id,
-            'title'          => 'Weekly Collection',
-            'description'    => 'Every Monday',
-            'frequency'      => 'weekly',
-            'start_date'     => '2026-07-01',
-            'end_date'       => '2026-12-31',
-            'collection_time'=> '07:00',
-            'personnel_ids'  => [$personnel->id],
+            'street_id' => $street->id,
+            'title' => 'Weekly Collection',
+            'description' => 'Every Monday',
+            'frequency' => 'weekly',
+            'start_date' => '2026-07-01',
+            'end_date' => '2026-12-31',
+            'collection_time' => '07:00',
+            'personnel_ids' => [$personnel->id],
         ]);
 
         $response->assertRedirect();
@@ -78,15 +77,15 @@ class OfficialTest extends TestCase
     public function test_official_cannot_create_schedule_without_personnel(): void
     {
         $official = $this->official();
-        $street   = $this->makeStreet();
+        $street = $this->makeStreet();
 
         $response = $this->actingAs($official)->post('/official/schedules', [
-            'street_id'       => $street->id,
-            'title'           => 'No Personnel',
-            'frequency'       => 'weekly',
-            'start_date'      => '2026-07-01',
+            'street_id' => $street->id,
+            'title' => 'No Personnel',
+            'frequency' => 'weekly',
+            'start_date' => '2026-07-01',
             'collection_time' => '07:00',
-            'personnel_ids'   => [],
+            'personnel_ids' => [],
         ]);
 
         $response->assertSessionHasErrors('personnel_ids');
@@ -94,16 +93,16 @@ class OfficialTest extends TestCase
 
     public function test_official_can_delete_schedule(): void
     {
-        $official  = $this->official();
-        $street    = $this->makeStreet();
-        $schedule  = Schedule::create([
-            'street_id'       => $street->id,
-            'created_by'      => $official->id,
-            'title'           => 'To Delete',
-            'frequency'       => 'once',
-            'start_date'      => '2026-07-01',
+        $official = $this->official();
+        $street = $this->makeStreet();
+        $schedule = Schedule::create([
+            'street_id' => $street->id,
+            'created_by' => $official->id,
+            'title' => 'To Delete',
+            'frequency' => 'once',
+            'start_date' => '2026-07-01',
             'collection_time' => '07:00',
-            'status'          => 'active',
+            'status' => 'active',
         ]);
 
         $response = $this->actingAs($official)->delete("/official/schedules/{$schedule->id}");
@@ -126,22 +125,22 @@ class OfficialTest extends TestCase
     {
         $official = $this->official();
         $resident = User::factory()->resident()->create();
-        $report   = Report::create([
+        $report = Report::create([
             'resident_id' => $resident->id,
-            'type'        => 'missed_collection',
+            'type' => 'missed_collection',
             'description' => 'Garbage not collected.',
-            'status'      => 'pending',
+            'status' => 'pending',
         ]);
 
         $response = $this->actingAs($official)->post("/official/reports/{$report->id}/respond", [
             'official_response' => 'We will send personnel.',
-            'status'            => 'resolved',
+            'status' => 'resolved',
         ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('reports', [
-            'id'                => $report->id,
-            'status'            => 'resolved',
+            'id' => $report->id,
+            'status' => 'resolved',
             'official_response' => 'We will send personnel.',
         ]);
     }
@@ -150,16 +149,16 @@ class OfficialTest extends TestCase
     {
         $official = $this->official();
         $resident = User::factory()->resident()->create();
-        $report   = Report::create([
+        $report = Report::create([
             'resident_id' => $resident->id,
-            'type'        => 'illegal_dumping',
+            'type' => 'illegal_dumping',
             'description' => 'Dumping near river.',
-            'status'      => 'pending',
+            'status' => 'pending',
         ]);
 
         $response = $this->actingAs($official)->post("/official/reports/{$report->id}/respond", [
             'official_response' => '',
-            'status'            => 'reviewed',
+            'status' => 'reviewed',
         ]);
 
         $response->assertSessionHasErrors('official_response');

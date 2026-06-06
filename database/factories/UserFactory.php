@@ -14,11 +14,11 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'         => fake()->name(),
-            'phone'        => '09' . fake()->unique()->numerify('#########'),
-            'role'         => 'resident',
-            'status'       => 'active',
-            'address'      => fake()->address(),
+            'name' => fake()->name(),
+            'phone' => '09'.fake()->unique()->numerify('#########'),
+            'role' => 'resident',
+            'status' => 'active',
+            'address' => fake()->address(),
             'remember_token' => Str::random(10),
         ];
     }

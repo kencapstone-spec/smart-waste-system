@@ -144,12 +144,12 @@ class ScheduleController extends Controller
                     ->where('collection_date', $date->toDateString())
                     ->exists();
 
-                if (!$exists) {
+                if (! $exists) {
                     CollectionTask::create([
-                        'schedule_id'     => $schedule->id,
-                        'personnel_id'    => $personnelId,
+                        'schedule_id' => $schedule->id,
+                        'personnel_id' => $personnelId,
                         'collection_date' => $date->toDateString(),
-                        'status'          => 'pending',
+                        'status' => 'pending',
                     ]);
                 }
             }
@@ -163,7 +163,7 @@ class ScheduleController extends Controller
     private function getCollectionDates(Schedule $schedule): array
     {
         $start = Carbon::parse($schedule->start_date)->startOfDay();
-        $end   = $schedule->end_date
+        $end = $schedule->end_date
             ? Carbon::parse($schedule->end_date)->startOfDay()
             : $start->copy()->addDays(90); // default: 90 days max
 

@@ -14,8 +14,8 @@ class PdfReportController extends Controller
     public function collectionSummary(Request $request)
     {
         $tasks = CollectionTask::with(['schedule.street.zone', 'personnel'])
-            ->when($request->from, fn($q) => $q->whereDate('collection_date', '>=', $request->from))
-            ->when($request->to, fn($q) => $q->whereDate('collection_date', '<=', $request->to))
+            ->when($request->from, fn ($q) => $q->whereDate('collection_date', '>=', $request->from))
+            ->when($request->to, fn ($q) => $q->whereDate('collection_date', '<=', $request->to))
             ->latest()
             ->get();
 
@@ -31,8 +31,8 @@ class PdfReportController extends Controller
     public function complaintsSummary(Request $request)
     {
         $reports = Report::with(['resident', 'respondedBy'])
-            ->when($request->from, fn($q) => $q->whereDate('created_at', '>=', $request->from))
-            ->when($request->to, fn($q) => $q->whereDate('created_at', '<=', $request->to))
+            ->when($request->from, fn ($q) => $q->whereDate('created_at', '>=', $request->from))
+            ->when($request->to, fn ($q) => $q->whereDate('created_at', '<=', $request->to))
             ->latest()
             ->get();
 
@@ -53,6 +53,7 @@ class PdfReportController extends Controller
             ->get()
             ->map(function ($resident) {
                 $resident->total_points = $resident->points->sum('points');
+
                 return $resident;
             })
             ->sortByDesc('total_points')

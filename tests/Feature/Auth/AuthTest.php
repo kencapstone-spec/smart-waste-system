@@ -2,10 +2,9 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\OtpCode;
+use App\Models\Street;
 use App\Models\User;
 use App\Models\Zone;
-use App\Models\Street;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -61,7 +60,7 @@ class AuthTest extends TestCase
 
     public function test_register_page_is_accessible(): void
     {
-        $zone   = Zone::create(['name' => 'Zone 1']);
+        $zone = Zone::create(['name' => 'Zone 1']);
         $street = Street::create(['zone_id' => $zone->id, 'name' => 'Rizal St.']);
 
         $response = $this->get('/register');
@@ -71,20 +70,20 @@ class AuthTest extends TestCase
 
     public function test_resident_can_register(): void
     {
-        $zone   = Zone::create(['name' => 'Zone 1']);
+        $zone = Zone::create(['name' => 'Zone 1']);
         $street = Street::create(['zone_id' => $zone->id, 'name' => 'Rizal St.']);
 
         $response = $this->post('/register', [
-            'name'      => 'Juan dela Cruz',
-            'phone'     => '09171234567',
-            'address'   => 'Purok 1',
+            'name' => 'Juan dela Cruz',
+            'phone' => '09171234567',
+            'address' => 'Purok 1',
             'street_id' => $street->id,
         ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('users', [
-            'phone'  => '09171234567',
-            'role'   => 'resident',
+            'phone' => '09171234567',
+            'role' => 'resident',
             'status' => 'pending',
         ]);
     }
@@ -93,13 +92,13 @@ class AuthTest extends TestCase
     {
         User::factory()->create(['phone' => '09171234567']);
 
-        $zone   = Zone::create(['name' => 'Zone 1']);
+        $zone = Zone::create(['name' => 'Zone 1']);
         $street = Street::create(['zone_id' => $zone->id, 'name' => 'Rizal St.']);
 
         $response = $this->post('/register', [
-            'name'      => 'Another User',
-            'phone'     => '09171234567',
-            'address'   => 'Purok 2',
+            'name' => 'Another User',
+            'phone' => '09171234567',
+            'address' => 'Purok 2',
             'street_id' => $street->id,
         ]);
 

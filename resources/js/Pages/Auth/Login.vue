@@ -1,8 +1,8 @@
 <template>
     <GuestLayout>
-        <div class="flex flex-col md:flex-row w-full max-w-4xl bg-white rounded-[24px] shadow-2xl overflow-hidden min-h-[550px] relative transition-all duration-500">
+        <div class="flex flex-col md:flex-row w-full max-w-4xl bg-white/70 backdrop-blur-3xl border border-white/50 rounded-[32px] shadow-[0_32px_64px_rgba(225,29,72,0.15)] overflow-hidden min-h-[550px] relative transition-all duration-500">
             
-            <div class="w-full md:w-1/2 bg-white px-8 pt-24 pb-16 md:p-12 md:pt-20 flex flex-col justify-center relative">
+            <div class="w-full md:w-1/2 px-8 pt-24 pb-16 md:p-12 md:pt-20 flex flex-col justify-center relative">
                 
                 <a href="/" class="absolute top-8 left-8 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-gray-900 transition-colors duration-200 z-30 group">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform">
@@ -98,7 +98,7 @@
             
             <template #footer>
                 <div class="w-full flex justify-center">
-                    <button @click="showOtpModal = false" class="text-sm font-semibold text-gray-400 hover:text-gray-600 transition-colors">Cancel</button>
+                    <button @click="showOtpModal = false" class="text-sm font-semibold text-gray-400 hover:text-rose-950/80 transition-colors">Cancel</button>
                 </div>
             </template>
         </Modal>

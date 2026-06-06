@@ -1,6 +1,6 @@
 <template>
     <Head title="Authentication" />
-    <div class="w-full min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans">
+    <div class="w-full min-h-screen bg-rose-50/30 flex flex-col md:flex-row font-sans">
         
         <!-- Left Side: Premium Branding (Hidden on Mobile) -->
         <div class="hidden md:flex md:w-5/12 lg:w-1/2 bg-gradient-to-br from-rose-950 via-rose-900 to-red-900 relative overflow-hidden flex-col justify-center px-12 lg:px-20">
@@ -13,8 +13,8 @@
             </div>
 
             <!-- Floating Orbs for depth -->
-            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-rose-500/20 rounded-full blur-[120px] mix-blend-screen translate-x-1/3 -translate-y-1/3"></div>
-            <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-red-500/20 rounded-full blur-[120px] mix-blend-screen -translate-x-1/3 translate-y-1/3"></div>
+            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-rose-500/20 rounded-full blur-[120px] mix-blend-screen translate-x-1/3 -translate-y-1/3 animate-float"></div>
+            <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-red-500/20 rounded-full blur-[120px] mix-blend-screen -translate-x-1/3 translate-y-1/3 animate-float-delayed"></div>
 
             <div class="relative z-10 w-full max-w-lg mx-auto">
                 <div class="w-20 h-20 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl flex items-center justify-center text-4xl mb-12 shadow-2xl shadow-black/20">
@@ -55,18 +55,18 @@
                 <div class="w-full max-w-[440px] mx-auto py-2">
                     
                     <!-- Sleek Segmented Control Tab Switcher -->
-                    <div class="bg-slate-100 p-1.5 rounded-2xl flex items-center mb-10 w-full shadow-inner border border-slate-200/50">
+                    <div class="bg-rose-50/50 p-1.5 rounded-2xl flex items-center mb-10 w-full shadow-inner border border-rose-100">
                         <button 
                             @click="switchTab(true)" 
                             class="flex-1 py-3 rounded-xl text-sm font-bold transition-all duration-300"
-                            :class="isLogin ? 'bg-white text-rose-900 shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-slate-200/50' : 'text-slate-500 hover:text-slate-700'"
+                            :class="isLogin ? 'bg-white text-rose-900 shadow-[0_4px_12px_rgba(225,29,72,0.05)] border border-rose-100' : 'text-rose-900/60 hover:text-rose-900'"
                         >
                             Sign In
                         </button>
                         <button 
                             @click="switchTab(false)" 
                             class="flex-1 py-3 rounded-xl text-sm font-bold transition-all duration-300"
-                            :class="!isLogin ? 'bg-white text-rose-900 shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-slate-200/50' : 'text-slate-500 hover:text-slate-700'"
+                            :class="!isLogin ? 'bg-white text-rose-900 shadow-[0_4px_12px_rgba(225,29,72,0.05)] border border-rose-100' : 'text-rose-900/60 hover:text-rose-900'"
                         >
                             Create Account
                         </button>
@@ -75,18 +75,18 @@
                     <!-- Login Form -->
                     <div v-if="isLogin" class="animate-fadeSlideUp w-full">
                         <div class="mb-10 text-center sm:text-left">
-                            <h2 class="text-3xl font-extrabold text-slate-900 mb-3 tracking-tight">Welcome Back</h2>
-                            <p class="text-slate-500 font-medium">Please enter your phone number to receive a secure login code.</p>
+                            <h2 class="text-3xl font-extrabold text-rose-950 mb-3 tracking-tight">Welcome Back</h2>
+                            <p class="text-rose-900/60 font-medium">Please enter your phone number to receive a secure login code.</p>
                         </div>
 
                         <form @submit.prevent="sendOtp" class="space-y-6">
                             <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-2">Phone Number</label>
+                                <label class="block text-sm font-bold text-rose-950 mb-2">Phone Number</label>
                                 <input
                                     v-model="loginForm.phone"
                                     type="tel"
                                     placeholder="09XXXXXXXXX"
-                                    class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all duration-300 font-medium text-lg"
+                                    class="w-full bg-rose-50/50 border border-rose-100 rounded-2xl px-5 py-4 text-rose-950 placeholder-rose-900/40 focus:outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all duration-300 font-medium text-lg"
                                 />
                                 <p v-if="loginForm.errors.phone" class="text-rose-500 text-sm mt-2 font-bold flex items-center gap-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
@@ -108,39 +108,39 @@
                     <!-- Register Form -->
                     <div v-else class="animate-fadeSlideUp w-full">
                         <div class="mb-10 text-center sm:text-left">
-                            <h2 class="text-3xl font-extrabold text-slate-900 mb-3 tracking-tight">Join Your Neighbors</h2>
-                            <p class="text-slate-500 font-medium">Register your household details to get started with SmartWaste.</p>
+                            <h2 class="text-3xl font-extrabold text-rose-950 mb-3 tracking-tight">Join Your Neighbors</h2>
+                            <p class="text-rose-900/60 font-medium">Register your household details to get started with SmartWaste.</p>
                         </div>
 
                         <form @submit.prevent="submitRegister" class="space-y-5">
                             <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-2">Full Name</label>
-                                <input v-model="registerForm.name" type="text" placeholder="Juan Dela Cruz" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all duration-300 font-medium" />
+                                <label class="block text-sm font-bold text-rose-950 mb-2">Full Name</label>
+                                <input v-model="registerForm.name" type="text" placeholder="Juan Dela Cruz" class="w-full bg-rose-50/50 border border-rose-100 rounded-2xl px-5 py-4 text-rose-950 placeholder-rose-900/40 focus:outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all duration-300 font-medium" />
                                 <p v-if="registerForm.errors.name" class="text-rose-500 text-sm mt-2 font-bold">{{ registerForm.errors.name }}</p>
                             </div>
                             
                             <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-2">Phone Number</label>
-                                <input v-model="registerForm.phone" type="tel" placeholder="09XXXXXXXXX" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all duration-300 font-medium" />
+                                <label class="block text-sm font-bold text-rose-950 mb-2">Phone Number</label>
+                                <input v-model="registerForm.phone" type="tel" placeholder="09XXXXXXXXX" class="w-full bg-rose-50/50 border border-rose-100 rounded-2xl px-5 py-4 text-rose-950 placeholder-rose-900/40 focus:outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all duration-300 font-medium" />
                                 <p v-if="registerForm.errors.phone" class="text-rose-500 text-sm mt-2 font-bold">{{ registerForm.errors.phone }}</p>
                             </div>
 
                             <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-2">Address</label>
-                                <input v-model="registerForm.address" type="text" placeholder="House No., Street, Barangay" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all duration-300 font-medium" />
+                                <label class="block text-sm font-bold text-rose-950 mb-2">Address</label>
+                                <input v-model="registerForm.address" type="text" placeholder="House No., Street, Barangay" class="w-full bg-rose-50/50 border border-rose-100 rounded-2xl px-5 py-4 text-rose-950 placeholder-rose-900/40 focus:outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all duration-300 font-medium" />
                                 <p v-if="registerForm.errors.address" class="text-rose-500 text-sm mt-2 font-bold">{{ registerForm.errors.address }}</p>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Street</label>
                                 <div class="relative">
-                                    <select v-model="registerForm.street_id" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 appearance-none focus:outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all duration-300 font-medium cursor-pointer" :class="!registerForm.street_id ? 'text-slate-400' : 'text-slate-900'">
+                                    <select v-model="registerForm.street_id" class="w-full bg-rose-50/50 border border-rose-100 rounded-2xl px-5 py-4 appearance-none focus:outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all duration-300 font-medium cursor-pointer" :class="!registerForm.street_id ? 'text-rose-900/40' : 'text-rose-950'">
                                         <option value="" disabled>Select your street</option>
-                                        <option v-for="street in streets" :key="street.id" :value="street.id" class="text-slate-900">{{ street.name }} ({{ street.zone.name }})</option>
+                                        <option v-for="street in streets" :key="street.id" :value="street.id" class="text-rose-950">{{ street.name }} ({{ street.zone.name }})</option>
                                     </select>
                                     <div class="absolute inset-y-0 right-0 flex items-center px-5 pointer-events-none">
-                                        <div class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center border border-slate-100">
-                                            <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                                        <div class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center border border-rose-100">
+                                            <svg class="w-4 h-4 text-rose-900/60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                                         </div>
                                     </div>
                                 </div>

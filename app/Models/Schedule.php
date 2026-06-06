@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class Schedule extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'street_id',
         'created_by',

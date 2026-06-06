@@ -2,13 +2,13 @@
 
 namespace Tests\Feature\Resident;
 
+use App\Models\CollectionTask;
+use App\Models\Point;
 use App\Models\Report;
 use App\Models\Schedule;
 use App\Models\Street;
 use App\Models\User;
-use App\Models\Zone;
-use App\Models\Point;
-use App\Models\CollectionTask; // <--- Added this import
+use App\Models\Zone; // <--- Added this import
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -28,6 +28,7 @@ class ResidentTest extends TestCase
     private function makeStreet(): Street
     {
         $zone = Zone::create(['name' => 'Zone 1']);
+
         return Street::create(['zone_id' => $zone->id, 'name' => 'Rizal St.']);
     }
 
@@ -65,37 +66,36 @@ class ResidentTest extends TestCase
 
     public function test_resident_sees_only_their_street_schedules(): void
     {
-        $street    = $this->makeStreet();
-        $resident  = $this->resident($street);
-        $official  = User::factory()->official()->create();
+        $street = $this->makeStreet();
+        $resident = $this->resident($street);
+        $official = User::factory()->official()->create();
 
         $mySchedule = Schedule::create([
-            'street_id'       => $street->id,
-            'created_by'      => $official->id,
-            'title'           => 'My Street Schedule',
-            'frequency'       => 'weekly',
-            'start_date'      => now()->toDateString(),
+            'street_id' => $street->id,
+            'created_by' => $official->id,
+            'title' => 'My Street Schedule',
+            'frequency' => 'weekly',
+            'start_date' => now()->toDateString(),
             'collection_time' => '07:00',
-            'status'          => 'active',
+            'status' => 'active',
         ]);
 
-        $otherZone   = Zone::create(['name' => 'Zone 2']);
+        $otherZone = Zone::create(['name' => 'Zone 2']);
         $otherStreet = Street::create(['zone_id' => $otherZone->id, 'name' => 'Other St.']);
         Schedule::create([
-            'street_id'       => $otherStreet->id,
-            'created_by'      => $official->id,
-            'title'           => 'Other Street Schedule',
-            'frequency'       => 'weekly',
-            'start_date'      => now()->toDateString(),
+            'street_id' => $otherStreet->id,
+            'created_by' => $official->id,
+            'title' => 'Other Street Schedule',
+            'frequency' => 'weekly',
+            'start_date' => now()->toDateString(),
             'collection_time' => '07:00',
-            'status'          => 'active',
+            'status' => 'active',
         ]);
 
         $response = $this->actingAs($resident)->get('/resident/schedules');
-        $response->assertInertia(fn ($p) =>
-            $p->component('Resident/Schedules/Index')
-              ->where('schedules.0.title', 'My Street Schedule')
-              ->count('schedules', 1)
+        $response->assertInertia(fn ($p) => $p->component('Resident/Schedules/Index')
+            ->where('schedules.0.title', 'My Street Schedule')
+            ->count('schedules', 1)
         );
     }
 
@@ -115,15 +115,15 @@ class ResidentTest extends TestCase
         $resident = $this->resident();
 
         $response = $this->actingAs($resident)->post('/resident/reports', [
-            'type'        => 'missed_collection',
+            'type' => 'missed_collection',
             'description' => 'Garbage was not collected this Monday.',
         ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('reports', [
             'resident_id' => $resident->id,
-            'type'        => 'missed_collection',
-            'status'      => 'pending',
+            'type' => 'missed_collection',
+            'status' => 'pending',
         ]);
     }
 
@@ -132,16 +132,16 @@ class ResidentTest extends TestCase
         $resident = $this->resident();
 
         $response = $this->actingAs($resident)->post('/resident/reports', [
-            'type'        => 'illegal_dumping',
+            'type' => 'illegal_dumping',
             'description' => 'Someone is dumping trash near the river.',
-            'latitude'    => 10.1236,
-            'longitude'   => 124.0030,
+            'latitude' => 10.1236,
+            'longitude' => 124.0030,
         ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('reports', [
             'resident_id' => $resident->id,
-            'type'        => 'illegal_dumping',
+            'type' => 'illegal_dumping',
         ]);
     }
 
@@ -151,9 +151,9 @@ class ResidentTest extends TestCase
         $resident = $this->resident();
 
         $response = $this->actingAs($resident)->post('/resident/reports', [
-            'type'        => 'missed_collection',
+            'type' => 'missed_collection',
             'description' => 'Garbage not collected.',
-            'photos'      => [UploadedFile::fake()->image('evidence.jpg')],
+            'photos' => [UploadedFile::fake()->image('evidence.jpg')],
         ]);
 
         $response->assertRedirect();
@@ -181,25 +181,24 @@ class ResidentTest extends TestCase
     public function test_resident_only_sees_own_reports(): void
     {
         $resident = $this->resident();
-        $other    = $this->resident();
+        $other = $this->resident();
 
         Report::create([
             'resident_id' => $resident->id,
-            'type'        => 'missed_collection',
+            'type' => 'missed_collection',
             'description' => 'My report',
-            'status'      => 'pending',
+            'status' => 'pending',
         ]);
         Report::create([
             'resident_id' => $other->id,
-            'type'        => 'illegal_dumping',
+            'type' => 'illegal_dumping',
             'description' => 'Other report',
-            'status'      => 'pending',
+            'status' => 'pending',
         ]);
 
         $response = $this->actingAs($resident)->get('/resident/reports');
-        $response->assertInertia(fn ($p) =>
-            $p->component('Resident/Reports/Index')
-              ->count('reports.data', 1)
+        $response->assertInertia(fn ($p) => $p->component('Resident/Reports/Index')
+            ->count('reports.data', 1)
         );
     }
 
@@ -216,28 +215,28 @@ class ResidentTest extends TestCase
 
     public function test_resident_sees_correct_total_points(): void
     {
-        $resident  = $this->resident();
+        $resident = $this->resident();
         $personnel = User::factory()->personnel()->create();
 
         // --- Fix: Create schedule and task ---
         $official = User::factory()->official()->create();
-        $street   = $this->makeStreet();
+        $street = $this->makeStreet();
 
         $schedule = Schedule::create([
-            'street_id'       => $street->id,
-            'created_by'      => $official->id,
-            'title'           => 'Test Schedule',
-            'frequency'       => 'once',
-            'start_date'      => now()->toDateString(),
+            'street_id' => $street->id,
+            'created_by' => $official->id,
+            'title' => 'Test Schedule',
+            'frequency' => 'once',
+            'start_date' => now()->toDateString(),
             'collection_time' => '07:00',
-            'status'          => 'active',
+            'status' => 'active',
         ]);
 
         $task = CollectionTask::create([
-            'schedule_id'     => $schedule->id,
-            'personnel_id'    => $personnel->id,
+            'schedule_id' => $schedule->id,
+            'personnel_id' => $personnel->id,
             'collection_date' => now()->toDateString(),
-            'status'          => 'completed',
+            'status' => 'completed',
         ]);
         // -------------------------------------
 
@@ -245,37 +244,36 @@ class ResidentTest extends TestCase
         Point::create(['resident_id' => $resident->id, 'awarded_by' => $personnel->id, 'collection_task_id' => $task->id, 'points' => 20]);
 
         $response = $this->actingAs($resident)->get('/resident/points');
-        $response->assertInertia(fn ($p) =>
-            $p->component('Resident/Points/Index')
-              ->where('totalPoints', 30)
+        $response->assertInertia(fn ($p) => $p->component('Resident/Points/Index')
+            ->where('totalPoints', 30)
         );
     }
 
     public function test_resident_only_sees_own_points(): void
     {
-        $resident  = $this->resident();
-        $other     = $this->resident();
+        $resident = $this->resident();
+        $other = $this->resident();
         $personnel = User::factory()->personnel()->create();
 
         // --- Fix: Create schedule and task ---
         $official = User::factory()->official()->create();
-        $street   = $this->makeStreet();
+        $street = $this->makeStreet();
 
         $schedule = Schedule::create([
-            'street_id'       => $street->id,
-            'created_by'      => $official->id,
-            'title'           => 'Test Schedule',
-            'frequency'       => 'once',
-            'start_date'      => now()->toDateString(),
+            'street_id' => $street->id,
+            'created_by' => $official->id,
+            'title' => 'Test Schedule',
+            'frequency' => 'once',
+            'start_date' => now()->toDateString(),
             'collection_time' => '07:00',
-            'status'          => 'active',
+            'status' => 'active',
         ]);
 
         $task = CollectionTask::create([
-            'schedule_id'     => $schedule->id,
-            'personnel_id'    => $personnel->id,
+            'schedule_id' => $schedule->id,
+            'personnel_id' => $personnel->id,
             'collection_date' => now()->toDateString(),
-            'status'          => 'completed',
+            'status' => 'completed',
         ]);
         // -------------------------------------
 
@@ -283,9 +281,8 @@ class ResidentTest extends TestCase
         Point::create(['resident_id' => $other->id,    'awarded_by' => $personnel->id, 'collection_task_id' => $task->id, 'points' => 50]);
 
         $response = $this->actingAs($resident)->get('/resident/points');
-        $response->assertInertia(fn ($p) =>
-            $p->component('Resident/Points/Index')
-              ->where('totalPoints', 5)
+        $response->assertInertia(fn ($p) => $p->component('Resident/Points/Index')
+            ->where('totalPoints', 5)
         );
     }
 }

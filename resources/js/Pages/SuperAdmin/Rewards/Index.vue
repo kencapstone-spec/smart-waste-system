@@ -1,33 +1,34 @@
 <template>
     <AuthLayout page-title="Rewards Management">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg font-semibold text-gray-700">Rewards Catalog</h2>
+            <h2 class="text-xl font-bold text-rose-950 tracking-tight">Rewards Catalog</h2>
             <button
                 @click="showCreateModal = true"
-                class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700 transition"
+                class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all transition"
             >
                 + Add Reward
             </button>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b">
+        <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
+            <div class="overflow-x-auto pb-4">
+                <table class="w-full text-sm whitespace-nowrap">
+                <thead class="border-b border-rose-100/50">
                     <tr>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Name</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Points Req.</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Stock</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Status</th>
-                        <th class="text-left px-6 py-3 text-gray-600 font-medium">Actions</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Name</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Points Req.</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Stock</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Status</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    <tr v-for="reward in rewards.data" :key="reward.id" class="hover:bg-gray-50">
-                        <td class="px-6 py-4 text-gray-800 font-medium">{{ reward.name }}</td>
-                        <td class="px-6 py-4 text-gray-600 font-bold text-yellow-600">{{ reward.points_required }} ⭐</td>
-                        <td class="px-6 py-4 text-gray-600">{{ reward.stock }}</td>
+                    <tr v-for="reward in rewards.data" :key="reward.id" class="hover:bg-rose-50/50 transition-colors">
+                        <td class="px-6 py-4 text-rose-950 font-semibold">{{ reward.name }}</td>
+                        <td class="px-6 py-4 text-rose-950/80 font-bold text-yellow-600">{{ reward.points_required }} ⭐</td>
+                        <td class="px-6 py-4 text-rose-950/80">{{ reward.stock }}</td>
                         <td class="px-6 py-4">
-                            <span :class="reward.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'" class="px-2 py-1 rounded-full text-xs font-medium">
+                            <span :class="reward.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-rose-950/80'" class="px-2 py-1 rounded-full text-xs font-medium">
                                 {{ reward.is_active ? 'Active' : 'Inactive' }}
                             </span>
                         </td>
@@ -41,6 +42,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <!-- Create Modal -->
@@ -69,8 +71,8 @@
                     <label for="isActiveCreate" class="text-sm text-gray-700">Active</label>
                 </div>
                 <div class="flex justify-end gap-3 pt-4">
-                    <button type="button" @click="showCreateModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
-                    <button type="submit" :disabled="createForm.processing" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700">Create</button>
+                    <button type="button" @click="showCreateModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
+                    <button type="submit" :disabled="createForm.processing" class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all">Create</button>
                 </div>
             </form>
         </Modal>
@@ -101,17 +103,17 @@
                     <label for="isActiveEdit" class="text-sm text-gray-700">Active</label>
                 </div>
                 <div class="flex justify-end gap-3 pt-4">
-                    <button type="button" @click="showEditModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
-                    <button type="submit" :disabled="editForm.processing" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700">Update</button>
+                    <button type="button" @click="showEditModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
+                    <button type="submit" :disabled="editForm.processing" class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all">Update</button>
                 </div>
             </form>
         </Modal>
 
         <!-- Delete Modal -->
         <Modal :show="showDeleteModal" title="Delete Reward" @close="showDeleteModal = false">
-            <p class="text-gray-600 text-sm mb-6">Are you sure you want to delete <span class="font-semibold">{{ selectedReward?.name }}</span>?</p>
+            <p class="text-rose-950/80 text-sm mb-6">Are you sure you want to delete <span class="font-semibold">{{ selectedReward?.name }}</span>?</p>
             <div class="flex justify-end gap-3">
-                <button @click="showDeleteModal = false" class="text-sm text-gray-500 hover:text-gray-700">Cancel</button>
+                <button @click="showDeleteModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
                 <button @click="submitDelete" class="bg-red-500 text-white px-4 py-2 rounded-md text-sm hover:bg-red-600">Delete</button>
             </div>
         </Modal>

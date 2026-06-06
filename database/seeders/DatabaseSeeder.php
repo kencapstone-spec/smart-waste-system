@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
             foreach ($streetNames[$i] as $streetName) {
                 $streets->push(Street::create([
                     'zone_id' => $zone->id,
-                    'name'    => $streetName,
+                    'name' => $streetName,
                 ]));
             }
         }
@@ -51,21 +51,21 @@ class DatabaseSeeder extends Seeder
 
         // -- Super Admins (2) --
         User::factory()->superAdmin()->create([
-            'name'  => 'Kenneth Admin',
+            'name' => 'Kenneth Admin',
             'phone' => '09111111111',
         ]);
         User::factory()->superAdmin()->create([
-            'name'  => 'Kean Admin',
+            'name' => 'Kean Admin',
             'phone' => '09222222222',
         ]);
 
         // -- Barangay Officials (3) --
         $official1 = User::factory()->official()->create([
-            'name'  => 'Kap. Roberto Santos',
+            'name' => 'Kap. Roberto Santos',
             'phone' => '09333333333',
         ]);
         User::factory()->official()->create([
-            'name'  => 'Kag. Maria Garcia',
+            'name' => 'Kag. Maria Garcia',
             'phone' => '09444444444',
         ]);
 
@@ -79,20 +79,20 @@ class DatabaseSeeder extends Seeder
 
         // -- Active Residents (25) spread across all 18 streets --
         $residentNames = [
-            'Ana Villanueva', 'Liza Tan', 'Mario Aquino', 'Rosa Fernandez', 'Elena Pascual', 
-            'Ben Torres', 'Grace Lim', 'Ramon Castillo', 'Sofia Navarro', 'Carlo Ramos', 
+            'Ana Villanueva', 'Liza Tan', 'Mario Aquino', 'Rosa Fernandez', 'Elena Pascual',
+            'Ben Torres', 'Grace Lim', 'Ramon Castillo', 'Sofia Navarro', 'Carlo Ramos',
             'Mila Soriano', 'Jose Aguilar', 'Teresa Cruz', 'Noel Dizon', 'Lydia Manalo',
             'Christian Santos', 'Angelica Flores', 'Gabriel Cruz', 'Patricia Reyes', 'Jon Villanueva',
-            'Maricel Soriano', 'Ricardo Diaz', 'Rowena Mercado', 'Fernando Poe', 'Imelda Marcos'
+            'Maricel Soriano', 'Ricardo Diaz', 'Rowena Mercado', 'Fernando Poe', 'Imelda Marcos',
         ];
 
         foreach ($residentNames as $i => $name) {
             $street = $streets[$i % $streets->count()];
             User::factory()->resident()->create([
-                'name'        => $name,
-                'phone'       => '0944' . str_pad($i + 1, 7, '0', STR_PAD_LEFT),
-                'street_id'   => $street->id,
-                'address'     => 'Purok ' . rand(1, 8) . ', ' . $street->name,
+                'name' => $name,
+                'phone' => '0944'.str_pad($i + 1, 7, '0', STR_PAD_LEFT),
+                'street_id' => $street->id,
+                'address' => 'Purok '.rand(1, 8).', '.$street->name,
                 'approved_at' => now()->subDays(rand(5, 30)),
                 'approved_by' => $official1->id,
             ]);
@@ -109,7 +109,7 @@ class DatabaseSeeder extends Seeder
             [
                 ['Super Admin',          '2',  '09111111111, 09222222222'],
                 ['Barangay Official',    '2',  '09333333333, 09444444444'],
-                ['Personnel / Collector','1',  '09555555555'],
+                ['Personnel / Collector', '1',  '09555555555'],
                 ['Resident (active)',    '25', '09440000001 – 09440000025'],
                 ['', '', ''],
                 ['Zones',                '6',  'Structural Data'],

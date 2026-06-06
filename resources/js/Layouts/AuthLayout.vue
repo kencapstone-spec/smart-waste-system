@@ -1,8 +1,19 @@
 <template>
-    <div class="min-h-screen bg-gray-50/50 flex flex-col md:flex-row">
+    <div class="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100 flex flex-col md:flex-row relative overflow-x-hidden">
         
+        <!-- Animated mesh pattern -->
+        <div class="fixed inset-0 z-0 opacity-30 pointer-events-none">
+            <div class="absolute top-0 left-0 w-full h-full"
+                style="background-image: radial-gradient(circle at 25% 25%, rgba(225,29,72,0.15) 1px, transparent 1px), radial-gradient(circle at 75% 75%, rgba(225,29,72,0.05) 1px, transparent 1px); background-size: 50px 50px;">
+            </div>
+        </div>
+
+        <!-- Floating orbs -->
+        <div class="fixed top-20 right-20 w-96 h-96 bg-rose-300/20 rounded-full blur-3xl animate-float pointer-events-none z-0"></div>
+        <div class="fixed bottom-20 left-10 w-72 h-72 bg-red-300/15 rounded-full blur-3xl animate-float-delayed pointer-events-none z-0"></div>
+
         <!-- Desktop Sidebar -->
-        <aside class="hidden md:flex flex-col w-72 fixed inset-y-0 left-0 z-50 bg-white/80 backdrop-blur-2xl border-r border-rose-100 shadow-[4px_0_24px_rgba(225,29,72,0.02)]">
+        <aside class="hidden md:flex flex-col w-[280px] fixed inset-y-6 left-6 z-50 bg-white/60 backdrop-blur-3xl border border-white/60 rounded-3xl shadow-[0_8px_32px_rgba(225,29,72,0.12)]">
             <div class="px-8 py-8 flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-rose-900 flex items-center justify-center text-xl shadow-lg shadow-rose-900/20 text-white">
                     🗑️
@@ -49,10 +60,10 @@
         </aside>
 
         <!-- Main Content -->
-        <div class="flex-1 md:ml-72 flex flex-col min-h-screen">
+        <div class="relative z-10 flex-1 md:ml-[320px] flex flex-col min-h-screen">
             
             <!-- Mobile Top Header -->
-            <header class="md:hidden sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-rose-100 shadow-sm">
+            <header class="md:hidden sticky top-0 z-40 bg-white/70 backdrop-blur-2xl border-b border-white/50 shadow-sm">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div class="flex items-center gap-2">
                         <div class="w-8 h-8 rounded-lg bg-rose-900 flex items-center justify-center text-sm shadow-md text-white">
@@ -97,18 +108,18 @@
             </div>
 
             <!-- Page Content -->
-            <main class="flex-1 px-6 md:px-10 pb-28 md:pb-12">
+            <main class="flex-1 px-4 sm:px-6 md:px-10 pb-28 md:pb-12 w-full max-w-full">
                 <slot />
             </main>
         </div>
 
         <!-- Mobile Bottom Navigation -->
-        <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-2xl border-t border-rose-100 shadow-[0_-10px_40px_rgba(225,29,72,0.08)] pb-safe">
-            <div class="flex items-center overflow-x-auto hide-scrollbar px-2 py-2 gap-1">
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-3xl border-t border-white/50 shadow-[0_-10px_40px_rgba(225,29,72,0.12)] pb-safe">
+            <div class="flex items-center justify-around px-2 py-2">
                 <a
-                    v-for="item in navItems" :key="item.label"
+                    v-for="item in mainNavItems" :key="item.label"
                     :href="item.href"
-                    class="flex-shrink-0 flex flex-col items-center justify-center w-20 py-2 rounded-2xl transition-all duration-300"
+                    class="flex flex-col items-center justify-center w-16 py-2 rounded-2xl transition-all duration-300"
                     :class="isActive(item.href) ? 'text-rose-900 scale-105' : 'text-gray-400 hover:text-gray-600'"
                 >
                     <div class="relative">
@@ -117,8 +128,43 @@
                     </div>
                     <span class="text-[10px] font-bold tracking-tight truncate w-full text-center px-1" :class="isActive(item.href) ? 'text-rose-950' : ''">{{ item.label }}</span>
                 </a>
+
+                <!-- More Button -->
+                <button
+                    v-if="moreNavItems.length > 0"
+                    @click="showMobileMenu = true"
+                    class="flex flex-col items-center justify-center w-16 py-2 rounded-2xl transition-all duration-300 text-gray-400 hover:text-rose-900"
+                >
+                    <span class="text-2xl block mb-1">⋯</span>
+                    <span class="text-[10px] font-bold tracking-tight w-full text-center px-1">More</span>
+                </button>
             </div>
         </nav>
+
+        <!-- Mobile More Menu Overlay -->
+        <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="showMobileMenu" class="md:hidden fixed inset-0 z-[60] bg-gray-900/40 backdrop-blur-sm" @click="showMobileMenu = false"></div>
+        </transition>
+
+        <transition enter-active-class="transition ease-out duration-300 transform" enter-from-class="translate-y-full" enter-to-class="translate-y-0" leave-active-class="transition ease-in duration-200 transform" leave-from-class="translate-y-0" leave-to-class="translate-y-full">
+            <div v-if="showMobileMenu" class="md:hidden fixed bottom-0 left-0 right-0 z-[70] bg-white rounded-t-3xl shadow-2xl overflow-hidden pb-safe">
+                <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-rose-50/30">
+                    <h3 class="font-bold text-rose-950 text-lg">More Options</h3>
+                    <button @click="showMobileMenu = false" class="w-8 h-8 flex items-center justify-center rounded-full bg-rose-100 text-rose-900 font-bold hover:bg-rose-200 transition-colors">✕</button>
+                </div>
+                <div class="p-4 space-y-2 max-h-[60vh] overflow-y-auto">
+                    <a
+                        v-for="item in moreNavItems" :key="item.label"
+                        :href="item.href"
+                        class="flex items-center gap-4 p-4 rounded-2xl transition-colors"
+                        :class="isActive(item.href) ? 'bg-rose-100 border border-rose-200' : 'bg-gray-50 hover:bg-rose-50 border border-transparent'"
+                    >
+                        <span class="text-2xl">{{ item.icon }}</span>
+                        <span class="font-semibold" :class="isActive(item.href) ? 'text-rose-900' : 'text-gray-700'">{{ item.label }}</span>
+                    </a>
+                </div>
+            </div>
+        </transition>
 
     </div>
 </template>
@@ -126,6 +172,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { usePage, useForm } from '@inertiajs/vue3'
+
+const showMobileMenu = ref(false)
 
 const page = usePage()
 const auth = computed(() => page.props.auth)
@@ -180,6 +228,14 @@ const navItems = computed(() => {
     if (role === 'barangay_official') return officialNav
     if (role === 'personnel') return personnelNav
     return residentNav
+})
+
+const mainNavItems = computed(() => {
+    return navItems.value.length > 5 ? navItems.value.slice(0, 4) : navItems.value
+})
+
+const moreNavItems = computed(() => {
+    return navItems.value.length > 5 ? navItems.value.slice(4) : []
 })
 
 const isActive = (href) => {

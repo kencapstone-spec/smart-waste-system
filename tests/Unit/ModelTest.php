@@ -20,6 +20,7 @@ class ModelTest extends TestCase
     private function makeStreet(): Street
     {
         $zone = Zone::create(['name' => 'Zone 1']);
+
         return Street::create(['zone_id' => $zone->id, 'name' => 'Rizal St.']);
     }
 
@@ -58,7 +59,7 @@ class ModelTest extends TestCase
     public function test_user_belongs_to_street(): void
     {
         $street = $this->makeStreet();
-        $user   = User::factory()->resident()->create(['street_id' => $street->id]);
+        $user = User::factory()->resident()->create(['street_id' => $street->id]);
 
         $this->assertEquals($street->id, $user->street->id);
     }
@@ -68,9 +69,9 @@ class ModelTest extends TestCase
         $resident = User::factory()->resident()->create();
         Report::create([
             'resident_id' => $resident->id,
-            'type'        => 'missed_collection',
+            'type' => 'missed_collection',
             'description' => 'Test',
-            'status'      => 'pending',
+            'status' => 'pending',
         ]);
 
         $this->assertCount(1, $resident->reports);
@@ -78,29 +79,29 @@ class ModelTest extends TestCase
 
     public function test_user_has_many_points(): void
     {
-        $resident  = User::factory()->resident()->create();
+        $resident = User::factory()->resident()->create();
         $personnel = User::factory()->personnel()->create();
-        
+
         // --- ADDED THIS SECTION TO FIX THE ERROR ---
         // We must create a schedule and a task first, because a Point requires a collection_task_id
         $official = User::factory()->official()->create();
-        $street   = $this->makeStreet();
+        $street = $this->makeStreet();
 
         $schedule = Schedule::create([
-            'street_id'       => $street->id,
-            'created_by'      => $official->id,
-            'title'           => 'Test Schedule',
-            'frequency'       => 'once',
-            'start_date'      => now()->toDateString(),
+            'street_id' => $street->id,
+            'created_by' => $official->id,
+            'title' => 'Test Schedule',
+            'frequency' => 'once',
+            'start_date' => now()->toDateString(),
             'collection_time' => '07:00',
-            'status'          => 'active',
+            'status' => 'active',
         ]);
 
         $task = CollectionTask::create([
-            'schedule_id'     => $schedule->id,
-            'personnel_id'    => $personnel->id,
+            'schedule_id' => $schedule->id,
+            'personnel_id' => $personnel->id,
             'collection_date' => now()->toDateString(),
-            'status'          => 'completed',
+            'status' => 'completed',
         ]);
         // ------------------------------------------
 
@@ -118,17 +119,17 @@ class ModelTest extends TestCase
 
     public function test_schedule_belongs_to_street(): void
     {
-        $street   = $this->makeStreet();
+        $street = $this->makeStreet();
         $official = User::factory()->official()->create();
 
         $schedule = Schedule::create([
-            'street_id'       => $street->id,
-            'created_by'      => $official->id,
-            'title'           => 'Test',
-            'frequency'       => 'weekly',
-            'start_date'      => now()->toDateString(),
+            'street_id' => $street->id,
+            'created_by' => $official->id,
+            'title' => 'Test',
+            'frequency' => 'weekly',
+            'start_date' => now()->toDateString(),
             'collection_time' => '07:00',
-            'status'          => 'active',
+            'status' => 'active',
         ]);
 
         $this->assertEquals($street->id, $schedule->street->id);
@@ -136,18 +137,18 @@ class ModelTest extends TestCase
 
     public function test_schedule_has_many_assignments(): void
     {
-        $street    = $this->makeStreet();
-        $official  = User::factory()->official()->create();
+        $street = $this->makeStreet();
+        $official = User::factory()->official()->create();
         $personnel = User::factory()->personnel()->create();
 
         $schedule = Schedule::create([
-            'street_id'       => $street->id,
-            'created_by'      => $official->id,
-            'title'           => 'Test',
-            'frequency'       => 'weekly',
-            'start_date'      => now()->toDateString(),
+            'street_id' => $street->id,
+            'created_by' => $official->id,
+            'title' => 'Test',
+            'frequency' => 'weekly',
+            'start_date' => now()->toDateString(),
             'collection_time' => '07:00',
-            'status'          => 'active',
+            'status' => 'active',
         ]);
 
         ScheduleAssignment::create(['schedule_id' => $schedule->id, 'personnel_id' => $personnel->id]);
@@ -161,25 +162,25 @@ class ModelTest extends TestCase
 
     public function test_collection_task_belongs_to_schedule_and_personnel(): void
     {
-        $street    = $this->makeStreet();
-        $official  = User::factory()->official()->create();
+        $street = $this->makeStreet();
+        $official = User::factory()->official()->create();
         $personnel = User::factory()->personnel()->create();
 
         $schedule = Schedule::create([
-            'street_id'       => $street->id,
-            'created_by'      => $official->id,
-            'title'           => 'Test',
-            'frequency'       => 'once',
-            'start_date'      => now()->toDateString(),
+            'street_id' => $street->id,
+            'created_by' => $official->id,
+            'title' => 'Test',
+            'frequency' => 'once',
+            'start_date' => now()->toDateString(),
             'collection_time' => '07:00',
-            'status'          => 'active',
+            'status' => 'active',
         ]);
 
         $task = CollectionTask::create([
-            'schedule_id'     => $schedule->id,
-            'personnel_id'    => $personnel->id,
+            'schedule_id' => $schedule->id,
+            'personnel_id' => $personnel->id,
             'collection_date' => now()->toDateString(),
-            'status'          => 'pending',
+            'status' => 'pending',
         ]);
 
         $this->assertEquals($schedule->id, $task->schedule->id);
@@ -193,11 +194,11 @@ class ModelTest extends TestCase
     public function test_report_belongs_to_resident(): void
     {
         $resident = User::factory()->resident()->create();
-        $report   = Report::create([
+        $report = Report::create([
             'resident_id' => $resident->id,
-            'type'        => 'illegal_dumping',
+            'type' => 'illegal_dumping',
             'description' => 'Near the river.',
-            'status'      => 'pending',
+            'status' => 'pending',
         ]);
 
         $this->assertEquals($resident->id, $report->resident->id);
@@ -218,7 +219,7 @@ class ModelTest extends TestCase
 
     public function test_street_belongs_to_zone(): void
     {
-        $zone   = Zone::create(['name' => 'Zone B']);
+        $zone = Zone::create(['name' => 'Zone B']);
         $street = Street::create(['zone_id' => $zone->id, 'name' => 'Main St.']);
 
         $this->assertEquals($zone->id, $street->zone->id);

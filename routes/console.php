@@ -1,12 +1,12 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Schedule;
-use Illuminate\Support\Facades\DB; // Added to read the assignments table
-use App\Models\Schedule as WasteSchedule;
 use App\Models\CollectionTask;
+use App\Models\Schedule as WasteSchedule;
 use Carbon\Carbon;
+use Illuminate\Foundation\Inspiring; // Added to read the assignments table
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schedule;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -14,13 +14,13 @@ Artisan::command('inspire', function () {
 
 Artisan::command('tasks:generate', function () {
     $today = Carbon::today();
-    
+
     // 1. Find all active schedules valid for today
     $schedules = WasteSchedule::where('status', 'active')
         ->whereDate('start_date', '<=', $today)
         ->where(function ($query) use ($today) {
             $query->whereNull('end_date')
-                  ->orWhereDate('end_date', '>=', $today);
+                ->orWhereDate('end_date', '>=', $today);
         })->get();
 
     $count = 0;
@@ -28,7 +28,7 @@ Artisan::command('tasks:generate', function () {
     foreach ($schedules as $schedule) {
         $shouldGenerate = false;
         $start = Carbon::parse($schedule->start_date)->startOfDay();
-        
+
         // Respect the schedule's frequency
         switch ($schedule->frequency) {
             case 'once':
@@ -45,7 +45,7 @@ Artisan::command('tasks:generate', function () {
                 break;
         }
 
-        if (!$shouldGenerate) {
+        if (! $shouldGenerate) {
             continue;
         }
 
@@ -56,17 +56,17 @@ Artisan::command('tasks:generate', function () {
 
         // 3. Create a daily task for EACH assigned personnel
         foreach ($assignments as $assignment) {
-            
+
             // Check if this specific worker already has this task today
             $taskExists = CollectionTask::where('schedule_id', $schedule->id)
                 ->where('personnel_id', $assignment->personnel_id)
                 ->whereDate('collection_date', $today)
                 ->exists();
 
-            if (!$taskExists) {
+            if (! $taskExists) {
                 CollectionTask::create([
                     'schedule_id' => $schedule->id,
-                    'personnel_id' => $assignment->personnel_id, 
+                    'personnel_id' => $assignment->personnel_id,
                     'collection_date' => $today,
                     'status' => 'pending',
                 ]);
@@ -83,7 +83,7 @@ Artisan::command('tasks:cleanup', function () {
     $count = CollectionTask::where('status', 'pending')
         ->whereDate('collection_date', '<', $today)
         ->update(['status' => 'missed']);
-        
+
     $this->info("Success! Marked {$count} pending tasks from past dates as missed.");
 })->purpose('Mark past pending tasks as missed');
 
