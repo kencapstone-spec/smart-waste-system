@@ -1,20 +1,20 @@
 <template>
     <AuthLayout page-title="My Assigned Schedules">
-        <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
+        <div class="bg-white/70 backdrop-blur-2xl sm:rounded-2xl shadow-xl shadow-rose-900/5 sm:border border-white/60 -mx-4 sm:mx-0 overflow-hidden">
             <div class="px-6 py-4 border-b">
                 <h2 class="text-base font-semibold text-gray-700">Active Schedules Assigned to Me</h2>
             </div>
 
             <div v-if="schedules.length > 0">
-                <div class="overflow-x-auto pb-4">
+                <div class="overflow-x-auto  scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent pb-4">
                     <table class="w-full text-sm whitespace-nowrap">
                     <thead class="border-b border-rose-100/50">
                         <tr>
                             <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Title</th>
                             <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Street</th>
-                            <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Zone</th>
+                            <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="MapPin" class="w-4 h-4 opacity-70" /> Zone</div></th>
                             <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Frequency</th>
-                            <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Time</th>
+                            <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Clock" class="w-4 h-4 opacity-70" /> Time</div></th>
                             <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Start Date</th>
                             <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">End Date</th>
                         </tr>
@@ -44,6 +44,7 @@
 </template>
 
 <script setup>
+import { MapPin, Clock } from '@lucide/vue'
 import AuthLayout from '@/Layouts/AuthLayout.vue'
 
 const props = defineProps({

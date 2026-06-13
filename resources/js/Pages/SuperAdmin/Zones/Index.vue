@@ -10,29 +10,27 @@
             </button>
         </div>
 
-        <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
-            <div class="overflow-x-auto pb-4">
+        <div class="bg-white/70 backdrop-blur-2xl sm:rounded-2xl shadow-xl shadow-rose-900/5 sm:border border-white/60 -mx-4 sm:mx-0 overflow-hidden">
+            <div class="overflow-x-auto  scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent pb-4">
                 <table class="w-full text-sm whitespace-nowrap">
                 <thead class="border-b border-rose-100/50">
                     <tr>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Name</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Description</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Streets</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Actions</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="User" class="w-4 h-4 opacity-70" /> Name</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="FileText" class="w-4 h-4 opacity-70" /> Description</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Settings" class="w-4 h-4 opacity-70" /> Actions</div></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     <tr v-for="zone in zones" :key="zone.id" class="hover:bg-rose-50/50 transition-colors">
                         <td class="px-6 py-4 text-rose-950 font-semibold">{{ zone.name }}</td>
                         <td class="px-6 py-4 text-rose-950/80">{{ zone.description ?? '—' }}</td>
-                        <td class="px-6 py-4 text-rose-950/80">{{ zone.streets_count }}</td>
                         <td class="px-6 py-4 flex gap-2">
-                            <button @click="editZone(zone)" class="text-blue-600 hover:underline text-xs">Edit</button>
-                            <button @click="confirmDelete(zone)" class="text-red-500 hover:underline text-xs">Delete</button>
+                            <button @click="editZone(zone)" class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0">Edit</button>
+                            <button @click="confirmDelete(zone)" class="text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0">Delete</button>
                         </td>
                     </tr>
                     <tr v-if="zones.length === 0">
-                        <td colspan="4" class="px-6 py-8 text-center text-gray-400">No zones found.</td>
+                        <td colspan="3" class="px-6 py-8 text-center text-gray-400">No zones found.</td>
                     </tr>
                 </tbody>
             </table>
@@ -79,7 +77,7 @@
 
         <!-- Delete Modal -->
         <Modal :show="showDeleteModal" title="Delete Zone" @close="showDeleteModal = false">
-            <p class="text-rose-950/80 text-sm mb-6">Are you sure you want to delete <span class="font-semibold">{{ selectedZone?.name }}</span>? All streets in this zone will also be deleted.</p>
+            <p class="text-rose-950/80 text-sm mb-6">Are you sure you want to delete <span class="font-semibold">{{ selectedZone?.name }}</span>?</p>
             <div class="flex justify-end gap-3">
                 <button @click="showDeleteModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
                 <button @click="submitDelete" class="bg-red-500 text-white px-4 py-2 rounded-md text-sm hover:bg-red-600">Delete</button>
@@ -89,6 +87,7 @@
 </template>
 
 <script setup>
+import { User, FileText, Settings } from '@lucide/vue'
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'

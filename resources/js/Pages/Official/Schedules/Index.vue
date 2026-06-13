@@ -10,24 +10,24 @@
             </button>
         </div>
 
-        <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
-            <div class="overflow-x-auto pb-4">
+        <div class="bg-white/70 backdrop-blur-2xl sm:rounded-2xl shadow-xl shadow-rose-900/5 sm:border border-white/60 -mx-4 sm:mx-0 overflow-hidden">
+            <div class="overflow-x-auto  scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent pb-4">
                 <table class="w-full text-sm whitespace-nowrap">
                 <thead class="border-b border-rose-100/50">
                     <tr>
                         <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Title</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Street</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="MapPin" class="w-4 h-4 opacity-70" /> Zone</div></th>
                         <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Frequency</th>
                         <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Start Date</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Time</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Status</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Actions</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Clock" class="w-4 h-4 opacity-70" /> Time</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Activity" class="w-4 h-4 opacity-70" /> Status</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Settings" class="w-4 h-4 opacity-70" /> Actions</div></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     <tr v-for="schedule in schedules.data" :key="schedule.id" class="hover:bg-rose-50/50 transition-colors">
                         <td class="px-6 py-4 text-rose-950 font-semibold">{{ schedule.title }}</td>
-                        <td class="px-6 py-4 text-rose-950/80">{{ schedule.street.name }}</td>
+                        <td class="px-6 py-4 text-rose-950/80">{{ schedule.zone.name }}</td>
                         <td class="px-6 py-4 capitalize text-rose-950/80">{{ schedule.frequency }}</td>
                         <td class="px-6 py-4 text-rose-950/80">{{ schedule.start_date }}</td>
                         <td class="px-6 py-4 text-rose-950/80">{{ schedule.collection_time }}</td>
@@ -38,8 +38,8 @@
                         </td>
                         <td class="px-6 py-4 flex gap-2">
                             <button @click="viewTasks(schedule)" class="text-indigo-600 hover:underline text-xs">Tasks</button>
-                            <button @click="editSchedule(schedule)" class="text-blue-600 hover:underline text-xs">Edit</button>
-                            <button @click="confirmDelete(schedule)" class="text-red-500 hover:underline text-xs">Delete</button>
+                            <button @click="editSchedule(schedule)" class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0">Edit</button>
+                            <button @click="confirmDelete(schedule)" class="text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0">Delete</button>
                         </td>
                     </tr>
                     <tr v-if="schedules.data.length === 0">
@@ -59,14 +59,14 @@
                     <p v-if="createForm.errors.title" class="text-red-500 text-xs mt-1">{{ createForm.errors.title }}</p>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Street</label>
-                    <select v-model="createForm.street_id" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
-                        <option value="">Select street</option>
-                        <option v-for="street in streets" :key="street.id" :value="street.id">
-                            {{ street.name }} ({{ street.zone.name }})
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Zone</label>
+                    <select v-model="createForm.zone_id" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
+                        <option value="">Select zone</option>
+                        <option v-for="zone in zones" :key="zone.id" :value="zone.id">
+                            {{ zone.name }}
                         </option>
                     </select>
-                    <p v-if="createForm.errors.street_id" class="text-red-500 text-xs mt-1">{{ createForm.errors.street_id }}</p>
+                    <p v-if="createForm.errors.zone_id" class="text-red-500 text-xs mt-1">{{ createForm.errors.zone_id }}</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
@@ -128,10 +128,10 @@
                     <p v-if="editForm.errors.title" class="text-red-500 text-xs mt-1">{{ editForm.errors.title }}</p>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Street</label>
-                    <select v-model="editForm.street_id" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
-                        <option v-for="street in streets" :key="street.id" :value="street.id">
-                            {{ street.name }} ({{ street.zone.name }})
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Zone</label>
+                    <select v-model="editForm.zone_id" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
+                        <option v-for="zone in zones" :key="zone.id" :value="zone.id">
+                            {{ zone.name }}
                         </option>
                     </select>
                 </div>
@@ -188,26 +188,17 @@
             </form>
         </Modal>
 
-        <!-- Delete Modal -->
-        <Modal :show="showDeleteModal" title="Delete Schedule" @close="showDeleteModal = false">
-            <p class="text-rose-950/80 text-sm mb-6">Are you sure you want to delete <span class="font-semibold">{{ selectedSchedule?.title }}</span>?</p>
-            <div class="flex justify-end gap-3">
-                <button @click="showDeleteModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
-                <button @click="submitDelete" class="bg-red-500 text-white px-4 py-2 rounded-md text-sm hover:bg-red-600">Delete</button>
-            </div>
-        </Modal>
-
         <!-- Tasks Reassignment Modal -->
         <Modal :show="showTasksModal" title="Schedule Tasks" max-width="3xl" @close="showTasksModal = false">
             <div v-if="loadingTasks" class="py-8 text-center text-sm text-gray-500">Loading tasks...</div>
             <div v-else>
                 <div class="max-h-[60vh] overflow-y-auto">
-                    <div class="overflow-x-auto pb-4">
+                    <div class="overflow-x-auto  scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent pb-4">
                         <table class="w-full text-sm whitespace-nowrap">
                         <thead class="bg-gray-50 border-b sticky top-0">
                             <tr>
-                                <th class="text-left px-4 py-3 text-rose-950/70 font-semibold">Date</th>
-                                <th class="text-left px-4 py-3 text-rose-950/70 font-semibold">Status</th>
+                                <th class="text-left px-4 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Calendar" class="w-4 h-4 opacity-70" /> Date</div></th>
+                                <th class="text-left px-4 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Activity" class="w-4 h-4 opacity-70" /> Status</div></th>
                                 <th class="text-left px-4 py-3 text-rose-950/70 font-semibold">Assigned To</th>
                                 <th class="text-left px-4 py-3 text-rose-950/70 font-semibold">Reassign</th>
                             </tr>
@@ -262,6 +253,7 @@
 </template>
 
 <script setup>
+import { MapPin, Clock, Activity, Settings, Calendar } from '@lucide/vue'
 import { ref, reactive } from 'vue'
 import { useForm, router } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'
@@ -269,7 +261,7 @@ import Modal from '@/Components/Modal.vue'
 
 const props = defineProps({
     schedules: Object,
-    streets: Array,
+    zones: Array,
     personnel: Array,
 })
 
@@ -284,7 +276,7 @@ const currentTasks = ref([])
 const reassignForms = reactive({})
 
 const createForm = useForm({
-    street_id: '',
+    zone_id: '',
     title: '',
     description: '',
     frequency: '',
@@ -295,7 +287,7 @@ const createForm = useForm({
 })
 
 const editForm = useForm({
-    street_id: '',
+    zone_id: '',
     title: '',
     description: '',
     frequency: '',
@@ -310,7 +302,7 @@ const deleteForm = useForm({})
 
 const editSchedule = (schedule) => {
     selectedSchedule.value = schedule
-    editForm.street_id = schedule.street_id
+    editForm.zone_id = schedule.zone_id
     editForm.title = schedule.title
     editForm.description = schedule.description ?? ''
     editForm.frequency = schedule.frequency

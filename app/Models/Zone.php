@@ -11,8 +11,13 @@ class Zone extends Model
 
     protected $fillable = ['name', 'description'];
 
-    public function streets()
+    public function users()
     {
-        return $this->hasMany(Street::class);
+        return $this->hasMany(User::class);
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
     }
 }

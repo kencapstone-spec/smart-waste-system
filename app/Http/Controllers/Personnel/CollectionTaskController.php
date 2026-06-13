@@ -14,7 +14,7 @@ class CollectionTaskController extends Controller
 {
     public function index()
     {
-        $tasks = CollectionTask::with(['schedule.street.zone', 'photos'])
+        $tasks = CollectionTask::with(['schedule.zone', 'photos'])
             ->where('personnel_id', Auth::id())
             ->orderBy('collection_date')
             ->paginate(15);
@@ -32,7 +32,7 @@ class CollectionTaskController extends Controller
         $residents = User::with('points')
             ->where('role', 'resident')
             ->where('status', 'active')
-            ->where('street_id', $task->schedule->street_id)
+            ->where('zone_id', $task->schedule->zone_id)
             ->get()
             ->map(function ($resident) use ($task) {
                 $resident->task_points = $resident->points
@@ -43,7 +43,7 @@ class CollectionTaskController extends Controller
             });
 
         return Inertia::render('Personnel/CollectionTasks/Show', [
-            'task' => $task->load(['schedule.street.zone', 'photos']),
+            'task' => $task->load(['schedule.zone', 'photos']),
             'residents' => $residents,
         ]);
     }
@@ -55,7 +55,7 @@ class CollectionTaskController extends Controller
         $residents = User::with('points')
             ->where('role', 'resident')
             ->where('status', 'active')
-            ->whereHas('street', fn ($q) => $q->where('id', $task->schedule->street_id))
+            ->whereHas('zone', fn ($q) => $q->where('id', $task->schedule->zone_id))
             ->get()
             ->map(function ($resident) use ($task) {
                 $resident->task_points = $resident->points

@@ -15,8 +15,7 @@ use App\Http\Controllers\Resident\PointController;
 use App\Http\Controllers\Resident\ReportController as ResidentReportController;
 use App\Http\Controllers\Resident\RewardController as ResidentRewardController;
 use App\Http\Controllers\Resident\ScheduleController as ResidentScheduleController;
-use App\Http\Controllers\SuperAdmin\RewardController as SuperAdminRewardController;
-use App\Http\Controllers\SuperAdmin\StreetController;
+use App\Http\Controllers\Official\RewardController as OfficialRewardController;
 use App\Http\Controllers\SuperAdmin\SystemLogController;
 use App\Http\Controllers\SuperAdmin\UserController;
 use App\Http\Controllers\SuperAdmin\ZoneController;
@@ -24,7 +23,48 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+    $topResidents = \App\Models\User::where('role', 'resident')
+        ->where('status', 'active')
+        ->withSum('points', 'points')
+        ->orderByDesc('points_sum_points')
+        ->take(10)
+        ->get(['id', 'name', 'address', 'zone_id'])
+        ->filter(function ($user) {
+            return $user->points_sum_points > 0;
+        })
+        ->map(function ($user) {
+            return [
+                'name' => $user->name,
+                'address' => $user->address,
+                'zone' => $user->zone ? $user->zone->name : 'Unknown',
+                'points' => $user->points_sum_points ?? 0,
+            ];
+        })
+        ->values();
+
+    $stats = [
+        [
+            'label' => 'Registered Residents',
+            'value' => number_format(\App\Models\User::where('role', 'resident')->where('status', 'active')->count())
+        ],
+        [
+            'label' => 'Active Personnel',
+            'value' => number_format(\App\Models\User::where('role', 'personnel')->where('status', 'active')->count())
+        ],
+        [
+            'label' => 'Coverage Zones',
+            'value' => number_format(\App\Models\Zone::count())
+        ],
+        [
+            'label' => 'Completed Collections',
+            'value' => number_format(\App\Models\CollectionTask::where('status', 'completed')->count())
+        ],
+    ];
+
+    return Inertia::render('Home', [
+        'leaderboard' => $topResidents,
+        'stats' => $stats
+    ]);
 });
 
 // Guest routes
@@ -50,14 +90,14 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:super_admin')->prefix('super-admin')->name('super-admin.')->group(function () {
         Route::resource('users', UserController::class)->except('show');
         Route::resource('zones', ZoneController::class)->except('show', 'create', 'edit');
-        Route::resource('streets', StreetController::class)->except('show', 'create', 'edit');
-        Route::resource('rewards', SuperAdminRewardController::class)->except('show', 'create', 'edit');
+
         Route::get('system-logs', [SystemLogController::class, 'index'])->name('system-logs.index');
     });
 
     // Barangay Official routes
     Route::middleware('role:barangay_official')->prefix('official')->name('official.')->group(function () {
         Route::resource('schedules', ScheduleController::class)->except('show', 'create', 'edit');
+        Route::resource('rewards', OfficialRewardController::class)->except('show', 'create', 'edit');
         Route::get('schedules/{schedule}/tasks', [ScheduleController::class, 'tasks'])->name('schedules.tasks');
         Route::post('tasks/{task}/reassign', [ScheduleController::class, 'reassignTask'])->name('tasks.reassign');
         Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
@@ -68,6 +108,7 @@ Route::middleware('auth')->group(function () {
         Route::post('residents/{resident}/approve', [ResidentController::class, 'approve'])->name('residents.approve');
         Route::post('residents/{resident}/reject', [ResidentController::class, 'reject'])->name('residents.reject');
         Route::post('residents/{resident}/deactivate', [ResidentController::class, 'deactivate'])->name('residents.deactivate');
+        Route::post('residents/{resident}/reactivate', [ResidentController::class, 'reactivate'])->name('residents.reactivate');
         Route::delete('residents/{resident}', [ResidentController::class, 'destroy'])->name('residents.destroy');
         Route::get('redemptions', [RedemptionController::class, 'index'])->name('redemptions.index');
         Route::post('redemptions/{redemption}/approve', [RedemptionController::class, 'approve'])->name('redemptions.approve');

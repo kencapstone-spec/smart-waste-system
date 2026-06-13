@@ -11,7 +11,7 @@ class PointController extends Controller
 {
     public function index()
     {
-        $points = Point::with(['awardedBy', 'collectionTask.schedule.street'])
+        $points = Point::with(['awardedBy', 'collectionTask.schedule.zone'])
             ->where('resident_id', Auth::id())
             ->latest()
             ->get();

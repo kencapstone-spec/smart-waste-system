@@ -42,7 +42,7 @@
                     <template v-if="user.role === 'resident'">
                         <div class="border-t border-gray-100 pt-6 mt-6">
                             <h3 class="text-sm font-extrabold text-gray-900 uppercase tracking-wider mb-4 flex items-center gap-2">
-                                <span class="text-lg">📍</span> Location Details
+                                <span class="text-lg"><component :is="MapPin" class="w-5 h-5 inline text-rose-500" /></span> Location Details
                             </h3>
                             
                             <div class="space-y-6">
@@ -58,18 +58,18 @@
                                 </div>
 
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Street / Area</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Zone</label>
                                     <select
-                                        v-model="form.street_id"
+                                        v-model="form.zone_id"
                                         class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-900/10 focus:border-rose-900 transition-all font-medium appearance-none"
                                         required
                                     >
-                                        <option value="" disabled>Select your street</option>
-                                        <option v-for="street in streets" :key="street.id" :value="street.id">
-                                            {{ street.name }} ({{ street.zone.name }})
+                                        <option value="" disabled>Select your zone</option>
+                                        <option v-for="zone in zones" :key="zone.id" :value="zone.id">
+                                            {{ zone.name }}
                                         </option>
                                     </select>
-                                    <p v-if="form.errors.street_id" class="mt-2 text-xs font-medium text-red-500">{{ form.errors.street_id }}</p>
+                                    <p v-if="form.errors.zone_id" class="mt-2 text-xs font-medium text-red-500">{{ form.errors.zone_id }}</p>
                                 </div>
                             </div>
                         </div>
@@ -91,19 +91,20 @@
 </template>
 
 <script setup>
+import { MapPin } from '@lucide/vue';
 import { useForm, usePage } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'
 
 const props = defineProps({
     user: Object,
-    streets: Array,
+    zones: Array,
 })
 
 const form = useForm({
     name: props.user.name,
     phone: props.user.phone,
     address: props.user.address ?? '',
-    street_id: props.user.street_id ?? '',
+    zone_id: props.user.zone_id ?? '',
 })
 
 const submit = () => {

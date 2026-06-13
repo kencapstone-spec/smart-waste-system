@@ -10,16 +10,16 @@
             </button>
         </div>
 
-        <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
-            <div class="overflow-x-auto pb-4">
+        <div class="bg-white/70 backdrop-blur-2xl sm:rounded-2xl shadow-xl shadow-rose-900/5 sm:border border-white/60 -mx-4 sm:mx-0 overflow-hidden">
+            <div class="overflow-x-auto  scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent pb-4">
                 <table class="w-full text-sm whitespace-nowrap">
                 <thead class="border-b border-rose-100/50">
                     <tr>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Name</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="User" class="w-4 h-4 opacity-70" /> Name</div></th>
                         <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Points Req.</th>
                         <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Stock</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Status</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Actions</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Activity" class="w-4 h-4 opacity-70" /> Status</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Settings" class="w-4 h-4 opacity-70" /> Actions</div></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -33,8 +33,8 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 flex gap-2">
-                            <button @click="editReward(reward)" class="text-blue-600 hover:underline text-xs">Edit</button>
-                            <button @click="confirmDelete(reward)" class="text-red-500 hover:underline text-xs">Delete</button>
+                            <button @click="editReward(reward)" class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0">Edit</button>
+                            <button @click="confirmDelete(reward)" class="text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0">Delete</button>
                         </td>
                     </tr>
                     <tr v-if="rewards.data.length === 0">
@@ -121,6 +121,7 @@
 </template>
 
 <script setup>
+import { User, Activity, Settings } from '@lucide/vue'
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'
@@ -169,7 +170,7 @@ const confirmDelete = (reward) => {
 }
 
 const submitCreate = () => {
-    createForm.post(route('super-admin.rewards.store'), {
+    createForm.post(route('official.rewards.store'), {
         onSuccess: () => {
             showCreateModal.value = false
             createForm.reset()
@@ -178,13 +179,13 @@ const submitCreate = () => {
 }
 
 const submitEdit = () => {
-    editForm.put(route('super-admin.rewards.update', selectedReward.value.id), {
+    editForm.put(route('official.rewards.update', selectedReward.value.id), {
         onSuccess: () => showEditModal.value = false,
     })
 }
 
 const submitDelete = () => {
-    deleteForm.delete(route('super-admin.rewards.destroy', selectedReward.value.id), {
+    deleteForm.delete(route('official.rewards.destroy', selectedReward.value.id), {
         onSuccess: () => showDeleteModal.value = false,
     })
 }

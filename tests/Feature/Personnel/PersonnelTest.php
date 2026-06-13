@@ -5,7 +5,6 @@ namespace Tests\Feature\Personnel;
 use App\Models\CollectionTask;
 use App\Models\Schedule;
 use App\Models\ScheduleAssignment;
-use App\Models\Street;
 use App\Models\User;
 use App\Models\Zone;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,11 +24,10 @@ class PersonnelTest extends TestCase
     private function makeScheduleWithTask(User $personnel): CollectionTask
     {
         $zone = Zone::create(['name' => 'Zone 1']);
-        $street = Street::create(['zone_id' => $zone->id, 'name' => 'Rizal St.']);
         $official = User::factory()->official()->create();
 
         $schedule = Schedule::create([
-            'street_id' => $street->id,
+            'zone_id' => $zone->id,
             'created_by' => $official->id,
             'title' => 'Test Schedule',
             'frequency' => 'once',

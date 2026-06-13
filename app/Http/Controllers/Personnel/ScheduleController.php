@@ -11,7 +11,7 @@ class ScheduleController extends Controller
 {
     public function index()
     {
-        $schedules = Schedule::with(['street.zone', 'assignments.personnel', 'collectionTasks' => function ($q) {
+        $schedules = Schedule::with(['zone', 'assignments.personnel', 'collectionTasks' => function ($q) {
             $q->where('personnel_id', Auth::id());
         }])
             ->whereHas('assignments', fn ($q) => $q->where('personnel_id', Auth::id()))

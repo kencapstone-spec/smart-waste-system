@@ -14,8 +14,8 @@
                 <div class="w-full max-w-sm mx-auto">
                     
                     <div class="text-center mb-8">
-                        <div class="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">
-                            🗑️
+                        <div class="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center mx-auto mb-4 shadow-sm text-rose-900">
+                            <component :is="Trash2" class="w-6 h-6" />
                         </div>
                         <h1 class="text-3xl font-bold text-gray-900 mb-2 tracking-tight">Sign In</h1>
                         <p class="text-gray-500 text-sm">Welcome back to SmartWaste</p>
@@ -48,7 +48,9 @@
                 <div class="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-white/5 blur-3xl pointer-events-none"></div>
                 
                 <div class="max-w-xs relative z-10">
-                    <span class="text-4xl block mb-4 animate-bounce">👋</span>
+                    <span class="block mb-4 animate-bounce text-white">
+                        <component :is="Smile" class="w-10 h-10" />
+                    </span>
                     <h2 class="text-3xl font-bold mb-4 tracking-tight">Hello, Neighbor!</h2>
                     <p class="text-rose-100/80 text-sm leading-relaxed mb-8">
                         Don't have an account yet? Register your details to start participating in our Smart Waste Collection system.
@@ -66,8 +68,8 @@
 
         <Modal :show="showOtpModal" title="Security Verification" @close="showOtpModal = false">
             <div class="text-center pb-2">
-                <div class="w-16 h-16 bg-rose-50 border border-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span class="text-2xl">🔐</span>
+                <div class="w-16 h-16 bg-rose-50 border border-rose-100 rounded-full flex items-center justify-center mx-auto mb-4 text-rose-900">
+                    <component :is="ShieldCheck" class="w-8 h-8" />
                 </div>
                 <p class="text-gray-500 text-sm mb-6">
                     We sent a 6-digit code to <br/>
@@ -110,6 +112,7 @@ import { ref, watch } from 'vue'
 import { useForm, usePage } from '@inertiajs/vue3'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 import Modal from '@/Components/Modal.vue'
+import { Trash2, Smile, ShieldCheck } from '@lucide/vue'
 
 const page = usePage()
 const showOtpModal = ref(false)

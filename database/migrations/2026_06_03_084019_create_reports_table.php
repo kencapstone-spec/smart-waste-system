@@ -13,8 +13,7 @@ return new class extends Migration
             $table->foreignId('resident_id')->constrained('users')->cascadeOnDelete();
             $table->enum('type', ['missed_collection', 'illegal_dumping']);
             $table->text('description');
-            $table->decimal('latitude', 10, 7)->nullable();
-            $table->decimal('longitude', 10, 7)->nullable();
+
             $table->enum('status', ['pending', 'reviewed', 'resolved'])->default('pending');
             $table->text('official_response')->nullable();
             $table->foreignId('responded_by')->nullable()->constrained('users')->nullOnDelete();

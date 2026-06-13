@@ -23,24 +23,24 @@
             >Rejected</button>
         </div>
 
-        <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
-            <div class="overflow-x-auto pb-4">
+        <div class="bg-white/70 backdrop-blur-2xl sm:rounded-2xl shadow-xl shadow-rose-900/5 sm:border border-white/60 -mx-4 sm:mx-0 overflow-hidden">
+            <div class="overflow-x-auto  scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent pb-4">
                 <table class="w-full text-sm whitespace-nowrap">
                 <thead class="border-b border-rose-100/50">
                     <tr>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Name</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Phone</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Street</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Status</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="User" class="w-4 h-4 opacity-70" /> Name</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Phone" class="w-4 h-4 opacity-70" /> Phone</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="MapPin" class="w-4 h-4 opacity-70" /> Zone</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Activity" class="w-4 h-4 opacity-70" /> Status</div></th>
                         <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Registered</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Actions</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Settings" class="w-4 h-4 opacity-70" /> Actions</div></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     <tr v-for="resident in filteredResidents" :key="resident.id" class="hover:bg-rose-50/50 transition-colors">
                         <td class="px-6 py-4 text-rose-950 font-semibold">{{ resident.name }}</td>
                         <td class="px-6 py-4 text-rose-950/80">{{ resident.phone }}</td>
-                        <td class="px-6 py-4 text-rose-950/80">{{ resident.street?.name ?? '—' }}</td>
+                        <td class="px-6 py-4 text-rose-950/80">{{ resident.zone?.name ?? '—' }}</td>
                         <td class="px-6 py-4">
                             <span :class="statusClass(resident.status)" class="px-2 py-1 rounded-full text-xs font-medium capitalize">
                                 {{ resident.status }}
@@ -64,6 +64,11 @@
                                 @click="deactivateResident(resident)"
                                 class="text-orange-500 hover:underline text-xs font-medium"
                             >Deactivate</button>
+                            <button
+                                v-if="resident.status === 'rejected'"
+                                @click="reactivateResident(resident)"
+                                class="text-green-600 hover:underline text-xs font-medium"
+                            >Reactivate</button>
                             <button
                                 @click="deleteResident(resident)"
                                 class="text-red-600 hover:underline text-xs font-medium"
@@ -95,8 +100,8 @@
                         <p class="text-gray-800">{{ selectedResident.address ?? '—' }}</p>
                     </div>
                     <div>
-                        <p class="text-gray-500 text-xs mb-1">Street</p>
-                        <p class="text-gray-800">{{ selectedResident.street?.name ?? '—' }}</p>
+                        <p class="text-gray-500 text-xs mb-1">Zone</p>
+                        <p class="text-gray-800">{{ selectedResident.zone?.name ?? '—' }}</p>
                     </div>
                     <div>
                         <p class="text-gray-500 text-xs mb-1">Status</p>
@@ -115,6 +120,9 @@
                     </template>
                     <template v-if="selectedResident.status === 'active'">
                         <button @click="deactivateResident(selectedResident)" class="bg-orange-500 text-white px-4 py-2 rounded-md text-sm hover:bg-orange-600 transition">Deactivate</button>
+                    </template>
+                    <template v-if="selectedResident.status === 'rejected'">
+                        <button @click="reactivateResident(selectedResident)" class="bg-green-500 text-white px-4 py-2 rounded-md text-sm hover:bg-green-600 transition">Reactivate</button>
                     </template>
                     <button @click="deleteResident(selectedResident)" class="bg-red-600 text-white px-4 py-2 rounded-md text-sm hover:bg-red-700 transition">Delete</button>
                 </div>
@@ -148,6 +156,15 @@
             </div>
         </Modal>
 
+        <!-- Reactivate Confirmation Modal -->
+        <Modal :show="showReactivateModal" title="Reactivate Resident" @close="showReactivateModal = false">
+            <p class="text-rose-950/80 text-sm mb-6">Reactivate <span class="font-semibold">{{ selectedResident?.name }}</span>? This will restore their access to the system and they will be notified via SMS.</p>
+            <div class="flex justify-end gap-3">
+                <button @click="showReactivateModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
+                <button @click="submitReactivate" :disabled="actionForm.processing" class="bg-green-500 text-white px-4 py-2 rounded-md text-sm hover:bg-green-600">Reactivate</button>
+            </div>
+        </Modal>
+
         <!-- Delete Confirmation Modal -->
         <Modal :show="showDeleteModal" title="Delete Resident Account" @close="showDeleteModal = false">
             <div class="mb-6">
@@ -163,6 +180,7 @@
 </template>
 
 <script setup>
+import { User, Phone, MapPin, Activity, Settings } from '@lucide/vue'
 import { ref, computed } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'
@@ -177,6 +195,7 @@ const showViewModal = ref(false)
 const showApproveModal = ref(false)
 const showRejectModal = ref(false)
 const showDeactivateModal = ref(false)
+const showReactivateModal = ref(false)
 const showDeleteModal = ref(false)
 const selectedResident = ref(null)
 const actionForm = useForm({})
@@ -231,6 +250,12 @@ const deactivateResident = (resident) => {
     showDeactivateModal.value = true
 }
 
+const reactivateResident = (resident) => {
+    selectedResident.value = resident
+    showViewModal.value = false
+    showReactivateModal.value = true
+}
+
 const deleteResident = (resident) => {
     selectedResident.value = resident
     showViewModal.value = false
@@ -240,6 +265,12 @@ const deleteResident = (resident) => {
 const submitDeactivate = () => {
     actionForm.post(route('official.residents.deactivate', selectedResident.value.id), {
         onSuccess: () => showDeactivateModal.value = false,
+    })
+}
+
+const submitReactivate = () => {
+    actionForm.post(route('official.residents.reactivate', selectedResident.value.id), {
+        onSuccess: () => showReactivateModal.value = false,
     })
 }
 

@@ -4,17 +4,17 @@
             <h2 class="text-xl font-bold text-rose-950 tracking-tight">Submitted Reports</h2>
         </div>
 
-        <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
-            <div class="overflow-x-auto pb-4">
+        <div class="bg-white/70 backdrop-blur-2xl sm:rounded-2xl shadow-xl shadow-rose-900/5 sm:border border-white/60 -mx-4 sm:mx-0 overflow-hidden">
+            <div class="overflow-x-auto  scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent pb-4">
                 <table class="w-full text-sm whitespace-nowrap">
                 <thead class="border-b border-rose-100/50">
                     <tr>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Resident</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Type</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Description</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Status</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Date</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Actions</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="User" class="w-4 h-4 opacity-70" /> Resident</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Box" class="w-4 h-4 opacity-70" /> Type</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="FileText" class="w-4 h-4 opacity-70" /> Description</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Activity" class="w-4 h-4 opacity-70" /> Status</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Calendar" class="w-4 h-4 opacity-70" /> Date</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Settings" class="w-4 h-4 opacity-70" /> Actions</div></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -33,7 +33,7 @@
                         </td>
                         <td class="px-6 py-4 text-gray-500">{{ formatDate(report.created_at) }}</td>
                         <td class="px-6 py-4">
-                            <button @click="viewReport(report)" class="text-blue-600 hover:underline text-xs">View</button>
+                            <button @click="viewReport(report)" class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0">View</button>
                         </td>
                     </tr>
                     <tr v-if="reports.data.length === 0">
@@ -108,7 +108,7 @@
         <!-- Fullscreen Image Modal -->
         <Modal :show="!!viewingPhoto" max-width="4xl" @close="viewingPhoto = null">
             <div class="relative bg-black rounded-xl overflow-hidden p-1">
-                <button @click="viewingPhoto = null" class="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/80 rounded-full w-8 h-8 flex items-center justify-center transition-colors">✕</button>
+                <button @click="viewingPhoto = null" class="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/80 rounded-full w-8 h-8 flex items-center justify-center transition-colors"><component :is="X" class="w-5 h-5" /></button>
                 <img :src="viewingPhoto" class="w-full h-auto max-h-[85vh] object-contain rounded-lg" />
             </div>
         </Modal>
@@ -116,6 +116,7 @@
 </template>
 
 <script setup>
+import { X, User, Box, FileText, Activity, Calendar, Settings } from '@lucide/vue';
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'

@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-white overflow-hidden">
+    <div class="min-h-screen bg-white overflow-x-hidden text-base">
 
         <!-- ============================================================ -->
         <!-- NAVBAR -->
@@ -8,9 +8,9 @@
             :class="scrolled ? 'bg-white/90 backdrop-blur-xl shadow-lg shadow-rose-900/5' : 'bg-transparent'">
             <div class="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-18">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl flex items-center justify-center text-lg"
+                    <div class="w-9 h-9 rounded-xl flex items-center justify-center"
                         :class="scrolled ? 'bg-rose-900 text-white' : 'bg-white/15 text-white backdrop-blur-sm'">
-                        🗑️
+                        <component :is="Trash2" class="w-5 h-5" />
                     </div>
                     <span class="font-bold text-lg tracking-tight"
                         :class="scrolled ? 'text-rose-950' : 'text-white'">
@@ -40,24 +40,34 @@
         <!-- ============================================================ -->
         <!-- HERO SECTION -->
         <!-- ============================================================ -->
-        <section class="relative min-h-screen flex items-center overflow-hidden">
-            <!-- Gradient Background -->
-            <div class="absolute inset-0 bg-gradient-to-br from-rose-950 via-rose-900 to-red-900"></div>
+        <section class="relative min-h-screen flex flex-col">
+            <!-- Background Elements Wrapper -->
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                <!-- Gradient Background -->
+                <div class="absolute inset-0 bg-gradient-to-br from-rose-950 via-rose-900 to-red-900"></div>
 
-            <!-- Animated mesh pattern -->
-            <div class="absolute inset-0 opacity-10">
-                <div class="absolute top-0 left-0 w-full h-full"
-                    style="background-image: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.15) 1px, transparent 1px), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 50px 50px;">
+                <!-- Animated mesh pattern -->
+                <div class="absolute inset-0 opacity-10">
+                    <div class="absolute top-0 left-0 w-full h-full"
+                        style="background-image: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.15) 1px, transparent 1px), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 50px 50px;">
+                    </div>
+                </div>
+
+                <!-- Floating orbs -->
+                <div class="absolute top-20 right-20 w-96 h-96 bg-rose-400/20 rounded-full blur-3xl animate-float"></div>
+                <div class="absolute bottom-20 left-10 w-72 h-72 bg-red-400/15 rounded-full blur-3xl animate-float-delayed"></div>
+                <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-rose-300/10 rounded-full blur-3xl animate-float-slow"></div>
+                
+                <!-- Bottom wave -->
+                <div class="absolute bottom-0 left-0 right-0">
+                    <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                        <path d="M0 120V60C240 20 480 0 720 20C960 40 1200 80 1440 60V120H0Z" fill="white"/>
+                    </svg>
                 </div>
             </div>
 
-            <!-- Floating orbs -->
-            <div class="absolute top-20 right-20 w-96 h-96 bg-rose-400/20 rounded-full blur-3xl animate-float"></div>
-            <div class="absolute bottom-20 left-10 w-72 h-72 bg-red-400/15 rounded-full blur-3xl animate-float-delayed"></div>
-            <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-rose-300/10 rounded-full blur-3xl animate-float-slow"></div>
-
-            <div class="relative max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20 w-full">
-                <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="relative flex-1 flex flex-col max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20 w-full">
+                <div class="my-auto grid lg:grid-cols-2 gap-16 items-center">
                     <div class="space-y-8">
                         <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs font-medium text-rose-200 border border-white/10">
                             <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
@@ -122,7 +132,7 @@
                                 <div class="space-y-4">
                                     <div class="flex items-center justify-between bg-white/10 rounded-xl p-4">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-lg bg-emerald-500/30 flex items-center justify-center text-emerald-300">📅</div>
+                                            <div class="w-10 h-10 rounded-lg bg-emerald-500/30 flex items-center justify-center text-emerald-300"><component :is="CalendarDays" class="w-7 h-7" /></div>
                                             <div>
                                                 <p class="text-sm font-medium text-white">Monday Collection</p>
                                                 <p class="text-xs text-rose-200/60">Rizal St. • Zone 1</p>
@@ -132,7 +142,7 @@
                                     </div>
                                     <div class="flex items-center justify-between bg-white/10 rounded-xl p-4">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-lg bg-amber-500/30 flex items-center justify-center text-amber-300">📝</div>
+                                            <div class="w-10 h-10 rounded-lg bg-amber-500/30 flex items-center justify-center text-amber-300"><component :is="FileText" class="w-7 h-7" /></div>
                                             <div>
                                                 <p class="text-sm font-medium text-white">Missed Collection Report</p>
                                                 <p class="text-xs text-rose-200/60">Submitted 2h ago</p>
@@ -153,33 +163,61 @@
                                 </div>
                             </div>
 
-                            <!-- Floating stat card -->
-                            <div class="absolute -bottom-6 -left-6 bg-white rounded-2xl p-5 shadow-2xl shadow-rose-950/20 animate-float-slow">
-                                <p class="text-xs text-gray-400 mb-1">Total Collections</p>
-                                <p class="text-2xl font-extrabold text-rose-900">1,247</p>
-                                <p class="text-xs text-emerald-600 font-medium mt-0.5">↑ 12% this month</p>
-                            </div>
 
-                            <!-- Floating notification -->
-                            <div class="absolute -top-4 -right-4 bg-white rounded-2xl px-5 py-3 shadow-2xl shadow-rose-950/20 animate-float-delayed">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center text-sm">✅</div>
-                                    <div>
-                                        <p class="text-xs font-semibold text-gray-800">Task Completed</p>
-                                        <p class="text-[10px] text-gray-400">Just now</p>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Bottom wave -->
-            <div class="absolute bottom-0 left-0 right-0">
-                <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
-                    <path d="M0 120V60C240 20 480 0 720 20C960 40 1200 80 1440 60V120H0Z" fill="white"/>
-                </svg>
+        <!-- ============================================================ -->
+        <!-- LEADERBOARD SECTION -->
+        <!-- ============================================================ -->
+        <section id="leaderboard" class="py-24 bg-rose-50/30">
+            <div class="max-w-4xl mx-auto px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <p class="text-sm font-semibold text-amber-600 tracking-widest uppercase mb-3">Top Performers</p>
+                    <h2 class="text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight">
+                        Resident Leaderboard
+                    </h2>
+                    <p class="text-gray-500 mt-4 text-lg">
+                        Recognizing our top 10 residents who are leading the way in clean waste management.
+                    </p>
+                </div>
+
+                <div v-if="leaderboard && leaderboard.length > 0" class="bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-xl shadow-rose-900/5">
+                    <div class="divide-y divide-gray-50">
+                        <div v-for="(resident, index) in leaderboard" :key="resident.name" 
+                            class="flex items-center justify-between p-6 hover:bg-gray-50 transition-colors"
+                            :class="index < 3 ? 'bg-amber-50/30' : ''">
+                            <div class="flex items-center gap-6">
+                                <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-bold shadow-sm"
+                                    :class="index === 0 ? 'bg-gradient-to-br from-amber-200 to-amber-400 text-amber-900 border border-amber-300' : (index === 1 ? 'bg-gradient-to-br from-gray-200 to-gray-300 text-gray-700 border border-gray-300' : (index === 2 ? 'bg-gradient-to-br from-orange-200 to-orange-300 text-orange-800 border border-orange-300' : 'bg-rose-50 text-rose-900 border border-rose-100'))">
+                                    <component v-if="index === 0" :is="Trophy" class="w-6 h-6" />
+                                    <component v-else-if="index === 1" :is="Medal" class="w-6 h-6" />
+                                    <component v-else-if="index === 2" :is="Award" class="w-6 h-6" />
+                                    <span v-else>{{ index + 1 }}</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 text-lg">{{ resident.name }}</h4>
+                                    <p class="text-sm text-gray-500">{{ resident.zone }} • {{ resident.address }}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-black text-rose-600">{{ resident.points }}</div>
+                                <div class="text-xs font-semibold text-rose-300 uppercase tracking-wider">Points</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div v-else class="text-center py-12 bg-white rounded-3xl border border-gray-100 border-dashed shadow-sm">
+                    <div class="mb-4 opacity-50 flex justify-center text-gray-400">
+                        <component :is="Trophy" class="w-12 h-12" />
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-1">No points awarded yet</h3>
+                    <p class="text-gray-500">The leaderboard will update automatically once residents start earning points!</p>
+                </div>
             </div>
         </section>
 
@@ -218,9 +256,9 @@
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div v-for="feature in features" :key="feature.title"
                         class="group relative bg-white rounded-2xl p-8 border border-gray-100 hover:border-rose-200 hover:shadow-xl hover:shadow-rose-900/5 transition-all duration-500 hover:-translate-y-1">
-                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-5 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
+                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
                             :class="feature.bgClass">
-                            {{ feature.icon }}
+                            <component :is="feature.icon" class="w-7 h-7" />
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 mb-2">{{ feature.title }}</h3>
                         <p class="text-gray-500 text-sm leading-relaxed">{{ feature.description }}</p>
@@ -275,7 +313,9 @@
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div v-for="role in roles" :key="role.title"
                         class="bg-white rounded-2xl p-7 border border-gray-100 hover:shadow-xl hover:shadow-rose-900/5 transition-all duration-500 hover:-translate-y-1">
-                        <div class="text-4xl mb-4">{{ role.icon }}</div>
+                    <div class="mb-4">
+                            <component :is="role.icon" class="w-10 h-10" :class="role.iconClass" />
+                        </div>
                         <h3 class="font-bold text-gray-900 mb-2 text-lg">{{ role.title }}</h3>
                         <ul class="space-y-2">
                             <li v-for="ability in role.abilities" :key="ability"
@@ -331,7 +371,7 @@
                 <div class="grid md:grid-cols-3 gap-12 mb-12">
                     <div>
                         <div class="flex items-center gap-3 mb-4">
-                            <div class="w-9 h-9 rounded-xl bg-rose-900 flex items-center justify-center text-lg">🗑️</div>
+                            <div class="w-9 h-9 rounded-xl bg-rose-900 flex items-center justify-center text-lg"><component :is="Trash2" class="w-8 h-8" /></div>
                             <span class="font-bold text-lg text-white tracking-tight">SmartWaste</span>
                         </div>
                         <p class="text-sm leading-relaxed">
@@ -369,6 +409,33 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import {
+    CalendarDays,
+    CheckCircle,
+    FileText,
+    Star,
+    FileDown,
+    ShieldCheck,
+    Shield,
+    Building,
+    Truck,
+    Home as HomeIcon,
+    Trash2,
+    Trophy,
+    Medal,
+    Award
+} from '@lucide/vue'
+
+const props = defineProps({
+    leaderboard: {
+        type: Array,
+        default: () => []
+    },
+    stats: {
+        type: Array,
+        default: () => []
+    }
+})
 
 // Navbar scroll state
 const scrolled = ref(false)
@@ -383,23 +450,19 @@ const scrollToSection = (id) => {
 const navLinks = [
     { id: 'features', label: 'Features' },
     { id: 'how-it-works', label: 'How It Works' },
+    { id: 'leaderboard', label: 'Leaderboard' },
     { id: 'roles', label: 'Roles' },
 ]
 
-const stats = [
-    { value: '6', label: 'Collection Zones' },
-    { value: '18', label: 'Streets Covered' },
-    { value: '4', label: 'Active Personnel' },
-    { value: '24/7', label: 'Report Anytime' },
-]
+
 
 const features = [
-    { icon: '📅', title: 'Scheduled Collections', description: 'Officials create and manage daily, weekly, or monthly waste collection schedules per street.', bgClass: 'bg-rose-100' },
-    { icon: '✅', title: 'Task Management', description: 'Personnel mark tasks as completed or missed with photo proof for full accountability.', bgClass: 'bg-amber-100' },
-    { icon: '📝', title: 'Incident Reporting', description: 'Residents report missed collections or illegal dumping with photos and GPS location.', bgClass: 'bg-blue-100' },
-    { icon: '⭐', title: 'Points & Incentives', description: 'Personnel manually award points to residents for proper segregation and participation.', bgClass: 'bg-emerald-100' },
-    { icon: '📄', title: 'PDF Reports', description: 'Officials generate exportable collection summaries, complaint reports, and participation rankings.', bgClass: 'bg-purple-100' },
-    { icon: '🔐', title: 'OTP Authentication', description: 'Secure phone-based login using SMS one-time passwords via Semaphore PH API.', bgClass: 'bg-rose-100' },
+    { icon: CalendarDays, title: 'Scheduled Collections', description: 'Officials create and manage daily, weekly, or monthly waste collection schedules per street.', bgClass: 'bg-rose-100 text-rose-600' },
+    { icon: CheckCircle, title: 'Task Management', description: 'Personnel mark tasks as completed or missed with photo proof for full accountability.', bgClass: 'bg-amber-100 text-amber-600' },
+    { icon: FileText, title: 'Incident Reporting', description: 'Residents report missed collections or illegal dumping with photos and GPS location.', bgClass: 'bg-blue-100 text-blue-600' },
+    { icon: Star, title: 'Points & Incentives', description: 'Personnel manually award points to residents for proper segregation and participation.', bgClass: 'bg-emerald-100 text-emerald-600' },
+    { icon: FileDown, title: 'PDF Reports', description: 'Officials generate exportable collection summaries, complaint reports, and participation rankings.', bgClass: 'bg-purple-100 text-purple-600' },
+    { icon: ShieldCheck, title: 'OTP Authentication', description: 'Secure phone-based login using SMS one-time passwords via Semaphore PH API.', bgClass: 'bg-rose-100 text-rose-600' },
 ]
 
 const steps = [
@@ -411,20 +474,24 @@ const steps = [
 
 const roles = [
     {
-        icon: '🛡️', title: 'Super Admin',
-        abilities: ['Manage user accounts', 'Configure zones & streets', 'View system activity logs'],
+        icon: Shield, title: 'Super Admin',
+        abilities: ['Manage user accounts', 'Configure zones', 'View system activity logs'],
+        iconClass: 'text-rose-600'
     },
     {
-        icon: '🏛️', title: 'Barangay Official',
+        icon: Building, title: 'Barangay Official',
         abilities: ['Create collection schedules', 'Respond to reports', 'Approve residents', 'Export PDF reports'],
+        iconClass: 'text-amber-600'
     },
     {
-        icon: '🚛', title: 'Personnel',
+        icon: Truck, title: 'Personnel',
         abilities: ['View assigned schedules', 'Update task status with photos', 'Award points to residents'],
+        iconClass: 'text-blue-600'
     },
     {
-        icon: '🏠', title: 'Resident',
+        icon: HomeIcon, title: 'Resident',
         abilities: ['View collection schedules', 'Submit reports with photos', 'Track earned points'],
+        iconClass: 'text-emerald-600'
     },
 ]
 </script>

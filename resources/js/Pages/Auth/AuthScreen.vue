@@ -132,11 +132,19 @@
                             </div>
 
                             <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-2">Street</label>
+                                <label class="block text-sm font-bold text-rose-950 mb-2">Zone</label>
                                 <div class="relative">
-                                    <select v-model="registerForm.street_id" class="w-full bg-rose-50/50 border border-rose-100 rounded-2xl px-5 py-4 appearance-none focus:outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all duration-300 font-medium cursor-pointer" :class="!registerForm.street_id ? 'text-rose-900/40' : 'text-rose-950'">
-                                        <option value="" disabled>Select your street</option>
-                                        <option v-for="street in streets" :key="street.id" :value="street.id" class="text-rose-950">{{ street.name }} ({{ street.zone.name }})</option>
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                    </div>
+                                    <select v-model="registerForm.zone_id" class="w-full bg-rose-50/50 border border-rose-100 rounded-2xl pl-12 pr-5 py-4 appearance-none focus:outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all duration-300 font-medium cursor-pointer" :class="!registerForm.zone_id ? 'text-rose-900/40' : 'text-rose-950'">
+                                        <option value="" disabled selected>Select your zone</option>
+                                        <option v-for="zone in zones" :key="zone.id" :value="zone.id">
+                                            {{ zone.name }}
+                                        </option>
                                     </select>
                                     <div class="absolute inset-y-0 right-0 flex items-center px-5 pointer-events-none">
                                         <div class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center border border-rose-100">
@@ -144,7 +152,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p v-if="registerForm.errors.street_id" class="text-rose-500 text-sm mt-2 font-bold">{{ registerForm.errors.street_id }}</p>
+                                <p v-if="registerForm.errors.zone_id" class="text-rose-500 text-sm mt-2 font-bold">{{ registerForm.errors.zone_id }}</p>
                             </div>
 
                             <button type="submit" :disabled="registerForm.processing" class="w-full bg-gradient-to-r from-rose-700 to-rose-900 text-white py-4 rounded-2xl text-base font-bold hover:from-rose-800 hover:to-rose-950 transition-all duration-300 shadow-[0_8px_25px_rgba(225,29,72,0.25)] hover:shadow-[0_12px_35px_rgba(225,29,72,0.35)] hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 mt-8">
@@ -162,7 +170,7 @@
         <Modal :show="showOtpModal" title="Security Verification" @close="showOtpModal = false">
             <div class="text-center pb-2 px-4">
                 <div class="w-20 h-20 bg-rose-50 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-inner border border-rose-100">
-                    <span class="text-3xl">🔐</span>
+                    <span class="text-3xl"><component :is="ShieldCheck" class="w-10 h-10 mx-auto text-rose-900" /></span>
                 </div>
                 <p class="text-slate-500 font-medium mb-6">
                     We sent a 6-digit secure code to <br/>
@@ -202,7 +210,7 @@
         <Modal :show="showSuccessModal" :closeable="false" max-width="sm">
             <div class="text-center py-8 px-4">
                 <div class="w-24 h-24 bg-emerald-50 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-inner border border-emerald-100">
-                    <span class="text-5xl">✨</span>
+                    <span class="text-5xl"><component :is="Sparkles" class="w-6 h-6 inline text-rose-400" /></span>
                 </div>
                 <h2 class="text-3xl font-extrabold text-slate-900 mb-4 tracking-tight">Application Sent!</h2>
                 <p class="text-slate-500 font-medium mb-8 leading-relaxed">
@@ -221,13 +229,14 @@
 </template>
 
 <script setup>
+import { ShieldCheck, Sparkles } from '@lucide/vue';
 import { ref, watch } from 'vue'
 import { useForm, usePage, router, Head, Link } from '@inertiajs/vue3'
 import Modal from '@/Components/Modal.vue'
 
 const props = defineProps({
     activeTab: String,
-    streets: Array,
+    zones: Array,
 })
 
 const page = usePage()
@@ -270,7 +279,7 @@ const registerForm = useForm({
     name: '',
     phone: '',
     address: '',
-    street_id: '',
+    zone_id: '',
 })
 
 watch(() => page.props.flash?.success, (val) => {

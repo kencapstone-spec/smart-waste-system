@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Street;
+use App\Models\Zone;
 use App\Models\User;
 use App\Services\OtpService;
 use App\Services\SemaphoreService;
@@ -22,7 +22,7 @@ class OtpController extends Controller
     {
         return Inertia::render('Auth/AuthScreen', [
             'activeTab' => 'login',
-            'streets' => Street::with('zone')->orderBy('name')->get(['id', 'name', 'zone_id']),
+            'zones' => Zone::orderBy('name')->get(['id', 'name']),
         ]);
     }
 

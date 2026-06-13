@@ -18,7 +18,7 @@ class User extends Authenticatable
         'role',
         'status',
         'address',
-        'street_id',
+        'zone_id',
         'approved_at',
         'approved_by',
     ];
@@ -34,9 +34,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function street()
+    public function zone()
     {
-        return $this->belongsTo(Street::class);
+        return $this->belongsTo(Zone::class);
     }
 
     public function approvedBy()

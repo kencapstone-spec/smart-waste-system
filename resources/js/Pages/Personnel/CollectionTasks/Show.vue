@@ -149,13 +149,14 @@
     <!-- Fullscreen Image Modal -->
     <Modal :show="!!viewingPhoto" max-width="4xl" @close="viewingPhoto = null">
         <div class="relative bg-black rounded-xl overflow-hidden p-1">
-            <button @click="viewingPhoto = null" class="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/80 rounded-full w-8 h-8 flex items-center justify-center transition-colors">✕</button>
+            <button @click="viewingPhoto = null" class="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/80 rounded-full w-8 h-8 flex items-center justify-center transition-colors"><component :is="X" class="w-5 h-5" /></button>
             <img :src="viewingPhoto" class="w-full h-auto max-h-[85vh] object-contain rounded-lg" />
         </div>
     </Modal>
 </template>
 
 <script setup>
+import { X } from '@lucide/vue';
 import { ref } from 'vue'
 import { useForm, Link } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'

@@ -13,8 +13,6 @@ class Report extends Model
         'resident_id',
         'type',
         'description',
-        'latitude',
-        'longitude',
         'status',
         'official_response',
         'responded_by',
@@ -24,8 +22,6 @@ class Report extends Model
     protected function casts(): array
     {
         return [
-            'latitude' => 'decimal:7',
-            'longitude' => 'decimal:7',
             'responded_at' => 'datetime',
         ];
     }

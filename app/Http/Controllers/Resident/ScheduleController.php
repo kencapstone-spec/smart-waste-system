@@ -13,15 +13,15 @@ class ScheduleController extends Controller
     {
         $user = Auth::user();
 
-        $schedules = Schedule::with(['street.zone', 'assignments.personnel'])
-            ->where('street_id', $user->street_id)
+        $schedules = Schedule::with(['zone', 'assignments.personnel'])
+            ->where('zone_id', $user->zone_id)
             ->where('status', 'active')
             ->orderBy('start_date')
             ->get();
 
         return Inertia::render('Resident/Schedules/Index', [
             'schedules' => $schedules,
-            'myStreet' => $user->load('street.zone')->street,
+            'myZone' => $user->load('zone')->zone,
         ]);
     }
 }

@@ -14,7 +14,7 @@ class ResidentController extends Controller
 
     public function index()
     {
-        $residents = User::with('street.zone')
+        $residents = User::with('zone')
             ->where('role', 'resident')
             ->latest()
             ->paginate(15);
@@ -32,7 +32,7 @@ class ResidentController extends Controller
             ->get();
 
         return Inertia::render('Official/Residents/Show', [
-            'resident' => $resident->load('street.zone'),
+            'resident' => $resident->load('zone'),
             'points' => $points,
             'totalPoints' => $points->sum('points'),
         ]);
@@ -76,6 +76,18 @@ class ResidentController extends Controller
         );
 
         return back()->with('success', 'Resident deactivated.');
+    }
+
+    public function reactivate(User $resident)
+    {
+        $resident->update(['status' => 'active']);
+
+        $this->semaphoreService->sendSms(
+            $resident->phone,
+            'Your Smart Waste System account has been reactivated. You can now log in and use the system again.'
+        );
+
+        return back()->with('success', 'Resident reactivated successfully.');
     }
 
     public function destroy(User $resident)

@@ -10,7 +10,7 @@ class Schedule extends Model
     use LogsActivity;
 
     protected $fillable = [
-        'street_id',
+        'zone_id',
         'created_by',
         'title',
         'description',
@@ -29,9 +29,9 @@ class Schedule extends Model
         ];
     }
 
-    public function street()
+    public function zone()
     {
-        return $this->belongsTo(Street::class);
+        return $this->belongsTo(Zone::class);
     }
 
     public function createdBy()

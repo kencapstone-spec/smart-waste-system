@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\SuperAdmin;
+namespace App\Http\Controllers\Official;
 
 use App\Http\Controllers\Controller;
 use App\Models\Reward;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class RewardController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
-        return Inertia::render('SuperAdmin/Rewards/Index', [
+        return Inertia::render('Official/Rewards/Index', [
             'rewards' => Reward::latest()->paginate(15),
         ]);
     }

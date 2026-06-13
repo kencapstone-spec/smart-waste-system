@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('street.zone')
+        $users = User::with('zone')
             ->whereIn('role', ['barangay_official', 'personnel'])
             ->latest()
             ->paginate(15);

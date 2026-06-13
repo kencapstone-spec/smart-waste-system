@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Street;
+use App\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -12,8 +12,8 @@ class ProfileController extends Controller
     public function edit(Request $request)
     {
         return Inertia::render('Profile/Edit', [
-            'user' => $request->user()->load('street.zone'),
-            'streets' => Street::with('zone')->orderBy('name')->get(['id', 'name', 'zone_id']),
+            'user' => $request->user()->load('zone'),
+            'zones' => Zone::orderBy('name')->get(['id', 'name']),
         ]);
     }
 
@@ -28,7 +28,7 @@ class ProfileController extends Controller
 
         if ($user->role === 'resident') {
             $rules['address'] = ['required', 'string', 'max:255'];
-            $rules['street_id'] = ['required', 'exists:streets,id'];
+            $rules['zone_id'] = ['required', 'exists:zones,id'];
         }
 
         $validated = $request->validate($rules);

@@ -9,22 +9,22 @@
                 @click="showCreateModal = true"
                 class="bg-rose-900 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-rose-800 transition-all shadow-lg shadow-rose-900/20 flex items-center justify-center gap-2 group"
             >
-                <span class="text-lg group-hover:rotate-90 transition-transform">➕</span>
+                <span class="text-lg group-hover:rotate-90 transition-transform"><component :is="Plus" class="w-5 h-5" /></span>
                 Submit Report
             </button>
         </div>
 
         <!-- Desktop Table -->
         <div class="hidden md:block bg-white/70 backdrop-blur-2xl rounded-3xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden mb-8">
-            <div class="overflow-x-auto pb-4">
+            <div class="overflow-x-auto  scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent pb-4">
                 <table class="w-full text-sm whitespace-nowrap">
                 <thead class="bg-white/40 border-b border-white/50 backdrop-blur-sm">
                     <tr>
-                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Type</th>
-                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Description</th>
-                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Status</th>
-                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Date</th>
-                        <th class="text-right px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Actions</th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs"><div class="flex items-center gap-1.5"><component :is="Box" class="w-4 h-4 opacity-70" /> Type</div></th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs"><div class="flex items-center gap-1.5"><component :is="FileText" class="w-4 h-4 opacity-70" /> Description</div></th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs"><div class="flex items-center gap-1.5"><component :is="Activity" class="w-4 h-4 opacity-70" /> Status</div></th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs"><div class="flex items-center gap-1.5"><component :is="Calendar" class="w-4 h-4 opacity-70" /> Date</div></th>
+                        <th class="text-right px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs"><div class="flex items-center gap-1.5"><component :is="Settings" class="w-4 h-4 opacity-70" /> Actions</div></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -45,7 +45,7 @@
                     </tr>
                     <tr v-if="reports.data.length === 0">
                         <td colspan="5" class="px-8 py-16 text-center text-gray-400">
-                            <div class="text-4xl mb-4 opacity-50">📝</div>
+                            <div class="text-4xl mb-4 opacity-50"><component :is="FileText" class="w-5 h-5" /></div>
                             <p class="font-medium text-base">No reports submitted yet.</p>
                         </td>
                     </tr>
@@ -77,7 +77,7 @@
             </div>
             
             <div v-if="reports.data.length === 0" class="py-12 text-center text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">
-                <div class="text-4xl mb-3 opacity-50">📝</div>
+                <div class="text-4xl mb-3 opacity-50"><component :is="FileText" class="w-5 h-5" /></div>
                 <p class="font-medium text-sm">No reports submitted yet.</p>
             </div>
         </div>
@@ -106,27 +106,14 @@
                     <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors relative cursor-pointer group">
                         <input type="file" accept="image/*" multiple @change="handlePhotos" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
                         <div class="text-center">
-                            <span class="text-2xl mb-2 block opacity-50 group-hover:scale-110 transition-transform">📸</span>
+                            <span class="text-2xl mb-2 block opacity-50 group-hover:scale-110 transition-transform"><component :is="Camera" class="w-5 h-5" /></span>
                             <span class="text-sm font-medium text-rose-950/80">Tap to attach photos</span>
                             <p v-if="reportForm.photos.length" class="text-xs text-rose-600 font-bold mt-2">{{ reportForm.photos.length }} file(s) selected</p>
                         </div>
                     </div>
                 </div>
                 
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Incident Location</label>
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-                        <button type="button" @click="getLocation" class="w-full sm:w-auto px-4 py-3 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-gray-800 transition-colors shadow-md flex items-center justify-center gap-2">
-                            <span>📍</span> Use My Current Location
-                        </button>
-                        <div class="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-xs font-medium text-gray-500 flex items-center justify-center sm:justify-start">
-                            <span v-if="reportForm.latitude" class="text-emerald-600 font-bold">
-                                Location Acquired: {{ reportForm.latitude.toFixed(4) }}, {{ reportForm.longitude.toFixed(4) }}
-                            </span>
-                            <span v-else>No location set</span>
-                        </div>
-                    </div>
-                </div>
+
                 
                 <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-100 mt-6">
                     <button type="button" @click="showCreateModal = false" class="w-full sm:w-auto px-6 py-3 text-sm text-rose-950/80 font-bold hover:bg-rose-50/50 transition-colors rounded-xl transition-all">Cancel</button>
@@ -169,7 +156,7 @@
                 </div>
                 
                 <div v-if="selectedReport.official_response" class="bg-emerald-50/50 p-5 rounded-2xl border border-emerald-100 mt-6">
-                    <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-2 flex items-center gap-1"><span>💬</span> Official Response</p>
+                    <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-2 flex items-center gap-1"><span><component :is="MessageCircle" class="w-5 h-5" /></span> Official Response</p>
                     <p class="text-emerald-900 font-medium text-sm leading-relaxed">{{ selectedReport.official_response }}</p>
                 </div>
                 
@@ -182,7 +169,7 @@
         <!-- Fullscreen Image Modal -->
         <Modal :show="!!viewingPhoto" max-width="4xl" @close="viewingPhoto = null">
             <div class="relative bg-black rounded-xl overflow-hidden p-1">
-                <button @click="viewingPhoto = null" class="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/80 rounded-full w-8 h-8 flex items-center justify-center transition-colors">✕</button>
+                <button @click="viewingPhoto = null" class="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/80 rounded-full w-8 h-8 flex items-center justify-center transition-colors"><component :is="X" class="w-5 h-5" /></button>
                 <img :src="viewingPhoto" class="w-full h-auto max-h-[85vh] object-contain rounded-lg" />
             </div>
         </Modal>
@@ -190,6 +177,7 @@
 </template>
 
 <script setup>
+import { Plus, FileText, Camera, MessageCircle, X, Box, Activity, Calendar, Settings } from '@lucide/vue';
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'
@@ -207,8 +195,6 @@ const viewingPhoto = ref(null)
 const reportForm = useForm({
     type: '',
     description: '',
-    latitude: null,
-    longitude: null,
     photos: [],
 })
 
@@ -227,16 +213,7 @@ const formatDate = (date) => new Date(date).toLocaleDateString('en-PH', {
     year: 'numeric', month: 'short', day: 'numeric',
 })
 
-const getLocation = () => {
-    if (!navigator.geolocation) return alert('Geolocation is not supported by your browser.')
-    navigator.geolocation.getCurrentPosition(
-        (pos) => {
-            reportForm.latitude = pos.coords.latitude
-            reportForm.longitude = pos.coords.longitude
-        },
-        () => alert('Unable to get your location.')
-    )
-}
+
 
 const handlePhotos = (e) => {
     reportForm.photos = Array.from(e.target.files)

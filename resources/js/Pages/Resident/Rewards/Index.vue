@@ -25,7 +25,7 @@
                 <div v-for="reward in rewards" :key="reward.id" class="bg-white/70 backdrop-blur-2xl rounded-3xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden hover:shadow-[0_8px_32px_rgba(225,29,72,0.08)] transition-all duration-300 group hover:-translate-y-1 flex flex-col">
                     <div class="h-40 bg-gradient-to-br from-rose-50 to-gray-50 flex items-center justify-center text-5xl relative overflow-hidden">
                         <div class="absolute inset-0 bg-rose-900/5 group-hover:bg-rose-900/0 transition-colors"></div>
-                        <span class="transform group-hover:scale-110 transition-transform duration-500">🎁</span>
+                        <span class="transform group-hover:scale-110 transition-transform duration-500"><component :is="Gift" class="w-8 h-8 mx-auto text-rose-500" /></span>
                     </div>
                     <div class="p-6 flex-1 flex flex-col">
                         <h4 class="font-extrabold text-gray-900 text-lg leading-tight">{{ reward.name }}</h4>
@@ -55,7 +55,7 @@
                 </div>
 
                 <div v-if="rewards.length === 0" class="col-span-full py-16 text-center bg-white rounded-3xl border border-dashed border-gray-200">
-                    <div class="text-4xl mb-4 opacity-50">🏪</div>
+                    <div class="text-4xl mb-4 opacity-50"><component :is="Store" class="w-8 h-8 text-amber-500" /></div>
                     <p class="text-gray-500 font-medium">No rewards available at the moment.</p>
                 </div>
             </div>
@@ -66,14 +66,14 @@
         
         <!-- Desktop Table -->
         <div class="hidden md:block bg-white/70 backdrop-blur-2xl rounded-3xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden mb-8">
-            <div class="overflow-x-auto pb-4">
+            <div class="overflow-x-auto  scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent pb-4">
                 <table class="w-full text-sm whitespace-nowrap">
                 <thead class="bg-white/40 border-b border-white/50 backdrop-blur-sm">
                     <tr>
-                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Date</th>
-                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Reward</th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs"><div class="flex items-center gap-1.5"><component :is="Calendar" class="w-4 h-4 opacity-70" /> Date</div></th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs"><div class="flex items-center gap-1.5"><component :is="Gift" class="w-4 h-4 opacity-70" /> Reward</div></th>
                         <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Points Spent</th>
-                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Status</th>
+                        <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs"><div class="flex items-center gap-1.5"><component :is="Activity" class="w-4 h-4 opacity-70" /> Status</div></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -157,6 +157,7 @@
 </template>
 
 <script setup>
+import { Gift, Store, Calendar, Activity } from '@lucide/vue';
 import { ref } from 'vue'
 import { router } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'

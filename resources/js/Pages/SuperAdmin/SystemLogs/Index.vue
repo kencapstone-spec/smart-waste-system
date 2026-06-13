@@ -1,15 +1,15 @@
 <template>
     <AuthLayout page-title="System Logs">
-        <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
-            <div class="overflow-x-auto pb-4">
+        <div class="bg-white/70 backdrop-blur-2xl sm:rounded-2xl shadow-xl shadow-rose-900/5 sm:border border-white/60 -mx-4 sm:mx-0 overflow-hidden">
+            <div class="overflow-x-auto  scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent pb-4">
                 <table class="w-full text-sm whitespace-nowrap">
                 <thead class="border-b border-rose-100/50">
                     <tr>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">User</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Action</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Model</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">IP Address</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Date</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="User" class="w-4 h-4 opacity-70" /> User</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="FileText" class="w-4 h-4 opacity-70" /> Action</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="FileText" class="w-4 h-4 opacity-70" /> Model</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Globe" class="w-4 h-4 opacity-70" /> IP Address</div></th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Calendar" class="w-4 h-4 opacity-70" /> Date</div></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -31,6 +31,7 @@
 </template>
 
 <script setup>
+import { User, FileText, Globe, Calendar } from '@lucide/vue'
 import AuthLayout from '@/Layouts/AuthLayout.vue'
 
 const props = defineProps({

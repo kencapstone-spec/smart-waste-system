@@ -27,10 +27,6 @@
                         <p class="text-gray-700 text-sm bg-gray-50 p-4 rounded-md">{{ report.description }}</p>
                     </div>
 
-                    <div v-if="report.latitude && report.longitude">
-                        <p class="text-xs text-gray-400 mb-1">Location</p>
-                        <p class="text-sm text-rose-950/80">{{ report.latitude }}, {{ report.longitude }}</p>
-                    </div>
 
                     <div v-if="report.photos?.length > 0">
                         <p class="text-xs text-gray-400 mb-2">Photos</p>

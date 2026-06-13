@@ -11,7 +11,7 @@ class ZoneController extends Controller
 {
     public function index()
     {
-        $zones = Zone::withCount('streets')->latest()->get();
+        $zones = Zone::withCount(['users', 'schedules'])->latest()->get();
 
         return Inertia::render('SuperAdmin/Zones/Index', [
             'zones' => $zones,

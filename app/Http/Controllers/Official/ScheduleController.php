@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Official;
 use App\Http\Controllers\Controller;
 use App\Models\CollectionTask;
 use App\Models\Schedule;
-use App\Models\Street;
+use App\Models\Zone;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,13 +16,13 @@ class ScheduleController extends Controller
 {
     public function index()
     {
-        $schedules = Schedule::with(['street.zone', 'createdBy', 'assignments.personnel'])
+        $schedules = Schedule::with(['zone', 'createdBy', 'assignments.personnel'])
             ->latest()
             ->paginate(15);
 
         return Inertia::render('Official/Schedules/Index', [
             'schedules' => $schedules,
-            'streets' => Street::with('zone')->orderBy('name')->get(['id', 'name', 'zone_id']),
+            'zones' => Zone::orderBy('name')->get(['id', 'name']),
             'personnel' => User::where('role', 'personnel')
                 ->where('status', 'active')
                 ->orderBy('name')
@@ -33,7 +33,7 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'street_id' => ['required', 'exists:streets,id'],
+            'zone_id' => ['required', 'exists:zones,id'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'frequency' => ['required', 'in:once,daily,weekly,monthly'],
@@ -45,7 +45,7 @@ class ScheduleController extends Controller
         ]);
 
         $schedule = Schedule::create([
-            'street_id' => $request->street_id,
+            'zone_id' => $request->zone_id,
             'created_by' => Auth::id(),
             'title' => $request->title,
             'description' => $request->description,
@@ -69,7 +69,7 @@ class ScheduleController extends Controller
     public function update(Request $request, Schedule $schedule)
     {
         $request->validate([
-            'street_id' => ['required', 'exists:streets,id'],
+            'zone_id' => ['required', 'exists:zones,id'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'frequency' => ['required', 'in:once,daily,weekly,monthly'],
@@ -82,7 +82,7 @@ class ScheduleController extends Controller
         ]);
 
         $schedule->update($request->only(
-            'street_id', 'title', 'description', 'frequency',
+            'zone_id', 'title', 'description', 'frequency',
             'start_date', 'end_date', 'collection_time', 'status'
         ));
 

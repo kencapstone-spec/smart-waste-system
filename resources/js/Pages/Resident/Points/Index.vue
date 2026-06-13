@@ -27,15 +27,15 @@
         <!-- Desktop Table -->
         <div class="hidden md:block bg-white/70 backdrop-blur-2xl rounded-3xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden mb-8">
             <div v-if="points.length > 0">
-                <div class="overflow-x-auto pb-4">
+                <div class="overflow-x-auto  scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent pb-4">
                     <table class="w-full text-sm whitespace-nowrap">
                     <thead class="bg-white/40 border-b border-white/50 backdrop-blur-sm">
                         <tr>
-                            <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Points</th>
+                            <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs"><div class="flex items-center gap-1.5"><component :is="Award" class="w-4 h-4 opacity-70" /> Points</div></th>
                             <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Awarded By</th>
                             <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Task Context</th>
                             <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Remarks</th>
-                            <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs">Date</th>
+                            <th class="text-left px-8 py-4 text-gray-500 font-semibold uppercase tracking-wider text-xs"><div class="flex items-center gap-1.5"><component :is="Calendar" class="w-4 h-4 opacity-70" /> Date</div></th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div v-else class="px-8 py-16 text-center text-gray-400">
-                <div class="text-4xl mb-4 opacity-50">🌱</div>
+                <div class="text-4xl mb-4 opacity-50"><component :is="Leaf" class="w-10 h-10 text-emerald-500" /></div>
                 <p class="font-medium">No points awarded yet. Proper waste disposal earns you points!</p>
             </div>
         </div>
@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div v-if="points.length === 0" class="py-12 text-center text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">
-                <div class="text-3xl mb-3 opacity-50">🌱</div>
+                <div class="text-3xl mb-3 opacity-50"><component :is="Leaf" class="w-10 h-10 text-emerald-500" /></div>
                 <p class="font-medium text-sm">No points awarded yet.</p>
             </div>
         </div>
@@ -82,6 +82,7 @@
 </template>
 
 <script setup>
+import { Leaf, Award, Calendar } from '@lucide/vue';
 import AuthLayout from '@/Layouts/AuthLayout.vue'
 
 const props = defineProps({

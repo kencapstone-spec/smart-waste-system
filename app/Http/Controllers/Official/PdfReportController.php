@@ -13,7 +13,7 @@ class PdfReportController extends Controller
 {
     public function collectionSummary(Request $request)
     {
-        $tasks = CollectionTask::with(['schedule.street.zone', 'personnel'])
+        $tasks = CollectionTask::with(['schedule.zone', 'personnel'])
             ->when($request->from, fn ($q) => $q->whereDate('collection_date', '>=', $request->from))
             ->when($request->to, fn ($q) => $q->whereDate('collection_date', '<=', $request->to))
             ->latest()
@@ -47,7 +47,7 @@ class PdfReportController extends Controller
 
     public function residentParticipation(Request $request)
     {
-        $residents = User::with(['points', 'street.zone'])
+        $residents = User::with(['points', 'zone'])
             ->where('role', 'resident')
             ->where('status', 'active')
             ->get()

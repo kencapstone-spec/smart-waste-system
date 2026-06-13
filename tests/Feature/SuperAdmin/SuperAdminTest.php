@@ -148,27 +148,7 @@ class SuperAdminTest extends TestCase
         $this->assertDatabaseMissing('zones', ['id' => $zone->id]);
     }
 
-    // ---------------------------------------------------------------
-    // Streets
-    // ---------------------------------------------------------------
 
-    public function test_super_admin_can_view_streets(): void
-    {
-        $response = $this->actingAs($this->superAdmin())->get('/super-admin/streets');
-        $response->assertStatus(200);
-        $response->assertInertia(fn ($page) => $page->component('SuperAdmin/Streets/Index'));
-    }
-
-    public function test_super_admin_can_create_street(): void
-    {
-        $zone = Zone::create(['name' => 'Zone 1']);
-        $response = $this->actingAs($this->superAdmin())->post('/super-admin/streets', [
-            'name' => 'Rizal St.',
-            'zone_id' => $zone->id,
-        ]);
-        $response->assertRedirect();
-        $this->assertDatabaseHas('streets', ['name' => 'Rizal St.']);
-    }
 
     // ---------------------------------------------------------------
     // System Logs

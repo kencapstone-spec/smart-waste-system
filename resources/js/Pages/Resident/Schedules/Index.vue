@@ -2,7 +2,7 @@
     <AuthLayout page-title="Waste Collection Schedules">
         
         <div v-if="myStreet" class="mb-8 bg-gradient-to-r from-emerald-50 to-emerald-100 border border-emerald-200 rounded-2xl p-6 text-sm text-emerald-900 shadow-sm flex items-center gap-4">
-            <div class="w-12 h-12 bg-emerald-200/50 rounded-full flex items-center justify-center text-2xl shrink-0">📍</div>
+            <div class="w-12 h-12 bg-emerald-200/50 rounded-full flex items-center justify-center text-2xl shrink-0"><component :is="MapPin" class="w-5 h-5 inline text-rose-500" /></div>
             <div>
                 <p class="text-emerald-700/80 font-semibold uppercase tracking-wider text-xs mb-0.5">Your Location</p>
                 <p class="font-bold text-lg">
@@ -23,7 +23,7 @@
 
         <!-- Desktop Table -->
         <div class="hidden md:block bg-white/70 backdrop-blur-2xl rounded-3xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden mb-8">
-            <div class="overflow-x-auto pb-4">
+            <div class="overflow-x-auto  scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent pb-4">
                 <table class="w-full text-sm whitespace-nowrap">
                 <thead class="bg-white/40 border-b border-white/50 backdrop-blur-sm">
                     <tr>
@@ -38,7 +38,7 @@
                         <td class="px-8 py-5">
                             <p class="font-bold text-gray-900 text-base mb-1">{{ schedule.title }}</p>
                             <p class="text-rose-600 font-semibold text-sm flex items-center gap-1">
-                                <span>🕒</span> {{ schedule.collection_time }}
+                                <span><component :is="Clock" class="w-5 h-5 inline text-gray-500" /></span> {{ schedule.collection_time }}
                             </p>
                         </td>
                         <td class="px-8 py-5">
@@ -55,7 +55,7 @@
                     </tr>
                     <tr v-if="schedules.length === 0">
                         <td colspan="4" class="px-8 py-16 text-center text-gray-400">
-                            <div class="text-4xl mb-4 opacity-50">📅</div>
+                            <div class="text-4xl mb-4 opacity-50"><component :is="Calendar" class="w-12 h-12 mx-auto text-indigo-500" /></div>
                             <p class="font-medium text-base">No schedules found for your street.</p>
                         </td>
                     </tr>
@@ -74,7 +74,7 @@
                 <div class="pr-20">
                     <h4 class="font-extrabold text-gray-900 text-lg mb-1">{{ schedule.title }}</h4>
                     <p class="text-rose-600 font-bold text-sm flex items-center gap-1.5">
-                        <span class="text-lg">🕒</span> {{ schedule.collection_time }}
+                        <span class="text-lg"><component :is="Clock" class="w-5 h-5 inline text-gray-500" /></span> {{ schedule.collection_time }}
                     </p>
                 </div>
                 
@@ -93,7 +93,7 @@
             </div>
             
             <div v-if="schedules.length === 0" class="py-12 text-center text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">
-                <div class="text-4xl mb-3 opacity-50">📅</div>
+                <div class="text-4xl mb-3 opacity-50"><component :is="Calendar" class="w-12 h-12 mx-auto text-indigo-500" /></div>
                 <p class="font-medium text-sm">No schedules found for your street.</p>
             </div>
         </div>
@@ -102,6 +102,7 @@
 </template>
 
 <script setup>
+import { MapPin, Clock, Calendar } from '@lucide/vue';
 import AuthLayout from '@/Layouts/AuthLayout.vue'
 
 const props = defineProps({

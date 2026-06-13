@@ -6,9 +6,8 @@ use App\Models\CollectionTask;
 use App\Models\Point;
 use App\Models\Report;
 use App\Models\Schedule;
-use App\Models\Street;
 use App\Models\User;
-use App\Models\Zone; // <--- Added this import
+use App\Models\Zone;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -18,18 +17,16 @@ class ResidentTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function resident(?Street $street = null): User
+    private function resident(?Zone $zone = null): User
     {
         return User::factory()->resident()->create([
-            'street_id' => $street?->id,
+            'zone_id' => $zone?->id,
         ]);
     }
 
-    private function makeStreet(): Street
+    private function makeZone(): Zone
     {
-        $zone = Zone::create(['name' => 'Zone 1']);
-
-        return Street::create(['zone_id' => $zone->id, 'name' => 'Rizal St.']);
+        return Zone::create(['name' => 'Zone 1']);
     }
 
     // ---------------------------------------------------------------
@@ -64,16 +61,16 @@ class ResidentTest extends TestCase
         $response->assertInertia(fn ($p) => $p->component('Resident/Schedules/Index'));
     }
 
-    public function test_resident_sees_only_their_street_schedules(): void
+    public function test_resident_sees_only_their_zone_schedules(): void
     {
-        $street = $this->makeStreet();
-        $resident = $this->resident($street);
+        $zone = $this->makeZone();
+        $resident = $this->resident($zone);
         $official = User::factory()->official()->create();
 
         $mySchedule = Schedule::create([
-            'street_id' => $street->id,
+            'zone_id' => $zone->id,
             'created_by' => $official->id,
-            'title' => 'My Street Schedule',
+            'title' => 'My Zone Schedule',
             'frequency' => 'weekly',
             'start_date' => now()->toDateString(),
             'collection_time' => '07:00',
@@ -81,11 +78,10 @@ class ResidentTest extends TestCase
         ]);
 
         $otherZone = Zone::create(['name' => 'Zone 2']);
-        $otherStreet = Street::create(['zone_id' => $otherZone->id, 'name' => 'Other St.']);
         Schedule::create([
-            'street_id' => $otherStreet->id,
+            'zone_id' => $otherZone->id,
             'created_by' => $official->id,
-            'title' => 'Other Street Schedule',
+            'title' => 'Other Zone Schedule',
             'frequency' => 'weekly',
             'start_date' => now()->toDateString(),
             'collection_time' => '07:00',
@@ -94,7 +90,7 @@ class ResidentTest extends TestCase
 
         $response = $this->actingAs($resident)->get('/resident/schedules');
         $response->assertInertia(fn ($p) => $p->component('Resident/Schedules/Index')
-            ->where('schedules.0.title', 'My Street Schedule')
+            ->where('schedules.0.title', 'My Zone Schedule')
             ->count('schedules', 1)
         );
     }
@@ -220,10 +216,10 @@ class ResidentTest extends TestCase
 
         // --- Fix: Create schedule and task ---
         $official = User::factory()->official()->create();
-        $street = $this->makeStreet();
+        $zone = $this->makeZone();
 
         $schedule = Schedule::create([
-            'street_id' => $street->id,
+            'zone_id' => $zone->id,
             'created_by' => $official->id,
             'title' => 'Test Schedule',
             'frequency' => 'once',
@@ -257,10 +253,10 @@ class ResidentTest extends TestCase
 
         // --- Fix: Create schedule and task ---
         $official = User::factory()->official()->create();
-        $street = $this->makeStreet();
+        $zone = $this->makeZone();
 
         $schedule = Schedule::create([
-            'street_id' => $street->id,
+            'zone_id' => $zone->id,
             'created_by' => $official->id,
             'title' => 'Test Schedule',
             'frequency' => 'once',

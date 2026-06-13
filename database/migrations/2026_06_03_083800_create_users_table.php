@@ -15,7 +15,7 @@ return new class extends Migration
             $table->enum('role', ['super_admin', 'barangay_official', 'personnel', 'resident']);
             $table->enum('status', ['active', 'pending', 'rejected'])->default('active');
             $table->string('address')->nullable();
-            $table->foreignId('street_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('zone_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamp('approved_at')->nullable();
             $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
             $table->rememberToken();

@@ -1,20 +1,20 @@
 <template>
     <AuthLayout page-title="Collection Tasks">
-        <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
+        <div class="bg-white/70 backdrop-blur-2xl sm:rounded-2xl shadow-xl shadow-rose-900/5 sm:border border-white/60 -mx-4 sm:mx-0 overflow-hidden">
             <div class="px-6 py-4 border-b">
                 <h2 class="text-base font-semibold text-gray-700">My Collection Tasks</h2>
             </div>
 
-            <div class="overflow-x-auto pb-4">
+            <div class="overflow-x-auto  scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent pb-4">
                 <table class="w-full text-sm whitespace-nowrap">
                 <thead class="border-b border-rose-100/50">
                     <tr>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Date</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Calendar" class="w-4 h-4 opacity-70" /> Date</div></th>
                         <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Schedule</th>
                         <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Street</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Status</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Activity" class="w-4 h-4 opacity-70" /> Status</div></th>
                         <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Remarks</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Actions</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Settings" class="w-4 h-4 opacity-70" /> Actions</div></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -81,13 +81,13 @@
                     Loading residents...
                 </div>
                 <div v-else-if="currentResidents.length > 0">
-                    <div class="overflow-x-auto pb-4">
+                    <div class="overflow-x-auto  scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent pb-4">
                         <table class="w-full text-sm whitespace-nowrap">
                         <thead class="border-b border-rose-100/50">
                             <tr>
-                                <th class="text-left px-4 py-2 text-rose-950/70 font-semibold">Resident</th>
+                                <th class="text-left px-4 py-2 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="User" class="w-4 h-4 opacity-70" /> Resident</div></th>
                                 <th class="text-left px-4 py-2 text-rose-950/70 font-semibold">Points This Task</th>
-                                <th class="text-left px-4 py-2 text-rose-950/70 font-semibold">Action</th>
+                                <th class="text-left px-4 py-2 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="FileText" class="w-4 h-4 opacity-70" /> Action</div></th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
@@ -126,6 +126,7 @@
 </template>
 
 <script setup>
+import { Calendar, Activity, Settings, User, FileText } from '@lucide/vue'
 import { ref, reactive } from 'vue'
 import { useForm, router } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'

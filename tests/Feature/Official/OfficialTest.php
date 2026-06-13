@@ -4,7 +4,6 @@ namespace Tests\Feature\Official;
 
 use App\Models\Report;
 use App\Models\Schedule;
-use App\Models\Street;
 use App\Models\User;
 use App\Models\Zone;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,11 +18,9 @@ class OfficialTest extends TestCase
         return User::factory()->official()->create();
     }
 
-    private function makeStreet(): Street
+    private function makeZone(): Zone
     {
-        $zone = Zone::create(['name' => 'Zone 1']);
-
-        return Street::create(['zone_id' => $zone->id, 'name' => 'Rizal St.']);
+        return Zone::create(['name' => 'Zone 1']);
     }
 
     // ---------------------------------------------------------------
@@ -55,11 +52,11 @@ class OfficialTest extends TestCase
     public function test_official_can_create_schedule(): void
     {
         $official = $this->official();
-        $street = $this->makeStreet();
+        $zone = $this->makeZone();
         $personnel = User::factory()->personnel()->create();
 
         $response = $this->actingAs($official)->post('/official/schedules', [
-            'street_id' => $street->id,
+            'zone_id' => $zone->id,
             'title' => 'Weekly Collection',
             'description' => 'Every Monday',
             'frequency' => 'weekly',
@@ -77,10 +74,10 @@ class OfficialTest extends TestCase
     public function test_official_cannot_create_schedule_without_personnel(): void
     {
         $official = $this->official();
-        $street = $this->makeStreet();
+        $zone = $this->makeZone();
 
         $response = $this->actingAs($official)->post('/official/schedules', [
-            'street_id' => $street->id,
+            'zone_id' => $zone->id,
             'title' => 'No Personnel',
             'frequency' => 'weekly',
             'start_date' => '2026-07-01',
@@ -94,9 +91,9 @@ class OfficialTest extends TestCase
     public function test_official_can_delete_schedule(): void
     {
         $official = $this->official();
-        $street = $this->makeStreet();
+        $zone = $this->makeZone();
         $schedule = Schedule::create([
-            'street_id' => $street->id,
+            'zone_id' => $zone->id,
             'created_by' => $official->id,
             'title' => 'To Delete',
             'frequency' => 'once',

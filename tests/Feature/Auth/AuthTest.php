@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\Street;
 use App\Models\User;
 use App\Models\Zone;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -61,7 +60,6 @@ class AuthTest extends TestCase
     public function test_register_page_is_accessible(): void
     {
         $zone = Zone::create(['name' => 'Zone 1']);
-        $street = Street::create(['zone_id' => $zone->id, 'name' => 'Rizal St.']);
 
         $response = $this->get('/register');
         $response->assertStatus(200);
@@ -71,13 +69,12 @@ class AuthTest extends TestCase
     public function test_resident_can_register(): void
     {
         $zone = Zone::create(['name' => 'Zone 1']);
-        $street = Street::create(['zone_id' => $zone->id, 'name' => 'Rizal St.']);
 
         $response = $this->post('/register', [
             'name' => 'Juan dela Cruz',
             'phone' => '09171234567',
             'address' => 'Purok 1',
-            'street_id' => $street->id,
+            'zone_id' => $zone->id,
         ]);
 
         $response->assertRedirect();
@@ -93,13 +90,12 @@ class AuthTest extends TestCase
         User::factory()->create(['phone' => '09171234567']);
 
         $zone = Zone::create(['name' => 'Zone 1']);
-        $street = Street::create(['zone_id' => $zone->id, 'name' => 'Rizal St.']);
 
         $response = $this->post('/register', [
             'name' => 'Another User',
             'phone' => '09171234567',
             'address' => 'Purok 2',
-            'street_id' => $street->id,
+            'zone_id' => $zone->id,
         ]);
 
         $response->assertSessionHasErrors('phone');

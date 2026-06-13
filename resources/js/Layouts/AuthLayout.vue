@@ -15,8 +15,8 @@
         <!-- Desktop Sidebar -->
         <aside class="hidden md:flex flex-col w-[280px] fixed inset-y-6 left-6 z-50 bg-white/60 backdrop-blur-3xl border border-white/60 rounded-3xl shadow-[0_8px_32px_rgba(225,29,72,0.12)]">
             <div class="px-8 py-8 flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-rose-900 flex items-center justify-center text-xl shadow-lg shadow-rose-900/20 text-white">
-                    🗑️
+                <div class="w-10 h-10 rounded-xl bg-rose-900 flex items-center justify-center shadow-lg shadow-rose-900/20 text-white">
+                    <component :is="Trash2" class="w-5 h-5" />
                 </div>
                 <span class="text-rose-950 font-extrabold text-2xl tracking-tight">SmartWaste</span>
             </div>
@@ -32,7 +32,7 @@
                                 : 'text-gray-500 hover:bg-gray-50 hover:text-rose-900'
                         ]"
                     >
-                        <span class="text-xl" :class="isActive(item.href) ? 'opacity-100 scale-110 transition-transform' : 'opacity-60'">{{ item.icon }}</span>
+                        <component :is="item.icon" class="w-5 h-5" :class="isActive(item.href) ? 'opacity-100 scale-110 transition-transform' : 'opacity-60'" />
                         <span>{{ item.label }}</span>
                     </a>
                 </template>
@@ -64,10 +64,10 @@
             
             <!-- Mobile Top Header -->
             <header class="md:hidden sticky top-0 z-40 bg-white/70 backdrop-blur-2xl border-b border-white/50 shadow-sm">
-                <div class="flex items-center justify-between px-6 py-4">
+                <div class="flex items-center justify-between px-4 py-3">
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-rose-900 flex items-center justify-center text-sm shadow-md text-white">
-                            🗑️
+                        <div class="w-8 h-8 rounded-lg bg-rose-900 flex items-center justify-center shadow-md text-white">
+                            <component :is="Trash2" class="w-4 h-4" />
                         </div>
                         <h1 class="text-lg font-bold text-rose-950">{{ pageTitle }}</h1>
                     </div>
@@ -97,13 +97,13 @@
                     v-if="flash.success"
                     class="bg-emerald-50 border border-emerald-100 text-emerald-800 px-5 py-4 rounded-2xl text-sm font-medium flex items-center gap-3 shadow-sm mb-4"
                 >
-                    <span class="text-lg">✅</span> {{ flash.success }}
+                    <component :is="CheckCircle" class="w-5 h-5" /> {{ flash.success }}
                 </div>
                 <div
                     v-if="flash.error"
                     class="bg-rose-50 border border-rose-100 text-rose-800 px-5 py-4 rounded-2xl text-sm font-medium flex items-center gap-3 shadow-sm mb-4"
                 >
-                    <span class="text-lg">⚠️</span> {{ flash.error }}
+                    <component :is="AlertTriangle" class="w-5 h-5" /> {{ flash.error }}
                 </div>
             </div>
 
@@ -123,7 +123,7 @@
                     :class="isActive(item.href) ? 'text-rose-900 scale-105' : 'text-gray-400 hover:text-gray-600'"
                 >
                     <div class="relative">
-                        <span class="text-2xl block mb-1" :class="isActive(item.href) ? 'drop-shadow-md' : ''">{{ item.icon }}</span>
+                        <component :is="item.icon" class="w-6 h-6 mx-auto mb-1" :class="isActive(item.href) ? 'drop-shadow-md text-rose-900' : ''" />
                         <div v-if="isActive(item.href)" class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-rose-600"></div>
                     </div>
                     <span class="text-[10px] font-bold tracking-tight truncate w-full text-center px-1" :class="isActive(item.href) ? 'text-rose-950' : ''">{{ item.label }}</span>
@@ -135,7 +135,7 @@
                     @click="showMobileMenu = true"
                     class="flex flex-col items-center justify-center w-16 py-2 rounded-2xl transition-all duration-300 text-gray-400 hover:text-rose-900"
                 >
-                    <span class="text-2xl block mb-1">⋯</span>
+                    <component :is="MoreHorizontal" class="w-6 h-6 mx-auto mb-1" />
                     <span class="text-[10px] font-bold tracking-tight w-full text-center px-1">More</span>
                 </button>
             </div>
@@ -150,7 +150,7 @@
             <div v-if="showMobileMenu" class="md:hidden fixed bottom-0 left-0 right-0 z-[70] bg-white rounded-t-3xl shadow-2xl overflow-hidden pb-safe">
                 <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-rose-50/30">
                     <h3 class="font-bold text-rose-950 text-lg">More Options</h3>
-                    <button @click="showMobileMenu = false" class="w-8 h-8 flex items-center justify-center rounded-full bg-rose-100 text-rose-900 font-bold hover:bg-rose-200 transition-colors">✕</button>
+                    <button @click="showMobileMenu = false" class="w-8 h-8 flex items-center justify-center rounded-full bg-rose-100 text-rose-900 font-bold hover:bg-rose-200 transition-colors"><component :is="X" class="w-5 h-5" /></button>
                 </div>
                 <div class="p-4 space-y-2 max-h-[60vh] overflow-y-auto">
                     <a
@@ -159,7 +159,7 @@
                         class="flex items-center gap-4 p-4 rounded-2xl transition-colors"
                         :class="isActive(item.href) ? 'bg-rose-100 border border-rose-200' : 'bg-gray-50 hover:bg-rose-50 border border-transparent'"
                     >
-                        <span class="text-2xl">{{ item.icon }}</span>
+                        <component :is="item.icon" class="w-6 h-6" />
                         <span class="font-semibold" :class="isActive(item.href) ? 'text-rose-900' : 'text-gray-700'">{{ item.label }}</span>
                     </a>
                 </div>
@@ -170,8 +170,13 @@
 </template>
 
 <script setup>
+import { X } from '@lucide/vue';
 import { ref, computed } from 'vue'
 import { usePage, useForm } from '@inertiajs/vue3'
+import {
+    Trash2, Home as HomeIcon, Users, Map as MapIcon, ClipboardList,
+    User as UserIcon, Calendar, FileText, Gift, Award, CheckCircle, Star, AlertTriangle, MoreHorizontal
+} from '@lucide/vue'
 
 const showMobileMenu = ref(false)
 
@@ -189,37 +194,37 @@ const props = defineProps({
 const userInitial = computed(() => auth.value.user?.name?.charAt(0).toUpperCase() ?? '?')
 
 const superAdminNav = [
-    { label: 'Dashboard', href: route('dashboard'), icon: '🏠' },
-    { label: 'Users', href: route('super-admin.users.index'), icon: '👥' },
-    { label: 'Zones', href: route('super-admin.zones.index'), icon: '🗺️' },
-    { label: 'Streets', href: route('super-admin.streets.index'), icon: '🛣️' },
-    { label: 'Rewards', href: route('super-admin.rewards.index'), icon: '🎁' },
-    { label: 'Logs', href: route('super-admin.system-logs.index'), icon: '📋' },
-    { label: 'Profile', href: route('profile.edit'), icon: '👤' },
+    { label: 'Dashboard', href: route('dashboard'), icon: HomeIcon },
+    { label: 'Users', href: route('super-admin.users.index'), icon: Users },
+    { label: 'Zones', href: route('super-admin.zones.index'), icon: MapIcon },
+
+    { label: 'Logs', href: route('super-admin.system-logs.index'), icon: ClipboardList },
+    { label: 'Profile', href: route('profile.edit'), icon: UserIcon },
 ]
 
 const officialNav = [
-    { label: 'Dashboard', href: route('dashboard'), icon: '🏠' },
-    { label: 'Schedules', href: route('official.schedules.index'), icon: '📅' },
-    { label: 'Reports', href: route('official.reports.index'), icon: '📝' },
-    { label: 'Residents', href: route('official.residents.index'), icon: '👥' },
-    { label: 'Redemptions', href: route('official.redemptions.index'), icon: '🎁' },
-    { label: 'Profile', href: route('profile.edit'), icon: '👤' },
+    { label: 'Dashboard', href: route('dashboard'), icon: HomeIcon },
+    { label: 'Schedules', href: route('official.schedules.index'), icon: Calendar },
+    { label: 'Reports', href: route('official.reports.index'), icon: FileText },
+    { label: 'Residents', href: route('official.residents.index'), icon: Users },
+    { label: 'Redemptions', href: route('official.redemptions.index'), icon: Gift },
+    { label: 'Rewards', href: route('official.rewards.index'), icon: Award },
+    { label: 'Profile', href: route('profile.edit'), icon: UserIcon },
 ]
 
 const personnelNav = [
-    { label: 'Dashboard', href: route('dashboard'), icon: '🏠' },
-    { label: 'Tasks', href: route('personnel.tasks.index'), icon: '✅' },
-    { label: 'Profile', href: route('profile.edit'), icon: '👤' },
+    { label: 'Dashboard', href: route('dashboard'), icon: HomeIcon },
+    { label: 'Tasks', href: route('personnel.tasks.index'), icon: CheckCircle },
+    { label: 'Profile', href: route('profile.edit'), icon: UserIcon },
 ]
 
 const residentNav = [
-    { label: 'Dashboard', href: route('dashboard'), icon: '🏠' },
-    { label: 'Schedules', href: route('resident.schedules.index'), icon: '📅' },
-    { label: 'Reports', href: route('resident.reports.index'), icon: '📝' },
-    { label: 'Points', href: route('resident.points.index'), icon: '⭐' },
-    { label: 'Rewards', href: route('resident.rewards.index'), icon: '🎁' },
-    { label: 'Profile', href: route('profile.edit'), icon: '👤' },
+    { label: 'Dashboard', href: route('dashboard'), icon: HomeIcon },
+    { label: 'Schedules', href: route('resident.schedules.index'), icon: Calendar },
+    { label: 'Reports', href: route('resident.reports.index'), icon: FileText },
+    { label: 'Points', href: route('resident.points.index'), icon: Star },
+    { label: 'Rewards', href: route('resident.rewards.index'), icon: Gift },
+    { label: 'Profile', href: route('profile.edit'), icon: UserIcon },
 ]
 
 const navItems = computed(() => {
