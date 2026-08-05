@@ -1,13 +1,12 @@
 <template>
     <AuthLayout page-title="Waste Collection Schedules">
         
-        <div v-if="myStreet" class="mb-8 bg-gradient-to-r from-emerald-50 to-emerald-100 border border-emerald-200 rounded-2xl p-6 text-sm text-emerald-900 shadow-sm flex items-center gap-4">
+        <div v-if="myZone" class="mb-8 bg-gradient-to-r from-emerald-50 to-emerald-100 border border-emerald-200 rounded-2xl p-6 text-sm text-emerald-900 shadow-sm flex items-center gap-4">
             <div class="w-12 h-12 bg-emerald-200/50 rounded-full flex items-center justify-center text-2xl shrink-0"><component :is="MapPin" class="w-5 h-5 inline text-rose-500" /></div>
             <div>
                 <p class="text-emerald-700/80 font-semibold uppercase tracking-wider text-xs mb-0.5">Your Location</p>
                 <p class="font-bold text-lg">
-                    {{ myStreet.name }}
-                    <span v-if="myStreet.zone" class="font-medium text-emerald-800"> — {{ myStreet.zone.name }}</span>
+                    {{ myZone.name }}
                 </p>
             </div>
         </div>
@@ -107,7 +106,7 @@ import AuthLayout from '@/Layouts/AuthLayout.vue'
 
 const props = defineProps({
     schedules: Array,
-    myStreet: Object,
+    myZone: Object,
 })
 
 const formatDate = (date) => new Date(date).toLocaleDateString('en-PH', {

@@ -47,31 +47,31 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 text-gray-500">{{ formatDate(resident.created_at) }}</td>
-                        <td class="px-6 py-4 flex gap-2">
-                            <button @click="viewResident(resident)" class="text-blue-600 hover:underline text-xs font-medium">View</button>
+                        <td class="px-6 py-4 flex items-center gap-1.5">
+                            <button @click="viewResident(resident)" class="px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors bg-blue-50 text-blue-700 hover:bg-blue-100">View</button>
                             <button
                                 v-if="resident.status === 'pending'"
                                 @click="approveResident(resident)"
-                                class="text-green-600 hover:underline text-xs font-medium"
+                                class="px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
                             >Approve</button>
                             <button
                                 v-if="resident.status === 'pending'"
                                 @click="rejectResident(resident)"
-                                class="text-red-500 hover:underline text-xs font-medium"
+                                class="px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors bg-rose-50 text-rose-700 hover:bg-rose-100"
                             >Reject</button>
                             <button
                                 v-if="resident.status === 'active'"
                                 @click="deactivateResident(resident)"
-                                class="text-orange-500 hover:underline text-xs font-medium"
+                                class="px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors bg-amber-50 text-amber-700 hover:bg-amber-100"
                             >Deactivate</button>
                             <button
                                 v-if="resident.status === 'rejected'"
                                 @click="reactivateResident(resident)"
-                                class="text-green-600 hover:underline text-xs font-medium"
+                                class="px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
                             >Reactivate</button>
                             <button
                                 @click="deleteResident(resident)"
-                                class="text-red-600 hover:underline text-xs font-medium"
+                                class="px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors bg-red-50 text-red-700 hover:bg-red-100"
                             >Delete</button>
                         </td>
                     </tr>
