@@ -63,7 +63,23 @@ class DatabaseSeeder extends Seeder
             User::factory()->personnel()->create($p);
         }
 
-
+        // -- Residents (3) --
+        $cahayagZone = $zones->where('name', 'Cahayag')->first();
+        User::factory()->resident()->create([
+            'name' => 'Kenneth',
+            'phone' => '09666666666',
+            'zone_id' => $cahayagZone->id ?? 6,
+        ]);
+        User::factory()->resident()->create([
+            'name' => 'Kean',
+            'phone' => '09777777777',
+            'zone_id' => $cahayagZone->id ?? 6,
+        ]);
+        User::factory()->resident()->create([
+            'name' => 'Lester',
+            'phone' => '09888888888',
+            'zone_id' => $cahayagZone->id ?? 6,
+        ]);
 
         // ============================================================
         // SUMMARY
@@ -77,6 +93,7 @@ class DatabaseSeeder extends Seeder
                 ['Super Admin',          '2',  '09111111111, 09222222222'],
                 ['Barangay Official',    '2',  '09333333333, 09444444444'],
                 ['Personnel / Collector', '1',  '09555555555'],
+                ['Residents',            '3',  '09666666666, 09777777777, 09888888888'],
 
                 ['', '', ''],
                 ['Zones',                '13',  'Structural Data'],

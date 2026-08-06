@@ -12,50 +12,45 @@
             <p class="text-gray-500 mt-2 text-lg">Here is what's happening today.</p>
         </div>
 
-        <!-- Super Admin Dashboard -->
         <div v-if="auth.user.role === 'super_admin'" class="space-y-10">
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
-                <!-- Total Users -->
-                <div class="relative overflow-hidden bg-white rounded-3xl p-3 sm:p-5 md:p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(225,29,72,0.1)] transition-all duration-300 group hover:-translate-y-1">
+            <div class="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-6">
+                <!-- Total Staff (clickable) -->
+                <a :href="route('super-admin.users.index')" class="relative overflow-hidden bg-white rounded-3xl p-3 sm:p-5 md:p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(225,29,72,0.12)] transition-all duration-300 group hover:-translate-y-1 cursor-pointer block">
                     <div class="absolute -right-6 -top-6 w-32 h-32 bg-gradient-to-br from-indigo-100 to-indigo-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 ease-out"></div>
                     <div class="relative flex items-center justify-between z-10">
                         <div>
-                            <p class="text-xs sm:text-sm font-bold text-gray-400 uppercase tracking-wider break-words w-full mb-2">Total Users</p>
-                            <p class="text-2xl sm:text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 tracking-tight">{{ stats.totalUsers }}</p>
+                            <p class="text-xs sm:text-sm font-bold text-gray-400 uppercase tracking-wider break-words w-full mb-2">Total Staff</p>
+                            <p class="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 tracking-tight">{{ stats.totalStaff }}</p>
+                            <p class="text-xs text-indigo-500 font-semibold mt-1 flex items-center gap-1">
+                                View all
+                                <svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </p>
                         </div>
                         <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-indigo-50 to-white flex items-center justify-center text-3xl shadow-sm border border-indigo-100/50 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
-                            <component :is="Users" class="w-6 h-6 md:w-8 md:h-8" />
+                            <component :is="Users" class="w-6 h-6 md:w-8 md:h-8 text-indigo-500" />
                         </div>
                     </div>
-                </div>
-                <!-- Residents -->
-                <div class="relative overflow-hidden bg-white rounded-3xl p-3 sm:p-5 md:p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(225,29,72,0.1)] transition-all duration-300 group hover:-translate-y-1">
-                    <div class="absolute -right-6 -top-6 w-32 h-32 bg-gradient-to-br from-emerald-100 to-emerald-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 ease-out"></div>
-                    <div class="relative flex items-center justify-between z-10">
-                        <div>
-                            <p class="text-xs sm:text-sm font-bold text-gray-400 uppercase tracking-wider break-words w-full mb-2">Residents</p>
-                            <p class="text-2xl sm:text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 tracking-tight">{{ stats.totalResidents }}</p>
-                        </div>
-                        <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-emerald-50 to-white flex items-center justify-center text-3xl shadow-sm border border-emerald-100/50 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300">
-                            <component :is="HomeIcon" class="w-6 h-6 md:w-8 md:h-8" />
-                        </div>
-                    </div>
-                </div>
-                <!-- Zones -->
-                <div class="relative overflow-hidden bg-white rounded-3xl p-3 sm:p-5 md:p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(225,29,72,0.1)] transition-all duration-300 group hover:-translate-y-1">
+                </a>
+                <!-- Zones (clickable) -->
+                <a :href="route('super-admin.zones.index')" class="relative overflow-hidden bg-white rounded-3xl p-3 sm:p-5 md:p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(245,158,11,0.12)] transition-all duration-300 group hover:-translate-y-1 cursor-pointer block">
                     <div class="absolute -right-6 -top-6 w-32 h-32 bg-gradient-to-br from-amber-100 to-amber-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 ease-out"></div>
                     <div class="relative flex items-center justify-between z-10">
                         <div>
                             <p class="text-xs sm:text-sm font-bold text-gray-400 uppercase tracking-wider break-words w-full mb-2">System Zones</p>
-                            <p class="text-2xl sm:text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 tracking-tight">{{ stats.totalZones }}</p>
+                            <p class="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 tracking-tight">{{ stats.totalZones }}</p>
+                            <p class="text-xs text-amber-500 font-semibold mt-1 flex items-center gap-1">
+                                View all
+                                <svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </p>
                         </div>
                         <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-amber-50 to-white flex items-center justify-center shadow-sm border border-amber-100/50 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 text-amber-500">
                             <component :is="MapIcon" class="w-6 h-6 md:w-8 md:h-8" />
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
+
 
         <!-- Barangay Official Dashboard -->
         <div v-else-if="auth.user.role === 'barangay_official'" class="space-y-10">

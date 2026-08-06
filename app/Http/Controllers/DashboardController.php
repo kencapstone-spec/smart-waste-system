@@ -21,9 +21,8 @@ class DashboardController extends Controller
 
         if ($user->isSuperAdmin()) {
             $stats = [
-                'totalUsers' => User::whereIn('role', ['barangay_official', 'personnel'])->count(),
-                'totalResidents' => User::where('role', 'resident')->count(),
-                'totalZones' => Zone::count(),
+                'totalStaff'     => User::whereIn('role', ['barangay_official', 'personnel'])->count(),
+                'totalZones'     => Zone::count(),
             ];
         } elseif ($user->isAdmin()) {
             $bestResidentRecord = Point::selectRaw('resident_id, SUM(points) as total_points')
