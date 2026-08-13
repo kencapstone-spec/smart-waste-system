@@ -3,7 +3,7 @@
 use App\Models\CollectionTask;
 use App\Models\Schedule as WasteSchedule;
 use Carbon\Carbon;
-use Illuminate\Foundation\Inspiring; // Added to read the assignments table
+use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schedule;

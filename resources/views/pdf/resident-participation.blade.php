@@ -34,7 +34,7 @@
                 <th>Rank</th>
                 <th>Resident Name</th>
                 <th>Phone</th>
-                <th>Street</th>
+                <th>Purok</th>
                 <th>Zone</th>
                 <th>Total Points</th>
             </tr>
@@ -47,8 +47,8 @@
                 </td>
                 <td>{{ $resident->name }}</td>
                 <td>{{ $resident->phone }}</td>
-                <td>{{ $resident->street->name ?? '—' }}</td>
-                <td>{{ $resident->street->zone->name ?? '—' }}</td>
+                <td>{{ $resident->zone->name ?? '—' }}</td>
+                <td>{{ $resident->zone->name ?? '—' }}</td>
                 <td class="points-col">{{ $resident->total_points }}</td>
             </tr>
             @empty

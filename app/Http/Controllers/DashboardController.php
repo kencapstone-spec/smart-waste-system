@@ -95,8 +95,11 @@ class DashboardController extends Controller
             ];
         }
 
+        $announcements = \App\Models\Announcement::latest()->take(3)->get();
+
         return Inertia::render('Dashboard', [
             'stats' => $stats,
+            'announcements' => $announcements,
         ]);
     }
 }

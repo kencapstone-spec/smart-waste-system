@@ -21,6 +21,7 @@ class ResidentController extends Controller
 
         return Inertia::render('Official/Residents/Index', [
             'residents' => $residents,
+            'zones'     => \App\Models\Zone::orderBy('name')->get(['id', 'name']),
         ]);
     }
 
@@ -36,6 +37,31 @@ class ResidentController extends Controller
             'points' => $points,
             'totalPoints' => $points->sum('points'),
         ]);
+    }
+
+    public function store(\Illuminate\Http\Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20|unique:users,phone',
+            'address' => 'required|string|max:255',
+            'zone_id' => 'required|exists:zones,id',
+        ]);
+
+        $resident = User::create([
+            ...$validated,
+            'role' => 'resident',
+            'status' => 'active',
+            'approved_at' => now(),
+            'approved_by' => auth()->id(),
+        ]);
+
+        $this->semaphoreService->sendSms(
+            $resident->phone,
+            'Your Smart Waste System account has been created by the Barangay Office. You can now log in using your phone number.'
+        );
+
+        return back()->with('success', 'Resident registered successfully.');
     }
 
     public function approve(User $resident)

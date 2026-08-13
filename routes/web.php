@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Official\AnnouncementController;
 use App\Http\Controllers\Official\PdfReportController;
 use App\Http\Controllers\Official\RedemptionController;
 use App\Http\Controllers\Official\ReportController;
@@ -61,9 +62,12 @@ Route::get('/', function () {
         ],
     ];
 
+    $announcements = \App\Models\Announcement::latest()->take(3)->get();
+
     return Inertia::render('Home', [
         'leaderboard' => $topResidents,
-        'stats' => $stats
+        'stats' => $stats,
+        'announcements' => $announcements,
     ]);
 });
 
@@ -104,6 +108,7 @@ Route::middleware('auth')->group(function () {
         Route::get('reports/{report}', [ReportController::class, 'show'])->name('reports.show');
         Route::post('reports/{report}/respond', [ReportController::class, 'respond'])->name('reports.respond');
         Route::get('residents', [ResidentController::class, 'index'])->name('residents.index');
+        Route::post('residents', [ResidentController::class, 'store'])->name('residents.store');
         Route::get('residents/{resident}', [ResidentController::class, 'show'])->name('residents.show');
         Route::post('residents/{resident}/approve', [ResidentController::class, 'approve'])->name('residents.approve');
         Route::post('residents/{resident}/reject', [ResidentController::class, 'reject'])->name('residents.reject');
@@ -113,6 +118,13 @@ Route::middleware('auth')->group(function () {
         Route::get('redemptions', [RedemptionController::class, 'index'])->name('redemptions.index');
         Route::post('redemptions/{redemption}/approve', [RedemptionController::class, 'approve'])->name('redemptions.approve');
         Route::post('redemptions/{redemption}/reject', [RedemptionController::class, 'reject'])->name('redemptions.reject');
+        
+        Route::put('points/{point}', [\App\Http\Controllers\Official\PointController::class, 'update'])->name('points.update');
+
+        Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+        Route::post('announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
+        Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+
         Route::get('pdf/collection-summary', [PdfReportController::class, 'collectionSummary'])->name('pdf.collection-summary');
         Route::get('pdf/complaints-summary', [PdfReportController::class, 'complaintsSummary'])->name('pdf.complaints-summary');
         Route::get('pdf/resident-participation', [PdfReportController::class, 'residentParticipation'])->name('pdf.resident-participation');

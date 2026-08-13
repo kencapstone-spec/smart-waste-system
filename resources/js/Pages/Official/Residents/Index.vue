@@ -1,6 +1,16 @@
 <template>
     <AuthLayout page-title="Resident Management">
-        <div class="mb-6 flex gap-3">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-rose-950 tracking-tight">Residents</h2>
+            <button
+                @click="showRegisterModal = true"
+                class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all"
+            >
+                + Register Resident
+            </button>
+        </div>
+
+        <div class="mb-6 flex gap-3 flex-wrap">
             <button
                 @click="filter = 'all'"
                 :class="filter === 'all' ? 'bg-green-600 text-white' : 'bg-white text-rose-950/80 border'"
@@ -82,6 +92,68 @@
             </table>
             </div>
         </div>
+
+        <!-- Manual Registration Modal -->
+        <Modal :show="showRegisterModal" title="Register Resident" @close="showRegisterModal = false">
+            <form @submit.prevent="submitRegister" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-rose-950 mb-1">Full Name</label>
+                    <input
+                        v-model="registerForm.name"
+                        type="text"
+                        placeholder="Juan Dela Cruz"
+                        class="w-full border border-rose-100 bg-rose-50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-rose-400 focus:border-rose-400 focus:outline-none transition-all"
+                        required
+                    />
+                    <p v-if="registerForm.errors.name" class="text-red-500 text-xs mt-1">{{ registerForm.errors.name }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-rose-950 mb-1">Phone Number</label>
+                    <input
+                        v-model="registerForm.phone"
+                        type="tel"
+                        placeholder="09XXXXXXXXX"
+                        class="w-full border border-rose-100 bg-rose-50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-rose-400 focus:border-rose-400 focus:outline-none transition-all"
+                        required
+                    />
+                    <p v-if="registerForm.errors.phone" class="text-red-500 text-xs mt-1">{{ registerForm.errors.phone }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-rose-950 mb-1">Address</label>
+                    <input
+                        v-model="registerForm.address"
+                        type="text"
+                        placeholder="House No., Purok, Barangay"
+                        class="w-full border border-rose-100 bg-rose-50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-rose-400 focus:border-rose-400 focus:outline-none transition-all"
+                        required
+                    />
+                    <p v-if="registerForm.errors.address" class="text-red-500 text-xs mt-1">{{ registerForm.errors.address }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-rose-950 mb-1">Purok / Zone</label>
+                    <select
+                        v-model="registerForm.zone_id"
+                        class="w-full border border-rose-100 bg-rose-50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-rose-400 focus:border-rose-400 focus:outline-none transition-all"
+                        required
+                    >
+                        <option value="" disabled>Select a Purok</option>
+                        <option v-for="zone in zones" :key="zone.id" :value="zone.id">{{ zone.name }}</option>
+                    </select>
+                    <p v-if="registerForm.errors.zone_id" class="text-red-500 text-xs mt-1">{{ registerForm.errors.zone_id }}</p>
+                </div>
+                <p class="text-xs text-rose-900/50 bg-rose-50 rounded-lg px-3 py-2">
+                    ℹ️ Manually registered residents are <strong>auto-approved</strong> and can log in immediately.
+                </p>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" @click="showRegisterModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors px-4 py-2">Cancel</button>
+                    <button
+                        type="submit"
+                        :disabled="registerForm.processing"
+                        class="bg-rose-900 text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all disabled:opacity-70"
+                    >Register</button>
+                </div>
+            </form>
+        </Modal>
 
         <!-- View Resident Modal -->
         <Modal :show="showViewModal" title="Resident Details" max-width="lg" @close="showViewModal = false">
@@ -188,9 +260,11 @@ import Modal from '@/Components/Modal.vue'
 
 const props = defineProps({
     residents: Object,
+    zones: Array,
 })
 
 const filter = ref('all')
+const showRegisterModal = ref(false)
 const showViewModal = ref(false)
 const showApproveModal = ref(false)
 const showRejectModal = ref(false)
@@ -199,6 +273,22 @@ const showReactivateModal = ref(false)
 const showDeleteModal = ref(false)
 const selectedResident = ref(null)
 const actionForm = useForm({})
+
+const registerForm = useForm({
+    name: '',
+    phone: '',
+    address: '',
+    zone_id: '',
+})
+
+const submitRegister = () => {
+    registerForm.post(route('official.residents.store'), {
+        onSuccess: () => {
+            showRegisterModal.value = false
+            registerForm.reset()
+        },
+    })
+}
 
 const filteredResidents = computed(() => {
     if (filter.value === 'all') return props.residents.data

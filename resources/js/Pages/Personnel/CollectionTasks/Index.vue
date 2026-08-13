@@ -11,7 +11,7 @@
                     <tr>
                         <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Calendar" class="w-4 h-4 opacity-70" /> Date</div></th>
                         <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Schedule</th>
-                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Street</th>
+                        <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Purok</th>
                         <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Activity" class="w-4 h-4 opacity-70" /> Status</div></th>
                         <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Remarks</th>
                         <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Settings" class="w-4 h-4 opacity-70" /> Actions</div></th>
@@ -21,7 +21,7 @@
                     <tr v-for="task in tasks.data" :key="task.id" class="hover:bg-rose-50/50 transition-colors">
                         <td class="px-6 py-4 text-gray-800">{{ formatDate(task.collection_date) }}</td>
                         <td class="px-6 py-4 text-rose-950/80">{{ task.schedule?.title ?? '—' }}</td>
-                        <td class="px-6 py-4 text-rose-950/80">{{ task.schedule?.street?.name ?? '—' }}</td>
+                        <td class="px-6 py-4 text-rose-950/80">{{ task.schedule?.zone?.name ?? '—' }}</td>
                         <td class="px-6 py-4">
                             <span :class="statusClass(task.status)" class="px-2 py-1 rounded-full text-xs font-medium capitalize">
                                 {{ task.status }}
@@ -72,7 +72,7 @@
         <!-- Award Points Modal -->
         <Modal :show="showPointsModal" title="Award Points to Residents" max-width="2xl" @close="showPointsModal = false">
             <div class="px-6 py-4 border-b bg-gray-50">
-                <h3 class="text-sm font-semibold text-gray-700">Residents on {{ selectedTask?.schedule?.street?.name ?? 'this street' }}</h3>
+                <h3 class="text-sm font-semibold text-gray-700">Residents on {{ selectedTask?.schedule?.street?.name ?? 'this purok' }}</h3>
                 <p class="text-xs text-gray-400 mt-0.5">Award points to residents for proper waste disposal</p>
             </div>
 
@@ -114,7 +114,7 @@
                     </div>
                 </div>
                 <div v-else class="py-12 text-center text-gray-400 text-sm border rounded-lg bg-gray-50">
-                    No active residents found on this street.
+                    No active residents found on this purok.
                 </div>
             </div>
             

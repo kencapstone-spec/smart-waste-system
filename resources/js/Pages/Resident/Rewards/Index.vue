@@ -55,7 +55,7 @@
                 </div>
 
                 <div v-if="rewards.length === 0" class="col-span-full py-16 text-center bg-white rounded-3xl border border-dashed border-gray-200">
-                    <div class="text-4xl mb-4 opacity-50"><component :is="Store" class="w-8 h-8 text-amber-500" /></div>
+                    <div class="flex justify-center mb-4 opacity-50"><component :is="Store" class="w-12 h-12 text-amber-500" /></div>
                     <p class="text-gray-500 font-medium">No rewards available at the moment.</p>
                 </div>
             </div>
@@ -119,8 +119,9 @@
                     <span class="font-extrabold text-amber-500 text-sm">-{{ redemption.points_spent }} ⭐</span>
                 </div>
             </div>
-            <div v-if="redemptions.length === 0" class="py-8 text-center text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">
-                You haven't redeemed any rewards yet.
+            <div v-if="redemptions.length === 0" class="py-12 text-center text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">
+                <div class="flex justify-center mb-3 opacity-50"><component :is="Gift" class="w-10 h-10 text-rose-500" /></div>
+                <p class="font-medium text-sm">No rewards redeemed yet.</p>
             </div>
         </div>
 

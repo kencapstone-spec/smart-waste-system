@@ -16,7 +16,7 @@
         <aside class="hidden md:flex flex-col w-[280px] fixed inset-y-6 left-6 z-50 bg-white/60 backdrop-blur-3xl border border-white/60 rounded-3xl shadow-[0_8px_32px_rgba(225,29,72,0.12)]">
             <div class="px-8 py-8 flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-rose-900 flex items-center justify-center shadow-lg shadow-rose-900/20 text-white">
-                    <component :is="Trash2" class="w-5 h-5" />
+                    <component :is="Leaf" class="w-5 h-5" />
                 </div>
                 <span class="text-rose-950 font-extrabold text-2xl tracking-tight">SmartWaste</span>
             </div>
@@ -48,7 +48,7 @@
                         <p class="text-xs text-gray-500 capitalize font-medium">{{ auth.user.role.replace('_', ' ') }}</p>
                     </div>
                 </div>
-                <form @submit.prevent="logout">
+                <form @submit.prevent="confirmLogout">
                     <button
                         type="submit"
                         class="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-rose-600 hover:text-white hover:bg-rose-600 rounded-xl transition-all duration-300"
@@ -64,20 +64,11 @@
             
             <!-- Mobile Top Header -->
             <header class="md:hidden sticky top-0 z-40 bg-white/70 backdrop-blur-2xl border-b border-white/50 shadow-sm">
-                <div class="flex items-center justify-between px-4 py-3">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-rose-900 flex items-center justify-center shadow-md text-white">
-                            <component :is="Trash2" class="w-4 h-4" />
-                        </div>
-                        <h1 class="text-lg font-bold text-rose-950">{{ pageTitle }}</h1>
+                <div class="flex items-center gap-3 px-4 py-3">
+                    <div class="w-8 h-8 rounded-lg bg-rose-900 flex items-center justify-center shadow-md text-white shrink-0">
+                        <component :is="Leaf" class="w-4 h-4" />
                     </div>
-                    
-                    <!-- Mobile Profile Menu Trigger (Logout) -->
-                    <form @submit.prevent="logout">
-                        <button type="submit" class="w-9 h-9 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-900 font-bold text-sm">
-                            {{ userInitial }}
-                        </button>
-                    </form>
+                    <h1 class="text-lg font-bold text-rose-950 truncate">{{ pageTitle }}</h1>
                 </div>
             </header>
 
@@ -108,7 +99,7 @@
             </div>
 
             <!-- Page Content -->
-            <main class="flex-1 px-4 sm:px-6 md:px-10 pb-28 md:pb-12 w-full max-w-full">
+            <main class="flex-1 px-4 sm:px-6 md:px-10 pt-4 pb-28 md:pb-12 w-full max-w-full">
                 <slot />
             </main>
         </div>
@@ -138,14 +129,109 @@
                     <component :is="MoreHorizontal" class="w-6 h-6 mx-auto mb-1" />
                     <span class="text-[10px] font-bold tracking-tight w-full text-center px-1">More</span>
                 </button>
+
+                <!-- Profile Button -->
+                <button
+                    @click="showProfileSheet = true"
+                    class="flex flex-col items-center justify-center w-16 py-2 rounded-2xl transition-all duration-300"
+                    :class="showProfileSheet ? 'text-rose-900 scale-105' : 'text-gray-400 hover:text-gray-600'"
+                >
+                    <div class="w-6 h-6 rounded-full bg-rose-100 flex items-center justify-center text-rose-900 font-black text-xs mb-1 mx-auto">
+                        {{ userInitial }}
+                    </div>
+                    <span class="text-[10px] font-bold tracking-tight w-full text-center px-1">Profile</span>
+                </button>
             </div>
         </nav>
 
         <!-- Mobile More Menu Overlay -->
+        <!-- Profile Slide-up Sheet Backdrop -->
+        <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="showProfileSheet" class="md:hidden fixed inset-0 z-[60] bg-gray-900/40 backdrop-blur-sm" @click="showProfileSheet = false"></div>
+        </transition>
+
+        <!-- Profile Slide-up Sheet -->
+        <transition enter-active-class="transition ease-out duration-300 transform" enter-from-class="translate-y-full" enter-to-class="translate-y-0" leave-active-class="transition ease-in duration-200 transform" leave-from-class="translate-y-0" leave-to-class="translate-y-full">
+            <div v-if="showProfileSheet" class="md:hidden fixed bottom-0 left-0 right-0 z-[70] bg-white rounded-t-3xl shadow-2xl pb-safe overflow-hidden">
+                <!-- Handle bar -->
+                <div class="flex justify-center pt-3 pb-1">
+                    <div class="w-10 h-1 rounded-full bg-gray-200"></div>
+                </div>
+
+                <!-- User Info -->
+                <div class="px-6 pt-4 pb-5 flex items-center gap-4 border-b border-gray-100">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-200 to-rose-100 flex items-center justify-center text-rose-900 font-black text-xl shadow-inner">
+                        {{ userInitial }}
+                    </div>
+                    <div>
+                        <p class="font-extrabold text-gray-900 text-lg leading-tight">{{ auth.user.name }}</p>
+                        <p class="text-sm text-gray-400 font-medium capitalize">{{ auth.user.role.replace(/_/g, ' ') }}</p>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="p-4 space-y-2">
+                    <a :href="route('profile.edit')" @click="showProfileSheet = false" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-gray-50 hover:bg-rose-50 border border-transparent hover:border-rose-100 transition-all group">
+                        <div class="w-9 h-9 rounded-xl bg-white border border-gray-100 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                            <component :is="UserIcon" class="w-5 h-5 text-gray-500 group-hover:text-rose-600" />
+                        </div>
+                        <span class="font-semibold text-gray-700 group-hover:text-rose-900">Edit Profile</span>
+                    </a>
+
+                    <form @submit.prevent="confirmLogout">
+                        <button type="submit" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-rose-50 hover:bg-rose-100 border border-rose-100 transition-all group">
+                            <div class="w-9 h-9 rounded-xl bg-white border border-rose-100 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                                <svg class="w-5 h-5 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                            </div>
+                            <span class="font-semibold text-rose-700">Log Out</span>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="pb-24"></div>
+            </div>
+        </transition>
+
+        <!-- Logout Confirmation Modal -->
+        <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="showLogoutConfirm" class="fixed inset-0 z-[80] flex items-center justify-center px-6" @click.self="showLogoutConfirm = false">
+                <!-- Backdrop -->
+                <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm"></div>
+
+                <!-- Dialog -->
+                <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden">
+                    <!-- Icon -->
+                    <div class="flex flex-col items-center pt-8 pb-4 px-6">
+                        <div class="w-16 h-16 rounded-2xl bg-rose-100 flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                        </div>
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-1">Log Out?</h3>
+                        <p class="text-sm text-gray-400 text-center">You'll need to log in again to access your account.</p>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex gap-3 px-6 pb-8 pt-2">
+                        <button
+                            @click="showLogoutConfirm = false"
+                            class="flex-1 py-3 rounded-2xl border border-gray-200 text-gray-700 font-bold text-sm hover:bg-gray-50 transition-colors"
+                        >Cancel</button>
+                        <form @submit.prevent="logout" class="flex-1">
+                            <button
+                                type="submit"
+                                class="w-full py-3 rounded-2xl bg-rose-600 text-white font-bold text-sm hover:bg-rose-700 transition-colors shadow-lg shadow-rose-500/30"
+                            >Log Out</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
+        <!-- More Menu Backdrop -->
         <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
             <div v-if="showMobileMenu" class="md:hidden fixed inset-0 z-[60] bg-gray-900/40 backdrop-blur-sm" @click="showMobileMenu = false"></div>
         </transition>
 
+        <!-- More Menu Sheet -->
         <transition enter-active-class="transition ease-out duration-300 transform" enter-from-class="translate-y-full" enter-to-class="translate-y-0" leave-active-class="transition ease-in duration-200 transform" leave-from-class="translate-y-0" leave-to-class="translate-y-full">
             <div v-if="showMobileMenu" class="md:hidden fixed bottom-0 left-0 right-0 z-[70] bg-white rounded-t-3xl shadow-2xl overflow-hidden pb-safe">
                 <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-rose-50/30">
@@ -175,10 +261,17 @@ import { ref, computed } from 'vue'
 import { usePage, useForm } from '@inertiajs/vue3'
 import {
     Trash2, Home as HomeIcon, Users, Map as MapIcon, ClipboardList,
-    User as UserIcon, Calendar, FileText, Gift, Award, CheckCircle, Star, AlertTriangle, MoreHorizontal
+    User as UserIcon, Calendar, FileText, Gift, Award, CheckCircle, Star, AlertTriangle, MoreHorizontal, Megaphone, Leaf
 } from '@lucide/vue'
 
 const showMobileMenu = ref(false)
+const showProfileSheet = ref(false)
+const showLogoutConfirm = ref(false)
+
+const confirmLogout = () => {
+    showProfileSheet.value = false
+    showLogoutConfirm.value = true
+}
 
 const page = usePage()
 const auth = computed(() => page.props.auth)
@@ -207,6 +300,7 @@ const officialNav = [
     { label: 'Schedules', href: route('official.schedules.index'), icon: Calendar },
     { label: 'Reports', href: route('official.reports.index'), icon: FileText },
     { label: 'Residents', href: route('official.residents.index'), icon: Users },
+    { label: 'Announcements', href: route('official.announcements.index'), icon: Megaphone },
     { label: 'Redemptions', href: route('official.redemptions.index'), icon: Gift },
     { label: 'Rewards', href: route('official.rewards.index'), icon: Award },
     { label: 'Profile', href: route('profile.edit'), icon: UserIcon },

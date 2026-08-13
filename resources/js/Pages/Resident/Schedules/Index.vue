@@ -14,7 +14,7 @@
             <div class="w-12 h-12 bg-amber-200/50 rounded-full flex items-center justify-center text-2xl shrink-0">⚠️</div>
             <div>
                 <p class="font-bold text-lg">Location Not Assigned</p>
-                <p class="text-amber-800/80 mt-0.5">You are not assigned to a street yet. Please contact the Barangay Office.</p>
+                <p class="text-amber-800/80 mt-0.5">You are not assigned to a purok yet. Please contact the Barangay Office.</p>
             </div>
         </div>
 
@@ -55,7 +55,7 @@
                     <tr v-if="schedules.length === 0">
                         <td colspan="4" class="px-8 py-16 text-center text-gray-400">
                             <div class="text-4xl mb-4 opacity-50"><component :is="Calendar" class="w-12 h-12 mx-auto text-indigo-500" /></div>
-                            <p class="font-medium text-base">No schedules found for your street.</p>
+                            <p class="font-medium text-base">No schedules found for your purok.</p>
                         </td>
                     </tr>
                 </tbody>
@@ -93,7 +93,7 @@
             
             <div v-if="schedules.length === 0" class="py-12 text-center text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">
                 <div class="text-4xl mb-3 opacity-50"><component :is="Calendar" class="w-12 h-12 mx-auto text-indigo-500" /></div>
-                <p class="font-medium text-sm">No schedules found for your street.</p>
+                <p class="font-medium text-sm">No schedules found for your purok.</p>
             </div>
         </div>
 

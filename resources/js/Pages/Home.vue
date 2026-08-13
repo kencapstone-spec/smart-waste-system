@@ -10,7 +10,7 @@
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl flex items-center justify-center"
                         :class="scrolled ? 'bg-rose-900 text-white' : 'bg-white/15 text-white backdrop-blur-sm'">
-                        <component :is="Trash2" class="w-5 h-5" />
+                        <component :is="Leaf" class="w-5 h-5" />
                     </div>
                     <span class="font-bold text-lg tracking-tight"
                         :class="scrolled ? 'text-rose-950' : 'text-white'">
@@ -135,7 +135,7 @@
                                             <div class="w-10 h-10 rounded-lg bg-emerald-500/30 flex items-center justify-center text-emerald-300"><component :is="CalendarDays" class="w-7 h-7" /></div>
                                             <div>
                                                 <p class="text-sm font-medium text-white">Monday Collection</p>
-                                                <p class="text-xs text-rose-200/60">Rizal St. • Zone 1</p>
+                                                <p class="text-xs text-rose-200/60">Purok Oten • Zone 1</p>
                                             </div>
                                         </div>
                                         <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-xs font-medium">Active</span>
@@ -364,6 +364,32 @@
         </section>
 
         <!-- ============================================================ -->
+        <!-- ANNOUNCEMENTS SECTION -->
+        <!-- ============================================================ -->
+        <section v-if="announcements && announcements.length > 0" id="announcements" class="py-24 bg-white relative">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <h2 class="text-3xl md:text-4xl font-black text-rose-950 tracking-tight mb-4">Latest Announcements</h2>
+                    <p class="text-lg text-rose-900/60 font-medium">Stay updated with the latest news and schedules from your Barangay.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div v-for="announcement in announcements" :key="announcement.id" class="bg-rose-50/50 rounded-3xl p-8 border border-rose-100/50 hover:bg-white hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden">
+                        <div class="absolute -right-8 -top-8 w-32 h-32 bg-rose-100 rounded-full blur-2xl opacity-50 group-hover:bg-rose-200 transition-colors"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-3 py-1 bg-rose-100 text-rose-800 text-xs font-bold rounded-xl uppercase tracking-wider">{{ announcement.type }}</span>
+                                <span class="text-sm text-gray-500 font-medium">{{ new Date(announcement.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) }}</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-rose-950 mb-3">{{ announcement.title }}</h3>
+                            <p class="text-gray-600 line-clamp-4 leading-relaxed">{{ announcement.content }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
         <!-- FOOTER -->
         <!-- ============================================================ -->
         <footer class="bg-gray-950 text-gray-400 py-16">
@@ -423,7 +449,8 @@ import {
     Trash2,
     Trophy,
     Medal,
-    Award
+    Award,
+    Leaf
 } from '@lucide/vue'
 
 const props = defineProps({
@@ -432,6 +459,10 @@ const props = defineProps({
         default: () => []
     },
     stats: {
+        type: Array,
+        default: () => []
+    },
+    announcements: {
         type: Array,
         default: () => []
     }
@@ -451,13 +482,14 @@ const navLinks = [
     { id: 'features', label: 'Features' },
     { id: 'how-it-works', label: 'How It Works' },
     { id: 'leaderboard', label: 'Leaderboard' },
+    { id: 'announcements', label: 'Announcements' },
     { id: 'roles', label: 'Roles' },
 ]
 
 
 
 const features = [
-    { icon: CalendarDays, title: 'Scheduled Collections', description: 'Officials create and manage daily, weekly, or monthly waste collection schedules per street.', bgClass: 'bg-rose-100 text-rose-600' },
+    { icon: CalendarDays, title: 'Scheduled Collections', description: 'Officials create and manage daily, weekly, or monthly waste collection schedules per purok.', bgClass: 'bg-rose-100 text-rose-600' },
     { icon: CheckCircle, title: 'Task Management', description: 'Personnel mark tasks as completed or missed with photo proof for full accountability.', bgClass: 'bg-amber-100 text-amber-600' },
     { icon: FileText, title: 'Incident Reporting', description: 'Residents report missed collections or illegal dumping with photos and GPS location.', bgClass: 'bg-blue-100 text-blue-600' },
     { icon: Star, title: 'Points & Incentives', description: 'Personnel manually award points to residents for proper segregation and participation.', bgClass: 'bg-emerald-100 text-emerald-600' },
@@ -466,9 +498,9 @@ const features = [
 ]
 
 const steps = [
-    { number: '01', title: 'Register', description: 'Sign up with your phone number and select your street.' },
+    { number: '01', title: 'Register', description: 'Sign up with your phone number and select your purok.' },
     { number: '02', title: 'Get Approved', description: 'A barangay official reviews and approves your account.' },
-    { number: '03', title: 'Stay Updated', description: 'View your street\'s collection schedule and submit reports.' },
+    { number: '03', title: 'Stay Updated', description: 'View your purok\'s collection schedule and submit reports.' },
     { number: '04', title: 'Earn Points', description: 'Get rewarded for proper waste segregation and timely disposal.' },
 ]
 

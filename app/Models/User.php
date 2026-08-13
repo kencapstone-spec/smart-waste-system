@@ -74,6 +74,11 @@ class User extends Authenticatable
         return $this->hasMany(Point::class, 'awarded_by');
     }
 
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class, 'created_by');
+    }
+
     public function systemLogs()
     {
         return $this->hasMany(SystemLog::class);

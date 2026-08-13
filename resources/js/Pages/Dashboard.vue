@@ -2,7 +2,7 @@
     <AuthLayout page-title="Dashboard">
         
         <!-- Welcome Header (All roles) -->
-        <div class="mb-10 relative">
+        <div class="mb-10 pt-2 relative">
             <div class="absolute -top-10 -left-10 w-40 h-40 bg-rose-400/20 rounded-full blur-3xl -z-10"></div>
             <div class="absolute top-0 right-20 w-32 h-32 bg-amber-400/20 rounded-full blur-3xl -z-10"></div>
             
@@ -12,42 +12,63 @@
             <p class="text-gray-500 mt-2 text-lg">Here is what's happening today.</p>
         </div>
 
-        <div v-if="auth.user.role === 'super_admin'" class="space-y-10">
-            <div class="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-6">
-                <!-- Total Staff (clickable) -->
-                <a :href="route('super-admin.users.index')" class="relative overflow-hidden bg-white rounded-3xl p-3 sm:p-5 md:p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(225,29,72,0.12)] transition-all duration-300 group hover:-translate-y-1 cursor-pointer block">
-                    <div class="absolute -right-6 -top-6 w-32 h-32 bg-gradient-to-br from-indigo-100 to-indigo-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 ease-out"></div>
-                    <div class="relative flex items-center justify-between z-10">
-                        <div>
-                            <p class="text-xs sm:text-sm font-bold text-gray-400 uppercase tracking-wider break-words w-full mb-2">Total Staff</p>
-                            <p class="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 tracking-tight">{{ stats.totalStaff }}</p>
-                            <p class="text-xs text-indigo-500 font-semibold mt-1 flex items-center gap-1">
-                                View all
-                                <svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                            </p>
+        <!-- Global Announcements -->
+        <div v-if="announcements && announcements.length > 0" class="mb-10 space-y-4">
+            <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <span class="w-1.5 h-6 bg-rose-500 rounded-full"></span>
+                Recent Announcements
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div v-for="announcement in announcements" :key="announcement.id" class="bg-gradient-to-br from-rose-50 to-white border border-rose-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 w-20 h-20 bg-rose-100 rounded-full blur-xl opacity-50 group-hover:bg-rose-200 transition-colors"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 bg-rose-100 text-rose-800 text-xs font-bold rounded-lg uppercase tracking-wider">{{ announcement.type }}</span>
+                            <span class="text-xs text-gray-400 font-medium">
+                                {{ new Date(announcement.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) }}
+                            </span>
                         </div>
-                        <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-indigo-50 to-white flex items-center justify-center text-3xl shadow-sm border border-indigo-100/50 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
-                            <component :is="Users" class="w-6 h-6 md:w-8 md:h-8 text-indigo-500" />
-                        </div>
+                        <h4 class="font-bold text-gray-900 mb-2">{{ announcement.title }}</h4>
+                        <p class="text-sm text-gray-600 line-clamp-3">{{ announcement.content }}</p>
                     </div>
-                </a>
-                <!-- Zones (clickable) -->
-                <a :href="route('super-admin.zones.index')" class="relative overflow-hidden bg-white rounded-3xl p-3 sm:p-5 md:p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(245,158,11,0.12)] transition-all duration-300 group hover:-translate-y-1 cursor-pointer block">
-                    <div class="absolute -right-6 -top-6 w-32 h-32 bg-gradient-to-br from-amber-100 to-amber-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 ease-out"></div>
-                    <div class="relative flex items-center justify-between z-10">
-                        <div>
-                            <p class="text-xs sm:text-sm font-bold text-gray-400 uppercase tracking-wider break-words w-full mb-2">System Zones</p>
-                            <p class="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 tracking-tight">{{ stats.totalZones }}</p>
-                            <p class="text-xs text-amber-500 font-semibold mt-1 flex items-center gap-1">
-                                View all
-                                <svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                            </p>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="auth.user.role === 'super_admin'" class="space-y-6">
+            <!-- Stat Cards -->
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Total Staff -->
+                <Link :href="route('super-admin.users.index')" class="relative overflow-hidden bg-white rounded-3xl p-5 md:p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)] transition-all duration-300 group hover:-translate-y-1 block">
+                    <div class="absolute -right-6 -top-6 w-32 h-32 bg-gradient-to-br from-indigo-100 to-indigo-50 rounded-full opacity-60 group-hover:scale-150 transition-transform duration-700 ease-out"></div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 border border-indigo-100/50">
+                            <component :is="Users" class="w-6 h-6 text-indigo-500" />
                         </div>
-                        <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-amber-50 to-white flex items-center justify-center shadow-sm border border-amber-100/50 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 text-amber-500">
-                            <component :is="MapIcon" class="w-6 h-6 md:w-8 md:h-8" />
-                        </div>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Staff</p>
+                        <p class="text-4xl font-black text-gray-900 tracking-tight">{{ stats.totalStaff }}</p>
+                        <p class="text-xs text-indigo-500 font-semibold mt-2 flex items-center gap-1">
+                            View all
+                            <svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </p>
                     </div>
-                </a>
+                </Link>
+
+                <!-- System Zones -->
+                <Link :href="route('super-admin.zones.index')" class="relative overflow-hidden bg-white rounded-3xl p-5 md:p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(245,158,11,0.15)] transition-all duration-300 group hover:-translate-y-1 block">
+                    <div class="absolute -right-6 -top-6 w-32 h-32 bg-gradient-to-br from-amber-100 to-amber-50 rounded-full opacity-60 group-hover:scale-150 transition-transform duration-700 ease-out"></div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 border border-amber-100/50">
+                            <component :is="MapIcon" class="w-6 h-6 text-amber-500" />
+                        </div>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">System Zones</p>
+                        <p class="text-4xl font-black text-gray-900 tracking-tight">{{ stats.totalZones }}</p>
+                        <p class="text-xs text-amber-500 font-semibold mt-2 flex items-center gap-1">
+                            View all
+                            <svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </p>
+                    </div>
+                </Link>
             </div>
         </div>
 
@@ -222,7 +243,7 @@
                     Quick Actions
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <a :href="route('personnel.schedules.index')" class="relative overflow-hidden bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center justify-between">
+                    <Link :href="route('personnel.schedules.index')" class="relative overflow-hidden bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center justify-between">
                         <div class="flex items-center gap-5 relative z-10">
                             <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-50 to-indigo-100 text-indigo-600 flex items-center justify-center text-2xl shadow-inner group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
                                 <component :is="Calendar" class="w-6 h-6 md:w-8 md:h-8" />
@@ -236,8 +257,8 @@
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                         </div>
                         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-indigo-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </a>
-                    <a :href="route('personnel.tasks.index')" class="relative overflow-hidden bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-emerald-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center justify-between">
+                    </Link>
+                    <Link :href="route('personnel.tasks.index')" class="relative overflow-hidden bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-emerald-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center justify-between">
                         <div class="flex items-center gap-5 relative z-10">
                             <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100 text-emerald-600 flex items-center justify-center text-2xl shadow-inner group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300">
                                 <component :is="CheckCircle" class="w-6 h-6 md:w-8 md:h-8" />
@@ -251,7 +272,7 @@
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                         </div>
                         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-emerald-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>
@@ -277,24 +298,24 @@
                             <span class="text-2xl font-bold text-rose-200/80 mb-2">pts</span>
                         </div>
                     </div>
-                    <div class="md:text-right">
-                        <a :href="route('resident.rewards.index')" class="group/btn relative inline-flex items-center justify-center bg-white text-rose-900 px-8 py-4 rounded-2xl font-extrabold text-sm shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(255,255,255,0.5)] transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+                    <div class="md:text-right relative z-20">
+                        <Link :href="route('resident.rewards.index')" class="group/btn relative inline-flex items-center justify-center bg-white text-rose-900 px-8 py-4 rounded-2xl font-extrabold text-sm shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(255,255,255,0.5)] transition-all duration-300 hover:-translate-y-1 overflow-hidden">
                             <span class="relative z-10 flex items-center gap-2">
                                 Redeem Rewards
                                 <svg class="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                             </span>
                             <div class="absolute inset-0 bg-gradient-to-r from-rose-50 to-white opacity-0 group-hover/btn:opacity-100 transition-opacity"></div>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
                 <!-- Total Reports -->
-                <div class="relative overflow-hidden bg-white rounded-3xl p-3 sm:p-5 md:p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-xl hover:shadow-rose-900/5 transition-all duration-300 group hover:-translate-y-1">
+                <Link :href="route('resident.reports.index')" class="block relative overflow-hidden bg-white rounded-3xl p-3 sm:p-5 md:p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-xl hover:shadow-rose-900/5 transition-all duration-300 group hover:-translate-y-1">
                     <div class="flex items-center justify-between mb-6">
                         <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-3xl group-hover:scale-110 group-hover:-rotate-6 transition-transform">
-                            <component :is="FileText" class="w-6 h-6 md:w-8 md:h-8" />
+                            <component :is="FileText" class="w-6 h-6 md:w-8 md:h-8 m-auto" />
                         </div>
                         <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center">
                             <svg class="w-5 h-5 text-gray-400 group-hover:text-amber-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -302,13 +323,13 @@
                     </div>
                     <p class="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider break-words w-full mb-2">Total Reports</p>
                     <p class="text-2xl sm:text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 tracking-tight">{{ stats.totalReports }}</p>
-                </div>
+                </Link>
                 
                 <!-- Account Status -->
                 <div class="relative overflow-hidden bg-white rounded-3xl p-3 sm:p-5 md:p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-xl hover:shadow-emerald-900/5 transition-all duration-300 group hover:-translate-y-1">
                     <div class="flex items-center justify-between mb-6">
                         <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-3xl group-hover:scale-110 group-hover:rotate-6 transition-transform">
-                            <component :is="ShieldCheck" class="w-6 h-6 md:w-8 md:h-8" />
+                            <component :is="ShieldCheck" class="w-6 h-6 md:w-8 md:h-8 m-auto" />
                         </div>
                         <span class="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border"
                             :class="auth.user.status === 'active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'">
@@ -326,7 +347,7 @@
                     Quick Navigation
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <a :href="route('resident.schedules.index')" class="relative overflow-hidden bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center justify-between">
+                    <Link :href="route('resident.schedules.index')" class="relative overflow-hidden bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-rose-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center justify-between">
                         <div class="flex items-center gap-5 relative z-10">
                             <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-50 to-rose-100 text-rose-600 flex items-center justify-center text-2xl shadow-inner group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300"><component :is="Calendar" class="w-6 h-6 md:w-8 md:h-8" /></div>
                             <div>
@@ -338,8 +359,8 @@
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                         </div>
                         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-rose-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </a>
-                    <a :href="route('resident.reports.index')" class="relative overflow-hidden bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-amber-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center justify-between">
+                    </Link>
+                    <Link :href="route('resident.reports.index')" class="relative overflow-hidden bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-amber-900/5 hover:-translate-y-1 transition-all duration-300 group flex items-center justify-between">
                         <div class="flex items-center gap-5 relative z-10">
                             <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100 text-amber-600 flex items-center justify-center text-2xl shadow-inner group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300"><component :is="FileText" class="w-6 h-6 md:w-8 md:h-8" /></div>
                             <div>
@@ -351,7 +372,7 @@
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                         </div>
                         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-amber-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>
@@ -360,7 +381,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { usePage } from '@inertiajs/vue3'
+import { usePage, Link } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'
 import { Smile, Users, Home as HomeIcon, Map as MapIcon, Calendar, AlertTriangle, Clock, Trophy, Star, ClipboardList, CheckCircle, FileText, ShieldCheck } from '@lucide/vue'
 import {
@@ -397,6 +418,10 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    announcements: {
+        type: Array,
+        default: () => []
+    }
 })
 
 const lineData = computed(() => ({

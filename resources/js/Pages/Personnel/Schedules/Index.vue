@@ -11,7 +11,7 @@
                     <thead class="border-b border-rose-100/50">
                         <tr>
                             <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Title</th>
-                            <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Street</th>
+                            <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Purok</th>
                             <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="MapPin" class="w-4 h-4 opacity-70" /> Zone</div></th>
                             <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Frequency</th>
                             <th class="text-left px-6 py-3 text-rose-950/70 font-semibold"><div class="flex items-center gap-1.5"><component :is="Clock" class="w-4 h-4 opacity-70" /> Time</div></th>
@@ -22,8 +22,8 @@
                     <tbody class="divide-y divide-gray-100">
                         <tr v-for="schedule in schedules" :key="schedule.id" class="hover:bg-rose-50/50 transition-colors">
                             <td class="px-6 py-4 font-medium text-gray-800">{{ schedule.title }}</td>
-                            <td class="px-6 py-4 text-rose-950/80">{{ schedule.street?.name ?? '—' }}</td>
-                            <td class="px-6 py-4 text-rose-950/80">{{ schedule.street?.zone?.name ?? '—' }}</td>
+                            <td class="px-6 py-4 text-rose-950/80">{{ schedule.zone?.name ?? '—' }}</td>
+                            <td class="px-6 py-4 text-rose-950/80">{{ schedule.zone?.name ?? '—' }}</td>
                             <td class="px-6 py-4">
                                 <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 capitalize">{{ schedule.frequency }}</span>
                             </td>

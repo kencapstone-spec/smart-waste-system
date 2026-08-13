@@ -20,12 +20,12 @@
                             <dd class="font-medium text-gray-800">{{ task.schedule?.title }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs text-gray-400 mb-0.5">Street</dt>
-                            <dd class="text-rose-950/80">{{ task.schedule?.street?.name ?? '—' }}</dd>
+                            <dt class="text-xs text-gray-400 mb-0.5">Purok</dt>
+                            <dd class="text-rose-950/80">{{ task.schedule?.zone?.name ?? '—' }}</dd>
                         </div>
                         <div>
                             <dt class="text-xs text-gray-400 mb-0.5">Zone</dt>
-                            <dd class="text-rose-950/80">{{ task.schedule?.street?.zone?.name ?? '—' }}</dd>
+                            <dd class="text-rose-950/80">{{ task.schedule?.zone?.name ?? '—' }}</dd>
                         </div>
                         <div>
                             <dt class="text-xs text-gray-400 mb-0.5">Collection Date</dt>
@@ -85,7 +85,7 @@
             <div class="lg:col-span-2">
                 <div class="bg-white/70 backdrop-blur-2xl rounded-2xl shadow-xl shadow-rose-900/5 border border-white/60 overflow-hidden">
                     <div class="px-6 py-4 border-b">
-                        <h3 class="text-base font-semibold text-gray-700">Residents on This Street</h3>
+                        <h3 class="text-base font-semibold text-gray-700">Residents in This Purok</h3>
                         <p class="text-xs text-gray-400 mt-0.5">Award points to residents for proper waste disposal</p>
                     </div>
 
@@ -117,7 +117,7 @@
                         </div>
                     </div>
                     <div v-else class="px-6 py-12 text-center text-gray-400 text-sm">
-                        No active residents found on this street.
+                        No active residents found on this purok.
                     </div>
                 </div>
             </div>

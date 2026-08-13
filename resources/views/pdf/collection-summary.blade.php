@@ -49,7 +49,7 @@
             <tr>
                 <th>#</th>
                 <th>Date</th>
-                <th>Street</th>
+                <th>Purok</th>
                 <th>Zone</th>
                 <th>Personnel</th>
                 <th>Status</th>
@@ -61,8 +61,8 @@
             <tr>
                 <td>{{ $i + 1 }}</td>
                 <td>{{ \Carbon\Carbon::parse($task->collection_date)->format('M d, Y') }}</td>
-                <td>{{ $task->schedule->street->name ?? '—' }}</td>
-                <td>{{ $task->schedule->street->zone->name ?? '—' }}</td>
+                <td>{{ $task->schedule->zone->name ?? '—' }}</td>
+                <td>{{ $task->schedule->zone->name ?? '—' }}</td>
                 <td>{{ $task->personnel->name ?? '—' }}</td>
                 <td><span class="badge badge-{{ $task->status }}">{{ ucfirst($task->status) }}</span></td>
                 <td>{{ $task->remarks ?? '—' }}</td>

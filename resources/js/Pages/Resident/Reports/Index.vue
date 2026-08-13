@@ -45,7 +45,7 @@
                     </tr>
                     <tr v-if="reports.data.length === 0">
                         <td colspan="5" class="px-8 py-16 text-center text-gray-400">
-                            <div class="text-4xl mb-4 opacity-50"><component :is="FileText" class="w-5 h-5" /></div>
+                            <div class="flex justify-center mb-4 opacity-50"><component :is="FileText" class="w-8 h-8" /></div>
                             <p class="font-medium text-base">No reports submitted yet.</p>
                         </td>
                     </tr>
@@ -77,7 +77,7 @@
             </div>
             
             <div v-if="reports.data.length === 0" class="py-12 text-center text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">
-                <div class="text-4xl mb-3 opacity-50"><component :is="FileText" class="w-5 h-5" /></div>
+                <div class="flex justify-center mb-3 opacity-50"><component :is="FileText" class="w-10 h-10" /></div>
                 <p class="font-medium text-sm">No reports submitted yet.</p>
             </div>
         </div>

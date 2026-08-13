@@ -1,7 +1,7 @@
 <template>
     <AuthLayout page-title="User Management">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold text-rose-950 tracking-tight">System Users</h2>
+            <h2 class="text-xl font-bold text-rose-950 tracking-tight">Staff & Officials</h2>
             <button
                 @click="showCreateModal = true"
                 class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all transition"

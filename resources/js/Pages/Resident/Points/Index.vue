@@ -44,7 +44,7 @@
                                 <span class="text-emerald-600 font-extrabold text-base bg-emerald-50 px-3 py-1 rounded-lg">+{{ point.points }}</span>
                             </td>
                             <td class="px-8 py-5 text-gray-900 font-medium">{{ point.awarded_by?.name ?? '—' }}</td>
-                            <td class="px-8 py-5 text-rose-950/80">{{ point.collection_task?.schedule?.street?.name ?? '—' }}</td>
+                            <td class="px-8 py-5 text-rose-950/80">{{ point.collection_task?.schedule?.zone?.name ?? '—' }}</td>
                             <td class="px-8 py-5 text-gray-500 italic">{{ point.remarks || 'No remarks' }}</td>
                             <td class="px-8 py-5 text-gray-500 font-medium">{{ formatDate(point.created_at) }}</td>
                         </tr>
@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div v-else class="px-8 py-16 text-center text-gray-400">
-                <div class="text-4xl mb-4 opacity-50"><component :is="Leaf" class="w-10 h-10 text-emerald-500" /></div>
+                <div class="flex justify-center mb-4 opacity-50"><component :is="Leaf" class="w-12 h-12 text-emerald-500" /></div>
                 <p class="font-medium">No points awarded yet. Proper waste disposal earns you points!</p>
             </div>
         </div>
@@ -64,7 +64,7 @@
                 <div class="flex justify-between items-start">
                     <div>
                         <p class="text-xs text-gray-500 font-medium mb-1">{{ formatDate(point.created_at) }}</p>
-                        <p class="font-bold text-gray-900 text-sm">Task on {{ point.collection_task?.schedule?.street?.name ?? 'Unknown Street' }}</p>
+                        <p class="font-bold text-gray-900 text-sm">Task on {{ point.collection_task?.schedule?.zone?.name ?? 'Unknown Purok' }}</p>
                         <p class="text-xs text-gray-500 mt-1">By: {{ point.awarded_by?.name ?? '—' }}</p>
                     </div>
                     <span class="text-emerald-600 font-extrabold text-lg bg-emerald-50 px-3 py-1 rounded-lg">+{{ point.points }}</span>
@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div v-if="points.length === 0" class="py-12 text-center text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">
-                <div class="text-3xl mb-3 opacity-50"><component :is="Leaf" class="w-10 h-10 text-emerald-500" /></div>
+                <div class="flex justify-center mb-3 opacity-50"><component :is="Leaf" class="w-10 h-10 text-emerald-500" /></div>
                 <p class="font-medium text-sm">No points awarded yet.</p>
             </div>
         </div>
