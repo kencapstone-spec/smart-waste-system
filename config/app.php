@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'Asia/Manila'),
 
     /*
     |--------------------------------------------------------------------------
@@ -122,5 +122,17 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Background Cron Secret
+    |--------------------------------------------------------------------------
+    |
+    | Secret key for triggering background queue workers and scheduled tasks
+    | via external HTTP cron services (e.g. cron-job.org).
+    |
+    */
+
+    'cron_secret' => env('CRON_SECRET'),
 
 ];

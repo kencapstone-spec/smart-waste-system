@@ -46,8 +46,12 @@ class OtpController extends Controller
             return back()->withErrors(['phone' => 'Your account has been rejected.']);
         }
 
-        // In local dev, skip real SMS — use code 123456
-        if (app()->environment('local')) {
+        $isDevMode = app()->environment('local')
+            || config('services.semaphore.dev_mode')
+            || empty(config('services.semaphore.api_key'));
+
+        // If in dev mode or Semaphore is unconfigured, use default code 123456
+        if ($isDevMode) {
             $this->otpService->generate($request->phone, '123456');
         } else {
             $code = $this->otpService->generate($request->phone);
@@ -64,8 +68,12 @@ class OtpController extends Controller
             'code' => ['required', 'string', 'size:6'],
         ]);
 
-        // In local dev, accept 123456 as valid OTP
-        if (app()->environment('local') && $request->code === '123456') {
+        $isDevMode = app()->environment('local')
+            || config('services.semaphore.dev_mode')
+            || empty(config('services.semaphore.api_key'));
+
+        // Accept 123456 if in dev mode
+        if ($isDevMode && $request->code === '123456') {
             $valid = true;
         } else {
             $valid = $this->otpService->verify($request->phone, $request->code);

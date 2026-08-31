@@ -26,6 +26,7 @@ return [
     'semaphore' => [
         'api_key' => env('SEMAPHORE_API_KEY', ''),
         'sender_name' => env('SEMAPHORE_SENDER_NAME', 'SmartWasteSystem'),
+        'dev_mode' => env('OTP_DEV_MODE', false),
     ],
 
 ];

@@ -150,3 +150,28 @@ Route::middleware('auth')->group(function () {
         Route::post('rewards/{reward}/redeem', [ResidentRewardController::class, 'redeem'])->name('rewards.redeem');
     });
 });
+
+// Background Queue & Schedule Worker Endpoint (for cron-job.org / Render)
+Route::get('/run-background-jobs', function (\Illuminate\Http\Request $request) {
+    $secret = config('app.cron_secret');
+
+    // Reject if no secret configured or secret mismatch
+    if (empty($secret) || $request->query('secret') !== $secret) {
+        abort(403, 'Unauthorized');
+    }
+
+    // Execute scheduled commands (such as daily task generation and cleanup)
+    \Illuminate\Support\Facades\Artisan::call('schedule:run');
+
+    // Process queued jobs (stop when empty to avoid blocking the HTTP request)
+    \Illuminate\Support\Facades\Artisan::call('queue:work', [
+        '--stop-when-empty' => true,
+        '--tries' => 3,
+    ]);
+
+    return response()->json([
+        'status' => 'Jobs and scheduler executed successfully',
+        'timestamp' => now()->toIso8601String(),
+    ]);
+});
+
