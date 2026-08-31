@@ -3,6 +3,7 @@ FROM php:8.3-fpm-alpine
 
 # Install system dependencies & PHP extensions
 RUN apk add --no-cache \
+    ca-certificates \
     nginx \
     nodejs \
     npm \
