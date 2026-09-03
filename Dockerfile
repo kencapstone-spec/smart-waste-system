@@ -28,7 +28,16 @@ RUN apk add --no-cache \
         gd \
         intl \
         bcmath \
-        opcache
+        opcache \
+    && { \
+        echo 'opcache.enable=1'; \
+        echo 'opcache.enable_cli=1'; \
+        echo 'opcache.memory_consumption=128'; \
+        echo 'opcache.interned_strings_buffer=16'; \
+        echo 'opcache.max_accelerated_files=10000'; \
+        echo 'opcache.validate_timestamps=0'; \
+        echo 'opcache.save_comments=1'; \
+    } > /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
 
 # Install Composer
 COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer
