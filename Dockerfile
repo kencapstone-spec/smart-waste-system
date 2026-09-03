@@ -51,7 +51,7 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Create storage symlink
-RUN php artisan storage:link || true
+RUN php artisan storage:link --force || true
 
 # Copy entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh

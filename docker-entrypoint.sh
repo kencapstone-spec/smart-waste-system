@@ -7,8 +7,8 @@ if [ -n "$DB_HOST" ]; then
     php artisan migrate --force || echo "Migration warning: DB not ready or failed"
 fi
 
-# Ensure storage symlink exists
-php artisan storage:link || true
+# Ensure storage symlink exists cleanly without errors
+php artisan storage:link --force || true
 
 # Pre-cache configuration, routes, and views for 10x faster response time
 echo "Caching Laravel configuration, routes, and views..."

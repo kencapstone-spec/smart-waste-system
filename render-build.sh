@@ -10,7 +10,7 @@ npm install
 npm run build
 
 echo "Creating Storage Link..."
-php artisan storage:link || true
+php artisan storage:link --force || true
 
 echo "Caching Laravel Configuration, Routes & Views..."
 php artisan config:cache || true
