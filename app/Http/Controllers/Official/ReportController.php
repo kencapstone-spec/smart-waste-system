@@ -32,17 +32,17 @@ class ReportController extends Controller
     {
         $request->validate([
             'official_response' => ['required', 'string'],
-            'status' => ['required', 'in:reviewed,resolved'],
+            'status' => ['nullable', 'in:reviewed,resolved'],
         ]);
 
         $report->update([
             'official_response' => $request->official_response,
-            'status' => $request->status,
+            'status' => 'resolved',
             'responded_by' => Auth::id(),
             'responded_at' => now(),
         ]);
 
-        return back()->with('success', 'Response submitted successfully.');
+        return back()->with('success', 'Response submitted and report marked as resolved.');
     }
 
     public function destroy(Report $report)

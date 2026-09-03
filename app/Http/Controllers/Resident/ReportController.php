@@ -33,6 +33,18 @@ class ReportController extends Controller
             'photos.*' => ['image', 'max:5120'],
         ]);
 
+        // Prevent duplicate submissions (same resident, same type, same description pending within 5 minutes)
+        $duplicate = Report::where('resident_id', Auth::id())
+            ->where('type', $request->type)
+            ->where('description', $request->description)
+            ->where('status', 'pending')
+            ->where('created_at', '>=', now()->subMinutes(5))
+            ->first();
+
+        if ($duplicate) {
+            return back()->with('error', 'A matching report was already submitted and is currently pending review.');
+        }
+
         $report = Report::create([
             'resident_id' => Auth::id(),
             'type' => $request->type,

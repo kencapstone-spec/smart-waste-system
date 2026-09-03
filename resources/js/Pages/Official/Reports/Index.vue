@@ -27,8 +27,8 @@
                         </td>
                         <td class="px-6 py-4 text-rose-950/80 max-w-xs truncate">{{ report.description }}</td>
                         <td class="px-6 py-4">
-                            <span :class="statusClass(report.status)" class="px-2 py-1 rounded-full text-xs font-medium capitalize">
-                                {{ report.status }}
+                            <span :class="statusClass(report.status)" class="px-3 py-1 rounded-full text-xs font-bold capitalize">
+                                {{ report.status === 'pending' ? 'Pending' : 'Resolved' }}
                             </span>
                         </td>
                         <td class="px-6 py-4 text-gray-500">
@@ -91,21 +91,23 @@
                 </div>
 
                 <div v-if="selectedReport.status === 'pending'" class="border-t pt-4">
-                    <p class="text-sm font-medium text-gray-700 mb-3">Respond to Report</p>
+                    <p class="text-sm font-bold text-gray-700 mb-2">Respond & Resolve Report</p>
                     <form @submit.prevent="submitResponse" class="space-y-3">
                         <div>
-                            <textarea v-model="respondForm.official_response" rows="3" placeholder="Write your response..." class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"></textarea>
+                            <textarea v-model="respondForm.official_response" rows="3" placeholder="Write resolution details or response to resident..." class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"></textarea>
                             <p v-if="respondForm.errors.official_response" class="text-red-500 text-xs mt-1">{{ respondForm.errors.official_response }}</p>
                         </div>
-                        <div>
-                            <select v-model="respondForm.status" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
-                                <option value="reviewed">Mark as Reviewed</option>
-                                <option value="resolved">Mark as Resolved</option>
-                            </select>
-                        </div>
-                        <div class="flex justify-end gap-3">
-                            <button type="button" @click="showViewModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors">Cancel</button>
-                            <button type="submit" :disabled="respondForm.processing" class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all">Submit Response</button>
+                        <div class="flex items-center justify-between pt-1">
+                            <span class="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-lg font-bold">
+                                Status: Marked as Resolved
+                            </span>
+                            <div class="flex gap-2">
+                                <button type="button" @click="showViewModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors px-3 py-2">Cancel</button>
+                                <button type="submit" :disabled="respondForm.processing" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl text-sm font-bold shadow-md transition-all flex items-center gap-1.5">
+                                    <span v-if="respondForm.processing">Saving...</span>
+                                    <span v-else>Resolve Report</span>
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -139,13 +141,13 @@ const viewingPhoto = ref(null)
 
 const respondForm = useForm({
     official_response: '',
-    status: 'reviewed',
+    status: 'resolved',
 })
 
 const statusClass = (status) => ({
-    pending: 'bg-yellow-100 text-yellow-700',
-    reviewed: 'bg-blue-100 text-blue-700',
-    resolved: 'bg-green-100 text-green-700',
+    pending: 'bg-amber-100 text-amber-800 border border-amber-200',
+    resolved: 'bg-emerald-100 text-emerald-800 border border-emerald-200',
+    reviewed: 'bg-emerald-100 text-emerald-800 border border-emerald-200',
 }[status] ?? 'bg-gray-100 text-gray-700')
 
 const formatDate = (date) => date ? new Date(date).toLocaleString('en-PH', {

@@ -61,16 +61,13 @@
                             ></textarea>
                             <p v-if="respondForm.errors.official_response" class="text-red-500 text-xs mt-1">{{ respondForm.errors.official_response }}</p>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Update Status</label>
-                            <select v-model="respondForm.status" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
-                                <option value="reviewed">Mark as Reviewed</option>
-                                <option value="resolved">Mark as Resolved</option>
-                            </select>
-                        </div>
-                        <div class="flex justify-end">
-                            <button type="submit" :disabled="respondForm.processing" class="bg-green-600 text-white px-5 py-2 rounded-md text-sm hover:bg-green-700 disabled:opacity-60">
-                                Submit Response
+                        <div class="flex items-center justify-between pt-1">
+                            <span class="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-lg font-bold">
+                                Status: Marked as Resolved
+                            </span>
+                            <button type="submit" :disabled="respondForm.processing" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl text-sm font-bold shadow-md transition-all flex items-center gap-1.5 disabled:opacity-60">
+                                <span v-if="respondForm.processing">Saving...</span>
+                                <span v-else>Resolve Report</span>
                             </button>
                         </div>
                     </form>
@@ -111,7 +108,7 @@ const props = defineProps({
 
 const respondForm = useForm({
     official_response: '',
-    status: 'reviewed',
+    status: 'resolved',
 })
 
 const typeClass = (type) => ({
@@ -120,9 +117,9 @@ const typeClass = (type) => ({
 }[type] ?? 'bg-gray-100 text-gray-700')
 
 const statusClass = (status) => ({
-    pending: 'bg-yellow-100 text-yellow-700',
-    reviewed: 'bg-blue-100 text-blue-700',
-    resolved: 'bg-green-100 text-green-700',
+    pending: 'bg-amber-100 text-amber-800 border border-amber-200',
+    resolved: 'bg-emerald-100 text-emerald-800 border border-emerald-200',
+    reviewed: 'bg-emerald-100 text-emerald-800 border border-emerald-200',
 }[status] ?? 'bg-gray-100 text-gray-700')
 
 const formatDate = (date) => date ? new Date(date).toLocaleDateString('en-PH', {

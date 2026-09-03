@@ -65,7 +65,7 @@
                         {{ report.type === 'missed_collection' ? 'Missed Collection' : 'Illegal Dumping' }}
                     </span>
                     <span :class="statusClass(report.status)" class="px-3 py-1 rounded-lg text-[10px] font-bold capitalize">
-                        {{ report.status }}
+                        {{ report.status === 'pending' ? 'Pending' : 'Resolved' }}
                     </span>
                 </div>
                 
@@ -136,7 +136,7 @@
                 <div class="flex justify-between items-start mb-6 pb-6 border-b border-gray-100">
                     <div>
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Status</p>
-                        <span :class="statusClass(selectedReport.status)" class="px-3 py-1.5 rounded-lg text-xs font-bold capitalize">{{ selectedReport.status }}</span>
+                        <span :class="statusClass(selectedReport.status)" class="px-3 py-1.5 rounded-lg text-xs font-bold capitalize">{{ selectedReport.status === 'pending' ? 'Pending' : 'Resolved' }}</span>
                     </div>
                     <div class="text-right">
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Date Submitted</p>
@@ -211,9 +211,9 @@ const typeClass = (type) => ({
 }[type] ?? 'bg-gray-100 text-gray-700')
 
 const statusClass = (status) => ({
-    pending: 'bg-amber-100 text-amber-700',
-    reviewed: 'bg-blue-100 text-blue-700',
-    resolved: 'bg-emerald-100 text-emerald-700',
+    pending: 'bg-amber-100 text-amber-800 border border-amber-200',
+    resolved: 'bg-emerald-100 text-emerald-800 border border-emerald-200',
+    reviewed: 'bg-emerald-100 text-emerald-800 border border-emerald-200',
 }[status] ?? 'bg-gray-100 text-gray-700')
 
 const formatDate = (date) => date ? new Date(date).toLocaleString('en-PH', {
