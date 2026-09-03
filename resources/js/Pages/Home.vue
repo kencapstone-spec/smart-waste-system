@@ -26,13 +26,13 @@
                     </a>
                 </div>
                 <div class="flex items-center gap-3">
-                    <a :href="route('login')"
+                    <Link :href="route('login')"
                         class="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300"
                         :class="scrolled
                             ? 'bg-rose-900 text-white hover:bg-rose-800 shadow-lg shadow-rose-900/25'
                             : 'bg-white text-rose-900 hover:bg-white/90 shadow-lg shadow-black/10'">
                         Sign In
-                    </a>
+                    </Link>
                 </div>
             </div>
         </nav>
@@ -429,6 +429,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { Link } from '@inertiajs/vue3'
 import {
     CalendarDays,
     CheckCircle,

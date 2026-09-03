@@ -23,7 +23,7 @@
 
             <nav class="flex-1 px-4 py-4 space-y-1.5 overflow-y-auto">
                 <template v-for="item in navItems" :key="item.label">
-                    <a
+                    <Link
                         :href="item.href"
                         :class="[
                             'flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all duration-300',
@@ -34,7 +34,7 @@
                     >
                         <component :is="item.icon" class="w-5 h-5" :class="isActive(item.href) ? 'opacity-100 scale-110 transition-transform' : 'opacity-60'" />
                         <span>{{ item.label }}</span>
-                    </a>
+                    </Link>
                 </template>
             </nav>
 
@@ -107,7 +107,7 @@
         <!-- Mobile Bottom Navigation -->
         <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-3xl border-t border-white/50 shadow-[0_-10px_40px_rgba(225,29,72,0.12)] pb-safe">
             <div class="flex items-center justify-around px-2 py-2">
-                <a
+                <Link
                     v-for="item in mainNavItems" :key="item.label"
                     :href="item.href"
                     class="flex flex-col items-center justify-center w-16 py-2 rounded-2xl transition-all duration-300"
@@ -118,7 +118,7 @@
                         <div v-if="isActive(item.href)" class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-rose-600"></div>
                     </div>
                     <span class="text-[10px] font-bold tracking-tight truncate w-full text-center px-1" :class="isActive(item.href) ? 'text-rose-950' : ''">{{ item.label }}</span>
-                </a>
+                </Link>
 
                 <!-- More Button -->
                 <button
@@ -171,12 +171,12 @@
 
                 <!-- Actions -->
                 <div class="p-4 space-y-2">
-                    <a :href="route('profile.edit')" @click="showProfileSheet = false" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-gray-50 hover:bg-rose-50 border border-transparent hover:border-rose-100 transition-all group">
+                    <Link :href="route('profile.edit')" @click="showProfileSheet = false" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-gray-50 hover:bg-rose-50 border border-transparent hover:border-rose-100 transition-all group">
                         <div class="w-9 h-9 rounded-xl bg-white border border-gray-100 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
                             <component :is="UserIcon" class="w-5 h-5 text-gray-500 group-hover:text-rose-600" />
                         </div>
                         <span class="font-semibold text-gray-700 group-hover:text-rose-900">Edit Profile</span>
-                    </a>
+                    </Link>
 
                     <form @submit.prevent="confirmLogout">
                         <button type="submit" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-rose-50 hover:bg-rose-100 border border-rose-100 transition-all group">
@@ -239,15 +239,16 @@
                     <button @click="showMobileMenu = false" class="w-8 h-8 flex items-center justify-center rounded-full bg-rose-100 text-rose-900 font-bold hover:bg-rose-200 transition-colors"><component :is="X" class="w-5 h-5" /></button>
                 </div>
                 <div class="p-4 space-y-2 max-h-[60vh] overflow-y-auto">
-                    <a
+                    <Link
                         v-for="item in moreNavItems" :key="item.label"
                         :href="item.href"
+                        @click="showMobileMenu = false"
                         class="flex items-center gap-4 p-4 rounded-2xl transition-colors"
                         :class="isActive(item.href) ? 'bg-rose-100 border border-rose-200' : 'bg-gray-50 hover:bg-rose-50 border border-transparent'"
                     >
                         <component :is="item.icon" class="w-6 h-6" />
                         <span class="font-semibold" :class="isActive(item.href) ? 'text-rose-900' : 'text-gray-700'">{{ item.label }}</span>
-                    </a>
+                    </Link>
                 </div>
             </div>
         </transition>
@@ -258,7 +259,7 @@
 <script setup>
 import { X } from '@lucide/vue';
 import { ref, computed } from 'vue'
-import { usePage, useForm } from '@inertiajs/vue3'
+import { usePage, useForm, Link } from '@inertiajs/vue3'
 import {
     Trash2, Home as HomeIcon, Users, Map as MapIcon, ClipboardList,
     User as UserIcon, Calendar, FileText, Gift, Award, CheckCircle, Star, AlertTriangle, MoreHorizontal, Megaphone, Leaf
@@ -339,7 +340,9 @@ const moreNavItems = computed(() => {
 
 const isActive = (href) => {
     try {
-        return window.location.pathname === new URL(href, window.location.origin).pathname
+        const targetPath = new URL(href, window.location.origin).pathname
+        const currentPath = new URL(page.url, window.location.origin).pathname
+        return currentPath === targetPath
     } catch {
         return false
     }
