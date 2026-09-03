@@ -22,4 +22,4 @@ echo "Starting high-performance multi-worker server on port $PORT_TO_USE..."
 # Enable multi-worker process handling in PHP built-in server (concurrent requests)
 export PHP_CLI_SERVER_WORKERS=4
 
-exec php artisan serve --host=0.0.0.0 --port="$PORT_TO_USE"
+exec php artisan serve --host=0.0.0.0 --port="$PORT_TO_USE" --no-reload

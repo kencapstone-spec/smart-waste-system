@@ -15,4 +15,4 @@ php artisan view:cache || true
 PORT_TO_USE="${PORT:-8080}"
 echo "🌟 Server listening on port $PORT_TO_USE with 4 concurrent workers..."
 
-exec php artisan serve --host=0.0.0.0 --port="$PORT_TO_USE"
+exec php artisan serve --host=0.0.0.0 --port="$PORT_TO_USE" --no-reload
