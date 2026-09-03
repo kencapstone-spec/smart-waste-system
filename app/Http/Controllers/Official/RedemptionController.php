@@ -14,7 +14,7 @@ class RedemptionController extends Controller
 
     public function index()
     {
-        $redemptions = Redemption::with(['resident', 'reward'])
+        $redemptions = Redemption::with(['resident.zone', 'reward'])
             ->latest()
             ->paginate(15);
 

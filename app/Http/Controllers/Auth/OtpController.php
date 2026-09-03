@@ -20,6 +20,8 @@ class OtpController extends Controller
 
     public function showLoginForm()
     {
+        Zone::ensureDefaultZonesExist();
+
         return Inertia::render('Auth/AuthScreen', [
             'activeTab' => 'login',
             'zones' => Zone::orderBy('name')->get(['id', 'name']),

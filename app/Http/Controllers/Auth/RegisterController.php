@@ -12,6 +12,8 @@ class RegisterController extends Controller
 {
     public function show()
     {
+        Zone::ensureDefaultZonesExist();
+
         return Inertia::render('Auth/AuthScreen', [
             'activeTab' => 'register',
             'zones' => Zone::orderBy('name')->get(['id', 'name']),

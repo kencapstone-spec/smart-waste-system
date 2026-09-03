@@ -58,33 +58,27 @@
                 <div class="absolute bottom-20 left-10 w-72 h-72 bg-red-400/15 rounded-full blur-3xl animate-float-delayed"></div>
                 <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-rose-300/10 rounded-full blur-3xl animate-float-slow"></div>
                 
-                <!-- Bottom wave -->
-                <div class="absolute bottom-0 left-0 right-0">
-                    <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
-                        <path d="M0 120V60C240 20 480 0 720 20C960 40 1200 80 1440 60V120H0Z" fill="white"/>
-                    </svg>
-                </div>
             </div>
 
             <div class="relative flex-1 flex flex-col max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20 w-full">
                 <div class="my-auto grid lg:grid-cols-2 gap-16 items-center">
                     <div class="space-y-8">
-                        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs font-medium text-rose-200 border border-white/10">
+                        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs font-medium text-white border border-white/10">
                             <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
                             Barangay San Isidro • Talibon, Bohol
                         </div>
 
                         <h1 class="text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white leading-[1.05] tracking-tight">
                             Smart Waste
-                            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-rose-200 via-rose-300 to-red-200">
+                            <span class="block text-white">
                                 Collection
                             </span>
-                            <span class="block text-3xl lg:text-4xl font-semibold text-rose-200/80 mt-2">
+                            <span class="block text-3xl lg:text-4xl font-semibold text-white mt-2">
                                 Monitoring & Scheduling
                             </span>
                         </h1>
 
-                        <p class="text-lg text-rose-100/70 max-w-lg leading-relaxed">
+                        <p class="text-lg text-white max-w-lg leading-relaxed">
                             A modern platform that connects residents, officials, and collection personnel
                             for cleaner, smarter, and more efficient waste management in our barangay.
                         </p>
@@ -104,15 +98,15 @@
 
                         <!-- Trust badges -->
                         <div class="flex items-center gap-6 pt-4">
-                            <div class="flex items-center gap-2 text-rose-200/60 text-xs">
+                            <div class="flex items-center gap-2 text-white text-xs">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
                                 <span>OTP Secured</span>
                             </div>
-                            <div class="flex items-center gap-2 text-rose-200/60 text-xs">
+                            <div class="flex items-center gap-2 text-white text-xs">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
                                 <span>Real-Time Updates</span>
                             </div>
-                            <div class="flex items-center gap-2 text-rose-200/60 text-xs">
+                            <div class="flex items-center gap-2 text-white text-xs">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
                                 <span>PDF Reports</span>
                             </div>
@@ -345,7 +339,7 @@
                         <h2 class="text-3xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
                             Ready to get started?
                         </h2>
-                        <p class="text-rose-200/70 text-lg mb-8">
+                        <p class="text-white text-lg mb-8">
                             Join the smart waste management system of Barangay San Isidro today. Register as a resident and start making a difference.
                         </p>
                         <div class="flex flex-wrap justify-center gap-4">
@@ -424,7 +418,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="border-t border-gray-800 pt-8 text-center text-xs text-rose-950/80">
+                <div class="border-t border-gray-800 pt-8 text-center text-xs text-gray-400">
                     © {{ new Date().getFullYear() }} SmartWaste System. All rights reserved.
                 </div>
             </div>
