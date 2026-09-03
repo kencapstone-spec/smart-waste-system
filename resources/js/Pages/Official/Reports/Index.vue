@@ -31,9 +31,15 @@
                                 {{ report.status }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-gray-500">{{ formatDate(report.created_at) }}</td>
+                        <td class="px-6 py-4 text-gray-500">
+                            <div>{{ formatDate(report.responded_at ?? report.created_at) }}</div>
+                            <div v-if="report.responded_at" class="text-[11px] text-gray-400">Submitted: {{ formatDate(report.created_at) }}</div>
+                        </td>
                         <td class="px-6 py-4">
-                            <button @click="viewReport(report)" class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0">View</button>
+                            <div class="flex items-center gap-2">
+                                <button @click="viewReport(report)" class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0">View</button>
+                                <button @click="deleteReport(report)" class="text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0">Delete</button>
+                            </div>
                         </td>
                     </tr>
                     <tr v-if="reports.data.length === 0">
@@ -81,6 +87,7 @@
                 <div v-if="selectedReport.official_response">
                     <p class="text-gray-500 text-xs mb-1">Official Response</p>
                     <p class="text-gray-800 text-sm bg-green-50 p-3 rounded-md">{{ selectedReport.official_response }}</p>
+                    <p v-if="selectedReport.responded_at" class="text-xs text-gray-400 mt-2">Responded on {{ formatDate(selectedReport.responded_at) }}</p>
                 </div>
 
                 <div v-if="selectedReport.status === 'pending'" class="border-t pt-4">
@@ -118,7 +125,7 @@
 <script setup>
 import { X, User, Box, FileText, Activity, Calendar, Settings } from '@lucide/vue';
 import { ref } from 'vue'
-import { useForm } from '@inertiajs/vue3'
+import { useForm, router } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'
 import Modal from '@/Components/Modal.vue'
 
@@ -141,10 +148,10 @@ const statusClass = (status) => ({
     resolved: 'bg-green-100 text-green-700',
 }[status] ?? 'bg-gray-100 text-gray-700')
 
-const formatDate = (date) => new Date(date).toLocaleString('en-PH', {
+const formatDate = (date) => date ? new Date(date).toLocaleString('en-PH', {
     year: 'numeric', month: 'short', day: 'numeric',
     hour: '2-digit', minute: '2-digit',
-})
+}) : '—'
 
 const viewReport = (report) => {
     selectedReport.value = report
@@ -156,5 +163,11 @@ const submitResponse = () => {
     respondForm.post(route('official.reports.respond', selectedReport.value.id), {
         onSuccess: () => showViewModal.value = false,
     })
+}
+
+const deleteReport = (report) => {
+    if (confirm(`Are you sure you want to delete this report from ${report.resident?.name || 'resident'}?`)) {
+        router.delete(route('official.reports.destroy', report.id))
+    }
 }
 </script>

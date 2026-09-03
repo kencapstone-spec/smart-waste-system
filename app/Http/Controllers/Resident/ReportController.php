@@ -14,7 +14,7 @@ class ReportController extends Controller
     {
         $reports = Report::with('photos')
             ->where('resident_id', Auth::id())
-            ->latest()
+            ->latest('updated_at')
             ->paginate(15);
 
         return Inertia::render('Resident/Reports/Index', [

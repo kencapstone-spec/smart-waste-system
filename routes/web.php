@@ -107,6 +107,7 @@ Route::middleware('auth')->group(function () {
         Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
         Route::get('reports/{report}', [ReportController::class, 'show'])->name('reports.show');
         Route::post('reports/{report}/respond', [ReportController::class, 'respond'])->name('reports.respond');
+        Route::delete('reports/{report}', [ReportController::class, 'destroy'])->name('reports.destroy');
         Route::get('residents', [ResidentController::class, 'index'])->name('residents.index');
         Route::post('residents', [ResidentController::class, 'store'])->name('residents.store');
         Route::get('residents/{resident}', [ResidentController::class, 'show'])->name('residents.show');

@@ -38,7 +38,10 @@
                         <td class="px-8 py-5">
                             <span :class="statusClass(report.status)" class="px-3 py-1.5 rounded-lg text-xs font-bold capitalize">{{ report.status }}</span>
                         </td>
-                        <td class="px-8 py-5 text-gray-500 font-medium">{{ formatDate(report.created_at) }}</td>
+                        <td class="px-8 py-5 text-gray-500 font-medium">
+                            <div>{{ formatDate(report.responded_at ?? report.created_at) }}</div>
+                            <div v-if="report.responded_at" class="text-[11px] text-gray-400">Submitted: {{ formatDate(report.created_at) }}</div>
+                        </td>
                         <td class="px-8 py-5 text-right">
                             <button @click="viewReport(report)" class="text-rose-600 hover:text-rose-800 font-bold text-sm bg-rose-50 hover:bg-rose-100 px-4 py-2 rounded-lg transition-colors">View Details</button>
                         </td>
@@ -68,7 +71,10 @@
                 
                 <div>
                     <p class="text-gray-900 font-medium text-sm line-clamp-2 mb-2">{{ report.description }}</p>
-                    <p class="text-xs text-gray-400 font-medium">{{ formatDate(report.created_at) }}</p>
+                    <p class="text-xs text-gray-400 font-medium">
+                        {{ formatDate(report.responded_at ?? report.created_at) }}
+                        <span v-if="report.responded_at" class="block text-[11px] opacity-75">Submitted: {{ formatDate(report.created_at) }}</span>
+                    </p>
                 </div>
                 
                 <div class="pt-3 border-t border-gray-50 flex justify-end">
@@ -158,6 +164,7 @@
                 <div v-if="selectedReport.official_response" class="bg-emerald-50/50 p-5 rounded-2xl border border-emerald-100 mt-6">
                     <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-2 flex items-center gap-1"><span><component :is="MessageCircle" class="w-5 h-5" /></span> Official Response</p>
                     <p class="text-emerald-900 font-medium text-sm leading-relaxed">{{ selectedReport.official_response }}</p>
+                    <p v-if="selectedReport.responded_at" class="text-xs text-emerald-600/70 mt-2">Responded on {{ formatDate(selectedReport.responded_at) }}</p>
                 </div>
                 
                 <div class="pt-6 mt-6 border-t border-gray-100 flex justify-end">
@@ -209,9 +216,10 @@ const statusClass = (status) => ({
     resolved: 'bg-emerald-100 text-emerald-700',
 }[status] ?? 'bg-gray-100 text-gray-700')
 
-const formatDate = (date) => new Date(date).toLocaleDateString('en-PH', {
+const formatDate = (date) => date ? new Date(date).toLocaleString('en-PH', {
     year: 'numeric', month: 'short', day: 'numeric',
-})
+    hour: '2-digit', minute: '2-digit',
+}) : '—'
 
 
 

@@ -161,6 +161,65 @@ class OfficialTest extends TestCase
         $response->assertSessionHasErrors('official_response');
     }
 
+    public function test_official_reports_ordered_by_latest_updated_at(): void
+    {
+        $official = $this->official();
+        $resident = User::factory()->resident()->create();
+
+        $report1 = Report::create([
+            'resident_id' => $resident->id,
+            'type' => 'missed_collection',
+            'description' => 'First report',
+            'status' => 'pending',
+            'created_at' => now()->subMinutes(10),
+            'updated_at' => now()->subMinutes(10),
+        ]);
+
+        $report2 = Report::create([
+            'resident_id' => $resident->id,
+            'type' => 'missed_collection',
+            'description' => 'Second report',
+            'status' => 'pending',
+            'created_at' => now()->subMinutes(5),
+            'updated_at' => now()->subMinutes(5),
+        ]);
+
+        // Review the older report1, bringing its updated_at to now()
+        $this->actingAs($official)->post("/official/reports/{$report1->id}/respond", [
+            'official_response' => 'Investigating.',
+            'status' => 'reviewed',
+        ]);
+
+        $response = $this->actingAs($official)->get('/official/reports');
+        $response->assertOk();
+
+        // The newly reviewed report1 should now be first in the list
+        $response->assertInertia(fn ($page) => $page
+            ->component('Official/Reports/Index')
+            ->has('reports.data', 2)
+            ->where('reports.data.0.id', $report1->id)
+            ->where('reports.data.1.id', $report2->id)
+        );
+    }
+
+    public function test_official_can_delete_report(): void
+    {
+        $official = $this->official();
+        $resident = User::factory()->resident()->create();
+
+        $report = Report::create([
+            'resident_id' => $resident->id,
+            'type' => 'missed_collection',
+            'description' => 'Duplicate test report',
+            'status' => 'pending',
+        ]);
+
+        $response = $this->actingAs($official)->delete("/official/reports/{$report->id}");
+        $response->assertRedirect();
+
+        $this->assertDatabaseMissing('reports', ['id' => $report->id]);
+    }
+
     // ---------------------------------------------------------------
     // Residents
     // ---------------------------------------------------------------

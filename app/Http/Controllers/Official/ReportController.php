@@ -13,7 +13,7 @@ class ReportController extends Controller
     public function index()
     {
         $reports = Report::with(['resident', 'photos', 'respondedBy'])
-            ->latest()
+            ->latest('updated_at')
             ->paginate(15);
 
         return Inertia::render('Official/Reports/Index', [
@@ -43,5 +43,12 @@ class ReportController extends Controller
         ]);
 
         return back()->with('success', 'Response submitted successfully.');
+    }
+
+    public function destroy(Report $report)
+    {
+        $report->delete();
+
+        return back()->with('success', 'Report deleted successfully.');
     }
 }
