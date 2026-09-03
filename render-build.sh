@@ -12,8 +12,10 @@ npm run build
 echo "Creating Storage Link..."
 php artisan storage:link || true
 
-echo "Clearing & Caching..."
-php artisan optimize:clear
+echo "Caching Laravel Configuration, Routes & Views..."
+php artisan config:cache || true
+php artisan route:cache || true
+php artisan view:cache || true
 
 echo "Running Database Migrations..."
 php artisan migrate --force

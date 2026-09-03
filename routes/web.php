@@ -24,51 +24,52 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    $topResidents = \App\Models\User::where('role', 'resident')
-        ->where('status', 'active')
-        ->withSum('points', 'points')
-        ->orderByDesc('points_sum_points')
-        ->take(10)
-        ->get(['id', 'name', 'address', 'zone_id'])
-        ->filter(function ($user) {
-            return $user->points_sum_points > 0;
-        })
-        ->map(function ($user) {
-            return [
+    $data = \Illuminate\Support\Facades\Cache::remember('homepage_data', 60, function () {
+        $topResidents = \App\Models\User::where('role', 'resident')
+            ->where('status', 'active')
+            ->with('zone:id,name')
+            ->withSum('points', 'points')
+            ->orderByDesc('points_sum_points')
+            ->take(10)
+            ->get(['id', 'name', 'address', 'zone_id'])
+            ->filter(fn ($user) => ($user->points_sum_points ?? 0) > 0)
+            ->map(fn ($user) => [
                 'name' => $user->name,
                 'address' => $user->address,
                 'zone' => $user->zone ? $user->zone->name : 'Unknown',
                 'points' => $user->points_sum_points ?? 0,
-            ];
-        })
-        ->values();
+            ])
+            ->values();
 
-    $stats = [
-        [
-            'label' => 'Registered Residents',
-            'value' => number_format(\App\Models\User::where('role', 'resident')->where('status', 'active')->count())
-        ],
-        [
-            'label' => 'Active Personnel',
-            'value' => number_format(\App\Models\User::where('role', 'personnel')->where('status', 'active')->count())
-        ],
-        [
-            'label' => 'Coverage Zones',
-            'value' => number_format(\App\Models\Zone::count())
-        ],
-        [
-            'label' => 'Completed Collections',
-            'value' => number_format(\App\Models\CollectionTask::where('status', 'completed')->count())
-        ],
-    ];
+        $stats = [
+            [
+                'label' => 'Registered Residents',
+                'value' => number_format(\App\Models\User::where('role', 'resident')->where('status', 'active')->count())
+            ],
+            [
+                'label' => 'Active Personnel',
+                'value' => number_format(\App\Models\User::where('role', 'personnel')->where('status', 'active')->count())
+            ],
+            [
+                'label' => 'Coverage Zones',
+                'value' => number_format(\App\Models\Zone::count())
+            ],
+            [
+                'label' => 'Completed Collections',
+                'value' => number_format(\App\Models\CollectionTask::where('status', 'completed')->count())
+            ],
+        ];
 
-    $announcements = \App\Models\Announcement::latest()->take(3)->get();
+        $announcements = \App\Models\Announcement::latest()->take(3)->get();
 
-    return Inertia::render('Home', [
-        'leaderboard' => $topResidents,
-        'stats' => $stats,
-        'announcements' => $announcements,
-    ]);
+        return [
+            'leaderboard' => $topResidents,
+            'stats' => $stats,
+            'announcements' => $announcements,
+        ];
+    });
+
+    return Inertia::render('Home', $data);
 });
 
 // Guest routes
