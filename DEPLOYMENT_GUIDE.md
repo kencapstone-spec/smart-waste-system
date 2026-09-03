@@ -41,7 +41,7 @@ git push origin main
    - **Name:** `smart-waste-system` (or your chosen name)
    - **Environment:** `PHP`
    - **Build Command:** `bash render-build.sh`
-   - **Start Command:** `php artisan serve --host=0.0.0.0 --port=$PORT`
+   - **Start Command:** `bash render-start.sh`
    - **Instance Type:** Free
 4. Scroll down and click **Advanced** to add your **Environment Variables**:
 
@@ -53,21 +53,22 @@ git push origin main
    | `APP_DEBUG` | `false` | Disable stack traces in prod |
    | `APP_URL` | `https://your-app-name.onrender.com` | Your Render web URL |
    | `APP_TIMEZONE` | `Asia/Manila` | Philippines Local Time |
+   | `PHP_CLI_SERVER_WORKERS` | `4` | Multi-worker concurrency (4x faster loads) |
    | `DB_CONNECTION` | `mysql` *(or `pgsql` for Supabase)* | Database driver |
    | `DB_HOST` | *(From your database provider)* | Database host |
    | `DB_PORT` | `3306` *(or `5432` for pgsql)* | Database port |
    | `DB_DATABASE` | *(From your database provider)* | Database name |
    | `DB_USERNAME` | *(From your database provider)* | Database user |
    | `DB_PASSWORD` | *(From your database provider)* | Database password |
-   | `SESSION_DRIVER` | `database` | Persistent sessions |
+   | `SESSION_DRIVER` | `cookie` | Instant sessions (zero DB latency overhead) |
    | `QUEUE_CONNECTION` | `database` | Background queue driver |
-   | `CACHE_STORE` | `database` | Cache driver |
+   | `CACHE_STORE` | `file` | Fast local file cache |
    | `CRON_SECRET` | *(Create a strong secret password, e.g. `WasteSysSecretKey_2026!`)* | Protects background runner |
    | `OTP_DEV_MODE` | `true` *(or `false` if using Semaphore)* | If `true`, code `123456` works for testing without SMS fees |
    | `SEMAPHORE_API_KEY` | *(Optional: Your Semaphore API Key)* | For real SMS OTP delivery in the PH |
    | `SEMAPHORE_SENDER_NAME` | `SmartWaste` | Sender name on SMS |
 
-5. Click **Create Web Service**. Render will execute `render-build.sh` and deploy your app.
+5. Click **Create Web Service** (or go to **Settings** > **Build & Start Commands** to update your Start Command to `bash render-start.sh`). Render will redeploy your app.
 
 ---
 

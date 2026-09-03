@@ -17,85 +17,97 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $stats = [];
+        $cacheKey = 'dashboard_stats_' . $user->role . '_' . $user->id;
 
-        if ($user->isSuperAdmin()) {
-            $stats = [
-                'totalStaff'     => User::whereIn('role', ['barangay_official', 'personnel'])->count(),
-                'totalZones'     => Zone::count(),
-            ];
-        } elseif ($user->isAdmin()) {
-            $bestResidentRecord = Point::selectRaw('resident_id, SUM(points) as total_points')
-                ->groupBy('resident_id')
-                ->orderByDesc('total_points')
-                ->first();
-            $bestResident = $bestResidentRecord ? User::find($bestResidentRecord->resident_id) : null;
+        $stats = \Illuminate\Support\Facades\Cache::remember($cacheKey, 30, function () use ($user) {
+            if ($user->isSuperAdmin()) {
+                return [
+                    'totalStaff' => User::whereIn('role', ['barangay_official', 'personnel'])->count(),
+                    'totalZones' => Zone::count(),
+                ];
+            }
 
-            $bestZoneRecord = Schedule::join('collection_tasks', 'schedules.id', '=', 'collection_tasks.schedule_id')
-                ->where('collection_tasks.status', 'completed')
-                ->selectRaw('schedules.zone_id, COUNT(collection_tasks.id) as completed_tasks')
-                ->groupBy('schedules.zone_id')
-                ->orderByDesc('completed_tasks')
-                ->first();
-            $bestZone = $bestZoneRecord ? Zone::find($bestZoneRecord->zone_id) : null;
+            if ($user->isAdmin()) {
+                $bestResidentRecord = Point::selectRaw('resident_id, SUM(points) as total_points')
+                    ->groupBy('resident_id')
+                    ->orderByDesc('total_points')
+                    ->first();
+                $bestResident = $bestResidentRecord ? User::find($bestResidentRecord->resident_id) : null;
 
-            $last7Days = collect(range(6, 0))->mapWithKeys(function ($i) {
-                return [now()->subDays($i)->format('Y-m-d') => 0];
-            });
+                $bestZoneRecord = Schedule::join('collection_tasks', 'schedules.id', '=', 'collection_tasks.schedule_id')
+                    ->where('collection_tasks.status', 'completed')
+                    ->selectRaw('schedules.zone_id, COUNT(collection_tasks.id) as completed_tasks')
+                    ->groupBy('schedules.zone_id')
+                    ->orderByDesc('completed_tasks')
+                    ->first();
+                $bestZone = $bestZoneRecord ? Zone::find($bestZoneRecord->zone_id) : null;
 
-            $tasksLast7Days = CollectionTask::where('status', 'completed')
-                ->where('collection_date', '>=', now()->subDays(6)->format('Y-m-d'))
-                ->selectRaw('collection_date, COUNT(*) as count')
-                ->groupBy('collection_date')
-                ->pluck('count', 'collection_date');
+                $last7Days = collect(range(6, 0))->mapWithKeys(function ($i) {
+                    return [now()->subDays($i)->format('Y-m-d') => 0];
+                });
 
-            $chartDates = $last7Days->merge($tasksLast7Days);
+                $tasksLast7Days = CollectionTask::where('status', 'completed')
+                    ->where('collection_date', '>=', now()->subDays(6)->format('Y-m-d'))
+                    ->selectRaw('collection_date, COUNT(*) as count')
+                    ->groupBy('collection_date')
+                    ->pluck('count', 'collection_date');
 
-            $taskStatuses = CollectionTask::selectRaw('status, COUNT(*) as count')
-                ->groupBy('status')
-                ->pluck('count', 'status');
+                $chartDates = $last7Days->merge($tasksLast7Days);
 
-            $stats = [
-                'activeSchedules' => Schedule::where('status', 'active')->count(),
-                'pendingReports' => Report::where('status', 'pending')->count(),
-                'pendingResidents' => User::where('role', 'resident')->where('status', 'pending')->count(),
-                'activeResidents' => User::where('role', 'resident')->where('status', 'active')->count(),
-                'kpis' => [
-                    'bestResident' => $bestResident ? $bestResident->name : 'No Data',
-                    'bestResidentPoints' => $bestResidentRecord ? $bestResidentRecord->total_points : 0,
-                    'bestZone' => $bestZone ? $bestZone->name : 'No Data',
-                    'bestZoneTasks' => $bestZoneRecord ? $bestZoneRecord->completed_tasks : 0,
-                ],
-                'chartData' => [
-                    'performance' => [
-                        'labels' => $chartDates->keys()->map(fn($d) => \Carbon\Carbon::parse($d)->format('M d'))->toArray(),
-                        'data' => $chartDates->values()->toArray(),
+                $taskStatuses = CollectionTask::selectRaw('status, COUNT(*) as count')
+                    ->groupBy('status')
+                    ->pluck('count', 'status');
+
+                return [
+                    'activeSchedules' => Schedule::where('status', 'active')->count(),
+                    'pendingReports' => Report::where('status', 'pending')->count(),
+                    'pendingResidents' => User::where('role', 'resident')->where('status', 'pending')->count(),
+                    'activeResidents' => User::where('role', 'resident')->where('status', 'active')->count(),
+                    'kpis' => [
+                        'bestResident' => $bestResident ? $bestResident->name : 'No Data',
+                        'bestResidentPoints' => $bestResidentRecord ? $bestResidentRecord->total_points : 0,
+                        'bestZone' => $bestZone ? $bestZone->name : 'No Data',
+                        'bestZoneTasks' => $bestZoneRecord ? $bestZoneRecord->completed_tasks : 0,
                     ],
-                    'statuses' => [
-                        'completed' => $taskStatuses['completed'] ?? 0,
-                        'pending' => $taskStatuses['pending'] ?? 0,
-                        'missed' => $taskStatuses['missed'] ?? 0,
+                    'chartData' => [
+                        'performance' => [
+                            'labels' => $chartDates->keys()->map(fn($d) => \Carbon\Carbon::parse($d)->format('M d'))->toArray(),
+                            'data' => $chartDates->values()->toArray(),
+                        ],
+                        'statuses' => [
+                            'completed' => $taskStatuses['completed'] ?? 0,
+                            'pending' => $taskStatuses['pending'] ?? 0,
+                            'missed' => $taskStatuses['missed'] ?? 0,
+                        ]
                     ]
-                ]
-            ];
-        } elseif ($user->isPersonnel()) {
-            $stats = [
-                'assignedSchedules' => ScheduleAssignment::where('personnel_id', $user->id)->count(),
-                'tasksToday' => CollectionTask::where('personnel_id', $user->id)
-                    ->whereDate('collection_date', today())
-                    ->count(),
-                'completedTasks' => CollectionTask::where('personnel_id', $user->id)
-                    ->where('status', 'completed')
-                    ->count(),
-            ];
-        } elseif ($user->isResident()) {
-            $stats = [
-                'totalPoints' => Point::where('resident_id', $user->id)->sum('points'),
-                'totalReports' => Report::where('resident_id', $user->id)->count(),
-            ];
-        }
+                ];
+            }
 
-        $announcements = \App\Models\Announcement::latest()->take(3)->get();
+            if ($user->isPersonnel()) {
+                return [
+                    'assignedSchedules' => ScheduleAssignment::where('personnel_id', $user->id)->count(),
+                    'tasksToday' => CollectionTask::where('personnel_id', $user->id)
+                        ->whereDate('collection_date', today())
+                        ->count(),
+                    'completedTasks' => CollectionTask::where('personnel_id', $user->id)
+                        ->where('status', 'completed')
+                        ->count(),
+                ];
+            }
+
+            if ($user->isResident()) {
+                return [
+                    'totalPoints' => Point::where('resident_id', $user->id)->sum('points'),
+                    'totalReports' => Report::where('resident_id', $user->id)->count(),
+                ];
+            }
+
+            return [];
+        });
+
+        $announcements = \Illuminate\Support\Facades\Cache::remember('latest_announcements_3', 30, function () {
+            return \App\Models\Announcement::latest()->take(3)->get();
+        });
 
         return Inertia::render('Dashboard', [
             'stats' => $stats,
