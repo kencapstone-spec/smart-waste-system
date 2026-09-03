@@ -129,10 +129,14 @@
                 <div>
                     <p class="text-sm text-rose-950/80 mb-4">Awarding points to <span class="font-semibold">{{ selectedResident?.name }}</span></p>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Points</label>
-                    <input v-model="pointsForm.points" type="number" min="1" max="100" class="w-full bg-white/50 border border-rose-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all" />
-                    <p v-if="pointsForm.errors.points" class="text-red-500 text-xs mt-1">{{ pointsForm.errors.points }}</p>
+                <div class="bg-amber-50 border border-amber-200/80 rounded-2xl p-4 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-amber-900 uppercase tracking-wider">Fixed Standard Incentive</p>
+                        <p class="text-xs text-amber-800/80 mt-0.5">Standard reward for proper waste segregation</p>
+                    </div>
+                    <div class="flex items-center gap-1.5 bg-amber-500/20 text-amber-950 px-3.5 py-1.5 rounded-xl font-black text-sm shadow-sm select-none">
+                        ⭐ 10 pts
+                    </div>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Remarks (optional)</label>

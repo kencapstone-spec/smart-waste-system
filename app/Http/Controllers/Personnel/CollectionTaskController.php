@@ -100,18 +100,20 @@ class CollectionTaskController extends Controller
 
         $request->validate([
             'resident_id' => ['required', 'exists:users,id'],
-            'points' => ['required', 'integer', 'min:1', 'max:100'],
+            'points' => ['nullable', 'integer', 'min:1', 'max:100'],
             'remarks' => ['nullable', 'string', 'max:500'],
         ]);
+
+        $points = $request->filled('points') ? (int) $request->points : Point::FIXED_AWARD_POINTS;
 
         Point::create([
             'resident_id' => $request->resident_id,
             'awarded_by' => Auth::id(),
             'collection_task_id' => $task->id,
-            'points' => $request->points,
+            'points' => $points,
             'remarks' => $request->remarks,
         ]);
 
-        return back()->with('success', 'Points awarded successfully.');
+        return back()->with('success', "{$points} points awarded successfully.");
     }
 }

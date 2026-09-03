@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Point extends Model
 {
+    public const FIXED_AWARD_POINTS = 10;
+
     protected $fillable = [
         'resident_id',
         'awarded_by',

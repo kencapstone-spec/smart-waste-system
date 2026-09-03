@@ -92,7 +92,7 @@
                                     <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Awarded By</th>
                                     <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Remarks</th>
                                     <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Date</th>
-                                    <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Actions</th>
+                                    <th class="text-left px-6 py-3 text-rose-950/70 font-semibold">Points Type</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -109,10 +109,10 @@
                                     <td class="px-6 py-4 text-rose-950/80">{{ point.remarks ?? '—' }}</td>
                                     <td class="px-6 py-4 text-gray-500">{{ formatDate(point.created_at) }}</td>
                                     <td class="px-6 py-4">
-                                        <button
-                                            @click="openEditPoint(point)"
-                                            class="px-2.5 py-1.5 rounded-md text-xs font-medium bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
-                                        >Edit</button>
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                            Fixed Award
+                                        </span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -129,43 +129,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Edit Points Modal -->
-        <Modal :show="showEditPointModal" title="Edit Points Record" @close="showEditPointModal = false">
-            <form @submit.prevent="submitEditPoint" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-bold text-rose-950 mb-1">Points</label>
-                    <input
-                        v-model="editPointForm.points"
-                        type="number"
-                        min="0"
-                        class="w-full border border-rose-100 bg-rose-50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-rose-400 focus:border-rose-400 focus:outline-none transition-all"
-                        required
-                    />
-                    <p v-if="editPointForm.errors.points" class="text-red-500 text-xs mt-1">{{ editPointForm.errors.points }}</p>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-rose-950 mb-1">Remarks</label>
-                    <input
-                        v-model="editPointForm.remarks"
-                        type="text"
-                        placeholder="e.g. Correction for proper segregation"
-                        class="w-full border border-rose-100 bg-rose-50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-rose-400 focus:border-rose-400 focus:outline-none transition-all"
-                    />
-                </div>
-                <p class="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2">
-                    ⚠️ This will directly update the point record. Use this to correct mistakes.
-                </p>
-                <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" @click="showEditPointModal = false" class="text-sm text-rose-900/60 hover:text-rose-900 transition-colors px-4 py-2">Cancel</button>
-                    <button
-                        type="submit"
-                        :disabled="editPointForm.processing"
-                        class="bg-rose-900 text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all disabled:opacity-70"
-                    >Save Changes</button>
-                </div>
-            </form>
-        </Modal>
 
         <!-- Approve Confirmation Modal -->
         <Modal :show="showApproveModal" title="Approve Resident" @close="showApproveModal = false">
@@ -205,27 +168,7 @@ const props = defineProps({
 
 const showApproveModal = ref(false)
 const showRejectModal = ref(false)
-const showEditPointModal = ref(false)
-const selectedPoint = ref(null)
 const actionForm = useForm({})
-
-const editPointForm = useForm({
-    points: 0,
-    remarks: '',
-})
-
-const openEditPoint = (point) => {
-    selectedPoint.value = point
-    editPointForm.points = point.points
-    editPointForm.remarks = point.remarks ?? ''
-    showEditPointModal.value = true
-}
-
-const submitEditPoint = () => {
-    editPointForm.put(route('official.points.update', selectedPoint.value.id), {
-        onSuccess: () => showEditPointModal.value = false,
-    })
-}
 
 const initials = (name) => name
     ? name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)

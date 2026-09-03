@@ -102,9 +102,14 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="flex items-center gap-2">
-                                        <input v-model="pointsForms[resident.id].points" type="number" min="1" max="100" class="w-16 border border-gray-300 rounded px-2 py-1 text-xs" />
-                                        <input v-model="pointsForms[resident.id].remarks" type="text" placeholder="Remarks" class="w-24 border border-gray-300 rounded px-2 py-1 text-xs" />
-                                        <button @click="submitPoints(resident.id)" :disabled="pointsForms[resident.id].processing" class="bg-green-600 text-white px-2 py-1 rounded text-xs hover:bg-green-700 disabled:opacity-50">Award</button>
+                                        <span class="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 px-2.5 py-1 rounded-lg text-xs font-black shadow-sm select-none">
+                                            ⭐ +10 pts
+                                        </span>
+                                        <input v-model="pointsForms[resident.id].remarks" type="text" placeholder="Remarks (optional)" class="w-36 border border-gray-200 rounded-lg px-2.5 py-1 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500" />
+                                        <button @click="submitPoints(resident.id)" :disabled="pointsForms[resident.id].processing" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-lg text-xs font-bold transition-all shadow-sm disabled:opacity-50 flex items-center gap-1">
+                                            <span v-if="pointsForms[resident.id].processing">...</span>
+                                            <span v-else>Award</span>
+                                        </button>
                                     </div>
                                     <p v-if="pointsForms[resident.id].error" class="text-red-500 text-[10px] mt-1">{{ pointsForms[resident.id].error }}</p>
                                 </td>
