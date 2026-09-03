@@ -63,12 +63,27 @@
         <div class="relative z-10 flex-1 md:ml-[320px] flex flex-col min-h-screen">
             
             <!-- Mobile Top Header -->
-            <header class="md:hidden sticky top-0 z-40 bg-white/70 backdrop-blur-2xl border-b border-white/50 shadow-sm">
-                <div class="flex items-center gap-3 px-4 py-3">
-                    <div class="w-8 h-8 rounded-lg bg-rose-900 flex items-center justify-center shadow-md text-white shrink-0">
-                        <component :is="Leaf" class="w-4 h-4" />
+            <header class="md:hidden sticky top-0 z-40 bg-white/80 backdrop-blur-2xl border-b border-rose-100/60 shadow-sm">
+                <div class="flex items-center justify-between px-4 py-2.5">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-8 h-8 rounded-lg bg-rose-900 flex items-center justify-center shadow-md shadow-rose-900/20 text-white shrink-0">
+                            <component :is="Leaf" class="w-4 h-4" />
+                        </div>
+                        <h1 class="text-base font-bold text-rose-950 truncate">{{ pageTitle }}</h1>
                     </div>
-                    <h1 class="text-lg font-bold text-rose-950 truncate">{{ pageTitle }}</h1>
+
+                    <!-- Profile Avatar Trigger -->
+                    <button
+                        @click="showProfileSheet = true"
+                        type="button"
+                        class="flex items-center gap-2 p-1 pl-2.5 rounded-full bg-white/90 hover:bg-rose-50 border border-rose-100 shadow-sm transition-all duration-200 active:scale-95 shrink-0"
+                        title="Profile & Account"
+                    >
+                        <span class="text-xs font-semibold text-rose-950 max-w-[90px] truncate hidden sm:inline">{{ auth.user.name }}</span>
+                        <div class="w-7 h-7 rounded-full bg-gradient-to-br from-rose-900 via-rose-800 to-rose-700 flex items-center justify-center text-white font-bold text-xs shadow-sm shadow-rose-900/20">
+                            {{ userInitial }}
+                        </div>
+                    </button>
                 </div>
             </header>
 
@@ -105,41 +120,73 @@
         </div>
 
         <!-- Mobile Bottom Navigation -->
-        <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-3xl border-t border-white/50 shadow-[0_-10px_40px_rgba(225,29,72,0.12)] pb-safe">
-            <div class="flex items-center justify-around px-2 py-2">
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/85 backdrop-blur-3xl border-t border-rose-100/60 shadow-[0_-10px_40px_rgba(225,29,72,0.12)] pb-safe">
+            <div class="flex items-center justify-around px-2 py-1.5 max-w-lg mx-auto relative">
+                <!-- Left Nav Items -->
                 <Link
-                    v-for="item in mainNavItems" :key="item.label"
+                    v-for="item in mobileNavConfig.left" :key="item.label"
                     :href="item.href"
-                    class="flex flex-col items-center justify-center w-16 py-2 rounded-2xl transition-all duration-300"
-                    :class="isActive(item.href) ? 'text-rose-900 scale-105' : 'text-gray-400 hover:text-gray-600'"
+                    class="flex flex-col items-center justify-center flex-1 py-1 rounded-2xl transition-all duration-300 active:scale-95"
+                    :class="isActive(item.href) ? 'text-rose-900 font-bold' : 'text-gray-400 hover:text-gray-600 font-medium'"
                 >
                     <div class="relative">
-                        <component :is="item.icon" class="w-6 h-6 mx-auto mb-1" :class="isActive(item.href) ? 'drop-shadow-md text-rose-900' : ''" />
-                        <div v-if="isActive(item.href)" class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-rose-600"></div>
+                        <component :is="item.icon" class="w-5 h-5 mx-auto mb-1 transition-transform" :class="isActive(item.href) ? 'drop-shadow-sm text-rose-900' : ''" />
+                        <div v-if="isActive(item.href)" class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-rose-600"></div>
                     </div>
-                    <span class="text-[10px] font-bold tracking-tight truncate w-full text-center px-1" :class="isActive(item.href) ? 'text-rose-950' : ''">{{ item.label }}</span>
+                    <span class="text-[10px] tracking-tight truncate w-full text-center px-0.5" :class="isActive(item.href) ? 'text-rose-950 font-bold' : ''">{{ item.label }}</span>
+                </Link>
+
+                <!-- Center Dashboard Item (Elevated Focal Anchor) -->
+                <Link
+                    :href="mobileNavConfig.center.href"
+                    class="flex flex-col items-center justify-center flex-1 -mt-5 group transition-all duration-300"
+                >
+                    <div
+                        class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-md group-hover:scale-105 active:scale-95"
+                        :class="isActive(mobileNavConfig.center.href)
+                            ? 'bg-gradient-to-tr from-rose-950 via-rose-900 to-rose-700 text-white shadow-rose-900/40 ring-4 ring-white'
+                            : 'bg-gradient-to-tr from-rose-100 via-rose-50 to-white text-rose-900 border border-rose-200/80 shadow-rose-900/10 ring-4 ring-white/95 group-hover:bg-rose-100'"
+                    >
+                        <component
+                            :is="mobileNavConfig.center.icon"
+                            class="w-6 h-6 transition-transform group-hover:scale-110"
+                            :class="isActive(mobileNavConfig.center.href) ? 'drop-shadow-md text-white' : 'text-rose-900'"
+                        />
+                    </div>
+                    <span
+                        class="text-[10px] tracking-tight font-extrabold mt-1 text-center truncate w-full px-0.5"
+                        :class="isActive(mobileNavConfig.center.href) ? 'text-rose-950' : 'text-gray-500'"
+                    >
+                        {{ mobileNavConfig.center.label }}
+                    </span>
+                </Link>
+
+                <!-- Right Nav Items -->
+                <Link
+                    v-for="item in mobileNavConfig.right" :key="item.label"
+                    :href="item.href"
+                    class="flex flex-col items-center justify-center flex-1 py-1 rounded-2xl transition-all duration-300 active:scale-95"
+                    :class="isActive(item.href) ? 'text-rose-900 font-bold' : 'text-gray-400 hover:text-gray-600 font-medium'"
+                >
+                    <div class="relative">
+                        <component :is="item.icon" class="w-5 h-5 mx-auto mb-1 transition-transform" :class="isActive(item.href) ? 'drop-shadow-sm text-rose-900' : ''" />
+                        <div v-if="isActive(item.href)" class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-rose-600"></div>
+                    </div>
+                    <span class="text-[10px] tracking-tight truncate w-full text-center px-0.5" :class="isActive(item.href) ? 'text-rose-950 font-bold' : ''">{{ item.label }}</span>
                 </Link>
 
                 <!-- More Button -->
                 <button
-                    v-if="moreNavItems.length > 0"
+                    v-if="mobileNavConfig.more && mobileNavConfig.more.length > 0 && mobileNavConfig.right.length < 2"
                     @click="showMobileMenu = true"
-                    class="flex flex-col items-center justify-center w-16 py-2 rounded-2xl transition-all duration-300 text-gray-400 hover:text-rose-900"
+                    class="flex flex-col items-center justify-center flex-1 py-1 rounded-2xl transition-all duration-300 active:scale-95"
+                    :class="showMobileMenu || isAnyMoreActive ? 'text-rose-900 font-bold' : 'text-gray-400 hover:text-rose-900 font-medium'"
                 >
-                    <component :is="MoreHorizontal" class="w-6 h-6 mx-auto mb-1" />
-                    <span class="text-[10px] font-bold tracking-tight w-full text-center px-1">More</span>
-                </button>
-
-                <!-- Profile Button -->
-                <button
-                    @click="showProfileSheet = true"
-                    class="flex flex-col items-center justify-center w-16 py-2 rounded-2xl transition-all duration-300"
-                    :class="showProfileSheet ? 'text-rose-900 scale-105' : 'text-gray-400 hover:text-gray-600'"
-                >
-                    <div class="w-6 h-6 rounded-full bg-rose-100 flex items-center justify-center text-rose-900 font-black text-xs mb-1 mx-auto">
-                        {{ userInitial }}
+                    <div class="relative">
+                        <component :is="MoreHorizontal" class="w-5 h-5 mx-auto mb-1 transition-transform" :class="isAnyMoreActive ? 'text-rose-900 drop-shadow-sm' : ''" />
+                        <div v-if="isAnyMoreActive" class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-rose-600"></div>
                     </div>
-                    <span class="text-[10px] font-bold tracking-tight w-full text-center px-1">Profile</span>
+                    <span class="text-[10px] tracking-tight truncate w-full text-center px-0.5" :class="isAnyMoreActive ? 'text-rose-950 font-bold' : ''">More</span>
                 </button>
             </div>
         </nav>
@@ -159,14 +206,22 @@
                 </div>
 
                 <!-- User Info -->
-                <div class="px-6 pt-4 pb-5 flex items-center gap-4 border-b border-gray-100">
-                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-200 to-rose-100 flex items-center justify-center text-rose-900 font-black text-xl shadow-inner">
-                        {{ userInitial }}
+                <div class="px-6 pt-4 pb-5 flex items-center justify-between border-b border-gray-100">
+                    <div class="flex items-center gap-4 min-w-0">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-900 to-rose-700 flex items-center justify-center text-white font-black text-xl shadow-md shadow-rose-900/20 shrink-0">
+                            {{ userInitial }}
+                        </div>
+                        <div class="min-w-0">
+                            <p class="font-extrabold text-gray-900 text-lg leading-tight truncate">{{ auth.user.name }}</p>
+                            <p class="text-sm text-gray-400 font-medium capitalize">{{ auth.user.role.replace(/_/g, ' ') }}</p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="font-extrabold text-gray-900 text-lg leading-tight">{{ auth.user.name }}</p>
-                        <p class="text-sm text-gray-400 font-medium capitalize">{{ auth.user.role.replace(/_/g, ' ') }}</p>
-                    </div>
+                    <button
+                        @click="showProfileSheet = false"
+                        class="w-8 h-8 flex items-center justify-center rounded-full bg-rose-50 text-rose-900 hover:bg-rose-100 transition-colors shrink-0"
+                    >
+                        <component :is="X" class="w-5 h-5" />
+                    </button>
                 </div>
 
                 <!-- Actions -->
@@ -188,7 +243,7 @@
                     </form>
                 </div>
 
-                <div class="pb-24"></div>
+                <div class="pb-16"></div>
             </div>
         </transition>
 
@@ -234,22 +289,28 @@
         <!-- More Menu Sheet -->
         <transition enter-active-class="transition ease-out duration-300 transform" enter-from-class="translate-y-full" enter-to-class="translate-y-0" leave-active-class="transition ease-in duration-200 transform" leave-from-class="translate-y-0" leave-to-class="translate-y-full">
             <div v-if="showMobileMenu" class="md:hidden fixed bottom-0 left-0 right-0 z-[70] bg-white rounded-t-3xl shadow-2xl overflow-hidden pb-safe">
-                <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-rose-50/30">
+                <!-- Handle bar -->
+                <div class="flex justify-center pt-3 pb-1">
+                    <div class="w-10 h-1 rounded-full bg-gray-200"></div>
+                </div>
+
+                <div class="px-5 py-3 border-b border-gray-100 flex justify-between items-center bg-rose-50/30">
                     <h3 class="font-bold text-rose-950 text-lg">More Options</h3>
                     <button @click="showMobileMenu = false" class="w-8 h-8 flex items-center justify-center rounded-full bg-rose-100 text-rose-900 font-bold hover:bg-rose-200 transition-colors"><component :is="X" class="w-5 h-5" /></button>
                 </div>
                 <div class="p-4 space-y-2 max-h-[60vh] overflow-y-auto">
                     <Link
-                        v-for="item in moreNavItems" :key="item.label"
+                        v-for="item in (mobileNavConfig.more || [])" :key="item.label"
                         :href="item.href"
                         @click="showMobileMenu = false"
                         class="flex items-center gap-4 p-4 rounded-2xl transition-colors"
                         :class="isActive(item.href) ? 'bg-rose-100 border border-rose-200' : 'bg-gray-50 hover:bg-rose-50 border border-transparent'"
                     >
-                        <component :is="item.icon" class="w-6 h-6" />
+                        <component :is="item.icon" class="w-6 h-6 text-rose-900" />
                         <span class="font-semibold" :class="isActive(item.href) ? 'text-rose-900' : 'text-gray-700'">{{ item.label }}</span>
                     </Link>
                 </div>
+                <div class="pb-8"></div>
             </div>
         </transition>
 
@@ -309,6 +370,7 @@ const officialNav = [
 
 const personnelNav = [
     { label: 'Dashboard', href: route('dashboard'), icon: HomeIcon },
+    { label: 'Schedules', href: route('personnel.schedules.index'), icon: Calendar },
     { label: 'Tasks', href: route('personnel.tasks.index'), icon: CheckCircle },
     { label: 'Profile', href: route('profile.edit'), icon: UserIcon },
 ]
@@ -330,12 +392,78 @@ const navItems = computed(() => {
     return residentNav
 })
 
-const mainNavItems = computed(() => {
-    return navItems.value.length > 5 ? navItems.value.slice(0, 4) : navItems.value
+const mobileNavConfig = computed(() => {
+    const role = auth.value.user?.role
+
+    if (role === 'super_admin') {
+        return {
+            left: [
+                { label: 'Users', href: route('super-admin.users.index'), icon: Users },
+                { label: 'Zones', href: route('super-admin.zones.index'), icon: MapIcon },
+            ],
+            center: { label: 'Dashboard', href: route('dashboard'), icon: HomeIcon },
+            right: [
+                { label: 'Logs', href: route('super-admin.system-logs.index'), icon: ClipboardList },
+            ],
+            more: [
+                { label: 'Profile Settings', href: route('profile.edit'), icon: UserIcon },
+            ]
+        }
+    }
+
+    if (role === 'barangay_official') {
+        return {
+            left: [
+                { label: 'Schedules', href: route('official.schedules.index'), icon: Calendar },
+                { label: 'Reports', href: route('official.reports.index'), icon: FileText },
+            ],
+            center: { label: 'Dashboard', href: route('dashboard'), icon: HomeIcon },
+            right: [
+                { label: 'Residents', href: route('official.residents.index'), icon: Users },
+            ],
+            more: [
+                { label: 'Announcements', href: route('official.announcements.index'), icon: Megaphone },
+                { label: 'Redemptions', href: route('official.redemptions.index'), icon: Gift },
+                { label: 'Rewards', href: route('official.rewards.index'), icon: Award },
+                { label: 'Profile Settings', href: route('profile.edit'), icon: UserIcon },
+            ]
+        }
+    }
+
+    if (role === 'personnel') {
+        return {
+            left: [
+                { label: 'Schedules', href: route('personnel.schedules.index'), icon: Calendar },
+            ],
+            center: { label: 'Dashboard', href: route('dashboard'), icon: HomeIcon },
+            right: [
+                { label: 'Tasks', href: route('personnel.tasks.index'), icon: CheckCircle },
+            ],
+            more: [
+                { label: 'Profile Settings', href: route('profile.edit'), icon: UserIcon },
+            ]
+        }
+    }
+
+    // resident
+    return {
+        left: [
+            { label: 'Schedules', href: route('resident.schedules.index'), icon: Calendar },
+            { label: 'Reports', href: route('resident.reports.index'), icon: FileText },
+        ],
+        center: { label: 'Dashboard', href: route('dashboard'), icon: HomeIcon },
+        right: [
+            { label: 'Points', href: route('resident.points.index'), icon: Star },
+            { label: 'Rewards', href: route('resident.rewards.index'), icon: Gift },
+        ],
+        more: [
+            { label: 'Profile Settings', href: route('profile.edit'), icon: UserIcon },
+        ]
+    }
 })
 
-const moreNavItems = computed(() => {
-    return navItems.value.length > 5 ? navItems.value.slice(4) : []
+const isAnyMoreActive = computed(() => {
+    return mobileNavConfig.value.more?.some(item => isActive(item.href)) ?? false
 })
 
 const isActive = (href) => {
