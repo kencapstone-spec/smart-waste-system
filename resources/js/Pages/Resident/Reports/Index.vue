@@ -174,10 +174,10 @@
         </Modal>
 
         <!-- Fullscreen Image Modal -->
-        <Modal :show="!!viewingPhoto" max-width="4xl" @close="viewingPhoto = null">
-            <div class="relative bg-black rounded-xl overflow-hidden p-1">
-                <button @click="viewingPhoto = null" class="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/80 rounded-full w-8 h-8 flex items-center justify-center transition-colors"><component :is="X" class="w-5 h-5" /></button>
-                <img :src="viewingPhoto" class="w-full h-auto max-h-[85vh] object-contain rounded-lg" />
+        <Modal :show="!!viewingPhoto" max-width="3xl" @close="viewingPhoto = null">
+            <div class="relative bg-slate-950 rounded-2xl overflow-hidden p-2 flex items-center justify-center min-h-[300px]">
+                <button @click="viewingPhoto = null" class="absolute top-4 right-4 text-white bg-black/60 hover:bg-black/90 rounded-full w-8 h-8 flex items-center justify-center transition-colors z-10"><component :is="X" class="w-5 h-5" /></button>
+                <img :src="viewingPhoto" class="w-full h-auto max-h-[80vh] object-contain rounded-xl" />
             </div>
         </Modal>
     </AuthLayout>

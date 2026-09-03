@@ -177,3 +177,20 @@ Route::get('/run-background-jobs', function (\Illuminate\Http\Request $request) 
     ]);
 });
 
+// Dedicated route to serve user-uploaded storage files with fallback for missing/ephemeral uploads
+Route::get('/storage/{path}', function (string $path) {
+    $filePath = storage_path('app/public/' . $path);
+    if (file_exists($filePath) && is_file($filePath)) {
+        return response()->file($filePath);
+    }
+
+    // Clean placeholder SVG if file is missing or was uploaded prior to a server redeploy
+    $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="260" viewBox="0 0 400 260"><rect width="400" height="260" rx="16" fill="#f8fafc"/><rect x="2" y="2" width="396" height="256" rx="14" fill="none" stroke="#e2e8f0" stroke-width="2"/><g fill="#64748b" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif"><text x="200" y="115" font-size="40">📷</text><text x="200" y="155" font-size="14" font-weight="700" fill="#334155">Photo Evidence</text><text x="200" y="180" font-size="12" fill="#94a3b8">Image unavailable on current server instance</text></g></svg>';
+
+    return response($svg, 200, [
+        'Content-Type' => 'image/svg+xml',
+        'Cache-Control' => 'public, max-age=3600',
+    ]);
+})->where('path', '.*');
+
+
