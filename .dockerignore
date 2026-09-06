@@ -1,0 +1,13 @@
+.git
+.github
+node_modules
+vendor
+.env
+.env.*
+storage/*.key
+storage/logs/*.log
+tests
+phpunit.xml
+.phpunit.result.cache
+.vscode
+.idea
