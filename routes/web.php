@@ -63,9 +63,9 @@ Route::get('/', function () {
         $announcements = \App\Models\Announcement::latest()->take(3)->get();
 
         return [
-            'leaderboard' => $topResidents,
+            'leaderboard' => $topResidents->toArray(),
             'stats' => $stats,
-            'announcements' => $announcements,
+            'announcements' => $announcements->toArray(),
         ];
     });
 
