@@ -66,7 +66,7 @@ RUN php artisan storage:link --force || true
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Expose port (Render injects PORT env variable, default 8080 or 10000)
-EXPOSE 8080
+# Expose port (Render defaults to 10000)
+EXPOSE 10000
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

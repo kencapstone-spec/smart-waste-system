@@ -16,7 +16,7 @@ php artisan config:cache || true
 php artisan route:cache || true
 php artisan view:cache || true
 
-PORT_TO_USE="${PORT:-8080}"
+PORT_TO_USE="${PORT:-10000}"
 echo "Starting high-performance multi-worker server on port $PORT_TO_USE..."
 
 # Enable multi-worker process handling in PHP built-in server (concurrent requests)

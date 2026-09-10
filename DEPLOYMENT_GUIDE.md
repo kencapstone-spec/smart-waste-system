@@ -39,10 +39,9 @@ git push origin main
 2. Connect your GitHub repository.
 3. Configure the service:
    - **Name:** `smart-waste-system` (or your chosen name)
-   - **Environment:** `PHP`
-   - **Build Command:** `bash render-build.sh`
-   - **Start Command:** `bash render-start.sh`
+   - **Language / Runtime:** **Docker** *(Render does NOT have a native PHP runtime — you must select Docker!)*
    - **Instance Type:** Free
+   - *(Note: With Docker selected, Render automatically uses `Dockerfile` and `docker-entrypoint.sh`; you do not need to configure Build or Start commands).*
 4. Scroll down and click **Advanced** to add your **Environment Variables**:
 
    | Key | Value | Notes |
@@ -68,7 +67,7 @@ git push origin main
    | `SEMAPHORE_API_KEY` | *(Optional: Your Semaphore API Key)* | For real SMS OTP delivery in the PH |
    | `SEMAPHORE_SENDER_NAME` | `SmartWaste` | Sender name on SMS |
 
-5. Click **Create Web Service** (or go to **Settings** > **Build & Start Commands** to update your Start Command to `bash render-start.sh`). Render will redeploy your app.
+5. Click **Create Web Service**. Render will build your Docker image and deploy your app.
 
 ---
 
