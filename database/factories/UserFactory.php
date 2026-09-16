@@ -13,12 +13,14 @@ class UserFactory extends Factory
 {
     public function definition(): array
     {
+        $hasFake = function_exists('fake');
+
         return [
-            'name' => fake()->name(),
-            'phone' => '09'.fake()->unique()->numerify('#########'),
+            'name' => $hasFake ? fake()->name() : 'User ' . Str::random(5),
+            'phone' => '09' . ($hasFake ? fake()->unique()->numerify('#########') : mt_rand(100000000, 999999999)),
             'role' => 'resident',
             'status' => 'active',
-            'address' => fake()->address(),
+            'address' => $hasFake ? fake()->address() : 'Purok San Isidro',
             'remember_token' => Str::random(10),
         ];
     }

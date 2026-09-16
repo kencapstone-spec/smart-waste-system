@@ -29,57 +29,54 @@ class DatabaseSeeder extends Seeder
             'Gutahit',
         ];
 
-        $zones = collect($zoneNames)->map(fn ($name) => Zone::create(['name' => $name]));
+        $zones = collect($zoneNames)->map(fn ($name) => Zone::firstOrCreate(['name' => $name]));
 
         // ============================================================
         // 2. USERS
         // ============================================================
 
         // -- Super Admins (2) --
-        User::factory()->superAdmin()->create([
-            'name' => 'Kenneth Admin',
-            'phone' => '09111111111',
-        ]);
-        User::factory()->superAdmin()->create([
-            'name' => 'Kean Admin',
-            'phone' => '09222222222',
-        ]);
+        User::firstOrCreate(
+            ['phone' => '09111111111'],
+            ['name' => 'Kenneth Admin', 'role' => 'super_admin', 'status' => 'active', 'address' => 'Purok Centro']
+        );
+        User::firstOrCreate(
+            ['phone' => '09222222222'],
+            ['name' => 'Kean Admin', 'role' => 'super_admin', 'status' => 'active', 'address' => 'Purok Centro']
+        );
 
         // -- Barangay Officials (2) --
-        $official1 = User::factory()->official()->create([
-            'name' => 'Kap. Roberto Santos',
-            'phone' => '09333333333',
-        ]);
-        User::factory()->official()->create([
-            'name' => 'Kag. Maria Garcia',
-            'phone' => '09444444444',
-        ]);
+        User::firstOrCreate(
+            ['phone' => '09333333333'],
+            ['name' => 'Kap. Roberto Santos', 'role' => 'barangay_official', 'status' => 'active', 'address' => 'Barangay Hall']
+        );
+        User::firstOrCreate(
+            ['phone' => '09444444444'],
+            ['name' => 'Kag. Maria Garcia', 'role' => 'barangay_official', 'status' => 'active', 'address' => 'Barangay Hall']
+        );
 
         // -- Personnel / Collectors (1) --
-        $personnelData = [
-            ['name' => 'Juan dela Cruz',   'phone' => '09555555555'],
-        ];
-        foreach ($personnelData as $p) {
-            User::factory()->personnel()->create($p);
-        }
+        User::firstOrCreate(
+            ['phone' => '09555555555'],
+            ['name' => 'Juan dela Cruz', 'role' => 'personnel', 'status' => 'active', 'address' => 'Barangay San Isidro']
+        );
 
         // -- Residents (3) --
         $cahayagZone = $zones->where('name', 'Cahayag')->first();
-        User::factory()->resident()->create([
-            'name' => 'Kenneth',
-            'phone' => '09666666666',
-            'zone_id' => $cahayagZone->id ?? 6,
-        ]);
-        User::factory()->resident()->create([
-            'name' => 'Kean',
-            'phone' => '09777777777',
-            'zone_id' => $cahayagZone->id ?? 6,
-        ]);
-        User::factory()->resident()->create([
-            'name' => 'Lester',
-            'phone' => '09888888888',
-            'zone_id' => $cahayagZone->id ?? 6,
-        ]);
+        $zoneId = $cahayagZone ? $cahayagZone->id : ($zones->first()->id ?? null);
+
+        User::firstOrCreate(
+            ['phone' => '09666666666'],
+            ['name' => 'Kenneth', 'role' => 'resident', 'status' => 'active', 'address' => 'Purok Cahayag', 'zone_id' => $zoneId]
+        );
+        User::firstOrCreate(
+            ['phone' => '09777777777'],
+            ['name' => 'Kean', 'role' => 'resident', 'status' => 'active', 'address' => 'Purok Cahayag', 'zone_id' => $zoneId]
+        );
+        User::firstOrCreate(
+            ['phone' => '09888888888'],
+            ['name' => 'Lester', 'role' => 'resident', 'status' => 'active', 'address' => 'Purok Cahayag', 'zone_id' => $zoneId]
+        );
 
         // ============================================================
         // SUMMARY
