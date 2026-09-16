@@ -20,17 +20,21 @@ class PdfReportController extends Controller
      */
     public function index()
     {
-        $zones = Zone::orderBy('name')->get(['id', 'name']);
+        $zones = \Illuminate\Support\Facades\Cache::remember('zones_dropdown', 300, function () {
+            return Zone::orderBy('name')->get(['id', 'name']);
+        });
 
-        $stats = [
-            'totalTasks' => CollectionTask::count(),
-            'completedTasks' => CollectionTask::where('status', 'completed')->count(),
-            'totalReports' => Report::count(),
-            'pendingReports' => Report::where('status', 'pending')->count(),
-            'resolvedReports' => Report::whereIn('status', ['resolved', 'reviewed'])->count(),
-            'activeResidents' => User::where('role', 'resident')->where('status', 'active')->count(),
-            'activeSchedules' => Schedule::where('status', 'active')->count(),
-        ];
+        $stats = \Illuminate\Support\Facades\Cache::remember('printed_reports_summary_stats', 30, function () {
+            return [
+                'totalTasks' => CollectionTask::count(),
+                'completedTasks' => CollectionTask::where('status', 'completed')->count(),
+                'totalReports' => Report::count(),
+                'pendingReports' => Report::where('status', 'pending')->count(),
+                'resolvedReports' => Report::whereIn('status', ['resolved', 'reviewed'])->count(),
+                'activeResidents' => User::where('role', 'resident')->where('status', 'active')->count(),
+                'activeSchedules' => Schedule::where('status', 'active')->count(),
+            ];
+        });
 
         $recentReports = Report::with(['resident.zone', 'respondedBy'])
             ->latest()

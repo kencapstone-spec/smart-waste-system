@@ -19,9 +19,13 @@ class ResidentController extends Controller
             ->latest()
             ->paginate(15);
 
+        $zones = \Illuminate\Support\Facades\Cache::remember('zones_dropdown', 300, function () {
+            return \App\Models\Zone::orderBy('name')->get(['id', 'name']);
+        });
+
         return Inertia::render('Official/Residents/Index', [
             'residents' => $residents,
-            'zones'     => \App\Models\Zone::orderBy('name')->get(['id', 'name']),
+            'zones'     => $zones,
         ]);
     }
 

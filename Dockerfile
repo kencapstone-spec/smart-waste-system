@@ -30,14 +30,23 @@ RUN apk add --no-cache \
         bcmath \
         opcache \
     && { \
+        echo 'zend_extension=opcache'; \
         echo 'opcache.enable=1'; \
         echo 'opcache.enable_cli=1'; \
-        echo 'opcache.memory_consumption=128'; \
-        echo 'opcache.interned_strings_buffer=16'; \
-        echo 'opcache.max_accelerated_files=10000'; \
+        echo 'opcache.memory_consumption=256'; \
+        echo 'opcache.interned_strings_buffer=32'; \
+        echo 'opcache.max_accelerated_files=20000'; \
         echo 'opcache.validate_timestamps=0'; \
         echo 'opcache.save_comments=1'; \
-    } > /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
+        echo 'opcache.fast_shutdown=1'; \
+    } > /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini \
+    && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
+    && { \
+        echo 'memory_limit = 512M'; \
+        echo 'output_buffering = 4096'; \
+        echo 'realpath_cache_size = 4096K'; \
+        echo 'realpath_cache_ttl = 600'; \
+    } >> "$PHP_INI_DIR/php.ini"
 
 # Install Composer
 COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer

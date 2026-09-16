@@ -20,13 +20,21 @@ class ScheduleController extends Controller
             ->latest()
             ->paginate(15);
 
-        return Inertia::render('Official/Schedules/Index', [
-            'schedules' => $schedules,
-            'zones' => Zone::orderBy('name')->get(['id', 'name']),
-            'personnel' => User::where('role', 'personnel')
+        $zones = \Illuminate\Support\Facades\Cache::remember('zones_dropdown', 300, function () {
+            return Zone::orderBy('name')->get(['id', 'name']);
+        });
+
+        $personnel = \Illuminate\Support\Facades\Cache::remember('active_personnel_dropdown', 60, function () {
+            return User::where('role', 'personnel')
                 ->where('status', 'active')
                 ->orderBy('name')
-                ->get(['id', 'name']),
+                ->get(['id', 'name']);
+        });
+
+        return Inertia::render('Official/Schedules/Index', [
+            'schedules' => $schedules,
+            'zones' => $zones,
+            'personnel' => $personnel,
         ]);
     }
 
