@@ -71,15 +71,11 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Create storage symlink
 RUN php artisan storage:link --force || true
 
-# Copy Nginx production configuration
-COPY docker/nginx.conf /etc/nginx/http.d/default.conf
-RUN mkdir -p /run/nginx
-
 # Copy entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Expose port (Render/Railway default: 10000)
-EXPOSE 10000
+# Expose ports
+EXPOSE 8080 10000
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
