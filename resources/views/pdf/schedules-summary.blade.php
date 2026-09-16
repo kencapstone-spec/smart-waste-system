@@ -2,15 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Collection Activity Summary Report</title>
+    <title>Collection Schedules Master List</title>
     <style>
         @page { margin: 25px 30px; }
         body { font-family: DejaVu Sans, sans-serif; font-size: 10px; color: #1e293b; margin: 0; padding: 0; line-height: 1.4; }
         
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #059669; padding-bottom: 12px; }
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #4f46e5; padding-bottom: 12px; }
         .republic { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin: 0; }
-        .lgu { font-size: 10px; font-weight: bold; color: #0f172a; margin: 2px 0; }
-        .brgy { font-size: 14px; font-weight: 800; color: #047857; margin: 2px 0 4px; letter-spacing: 0.5px; }
+        .brgy { font-size: 14px; font-weight: 800; color: #4338ca; margin: 2px 0 4px; letter-spacing: 0.5px; }
         .office { font-size: 9px; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; }
         .report-title { font-size: 13px; font-weight: 800; color: #0f172a; margin: 10px 0 2px; text-transform: uppercase; }
         .meta-period { font-size: 9px; color: #64748b; margin: 0; }
@@ -21,24 +20,22 @@
         .metric-val { font-size: 14px; font-weight: 800; }
         
         .metric-total { background-color: #f8fafc; color: #0f172a; }
-        .metric-completed { background-color: #ecfdf5; color: #047857; border-color: #a7f3d0; }
-        .metric-missed { background-color: #fef2f2; color: #b91c1c; border-color: #fecaca; }
-        .metric-pending { background-color: #fffbeb; color: #b45309; border-color: #fde68a; }
+        .metric-active { background-color: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+        .metric-inactive { background-color: #fef2f2; color: #b91c1c; border-color: #fecaca; }
 
         .filter-badges { margin-bottom: 12px; font-size: 9px; color: #475569; }
         .filter-item { display: inline-block; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; margin-right: 6px; }
 
         table.data-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
-        table.data-table thead { background-color: #047857; color: #ffffff; }
+        table.data-table thead { background-color: #4338ca; color: #ffffff; }
         table.data-table th { padding: 6px 8px; font-size: 9px; text-align: left; font-weight: 700; letter-spacing: 0.3px; }
         table.data-table tbody tr { border-bottom: 1px solid #e2e8f0; }
         table.data-table tbody tr:nth-child(even) { background-color: #f8fafc; }
-        table.data-table td { padding: 5px 8px; font-size: 9px; vertical-align: middle; }
+        table.data-table td { padding: 6px 8px; font-size: 9px; vertical-align: middle; }
 
         .badge { display: inline-block; padding: 2px 6px; border-radius: 3px; font-size: 8px; font-weight: 700; text-transform: uppercase; }
-        .badge-completed { background-color: #d1fae5; color: #065f46; }
-        .badge-missed { background-color: #fee2e2; color: #991b1b; }
-        .badge-pending { background-color: #fef3c7; color: #92400e; }
+        .badge-active { background-color: #d1fae5; color: #065f46; }
+        .badge-inactive { background-color: #fee2e2; color: #991b1b; }
 
         .signatories { width: 100%; margin-top: 35px; border-collapse: collapse; }
         .signatory-box { width: 50%; vertical-align: top; padding: 0 20px; }
@@ -53,18 +50,19 @@
     <div class="header">
         <p class="republic">Republic of the Philippines &bull; Province of Bohol &bull; Municipality of Talibon</p>
         <p class="brgy">BARANGAY SAN ISIDRO</p>
-        <p class="office">Solid Waste Management &amp; Ecological Monitoring Committee</p>
-        <h1 class="report-title">Waste Collection Activity Summary Report</h1>
-        <p class="meta-period">
-            Period: {{ $from ? \Carbon\Carbon::parse($from)->format('M d, Y') : 'All Recorded Dates' }} &mdash; {{ $to ? \Carbon\Carbon::parse($to)->format('M d, Y') : 'Present' }}
-        </p>
+        <p class="office">Solid Waste Management &amp; Collection Logistics Desk</p>
+        <h1 class="report-title">Waste Collection Schedules Master List</h1>
+        <p class="meta-period">Master Roster as of {{ now()->format('F d, Y') }}</p>
     </div>
 
-    @if($selectedZone || $status)
+    @if($selectedZone || $status || $frequency)
     <div class="filter-badges">
         <strong>Filters Applied:</strong>
         @if($selectedZone)
-            <span class="filter-item">Purok / Zone: <strong>{{ $selectedZone }}</strong></span>
+            <span class="filter-item">Purok: <strong>{{ $selectedZone }}</strong></span>
+        @endif
+        @if($frequency)
+            <span class="filter-item">Frequency: <strong>{{ ucfirst($frequency) }}</strong></span>
         @endif
         @if($status)
             <span class="filter-item">Status: <strong>{{ ucfirst($status) }}</strong></span>
@@ -74,21 +72,17 @@
 
     <table class="metrics-table">
         <tr>
-            <td class="metric-cell metric-total" style="width: 25%;">
-                <div class="metric-label">Total Assigned Tasks</div>
-                <div class="metric-val">{{ $tasks->count() }}</div>
+            <td class="metric-cell metric-total" style="width: 33%;">
+                <div class="metric-label">Total Schedules</div>
+                <div class="metric-val">{{ $schedules->count() }}</div>
             </td>
-            <td class="metric-cell metric-completed" style="width: 25%;">
-                <div class="metric-label">Completed Collections</div>
-                <div class="metric-val">{{ $tasks->where('status', 'completed')->count() }}</div>
+            <td class="metric-cell metric-active" style="width: 33%;">
+                <div class="metric-label">Active Schedules</div>
+                <div class="metric-val">{{ $schedules->where('status', 'active')->count() }}</div>
             </td>
-            <td class="metric-cell metric-missed" style="width: 25%;">
-                <div class="metric-label">Missed Collections</div>
-                <div class="metric-val">{{ $tasks->where('status', 'missed')->count() }}</div>
-            </td>
-            <td class="metric-cell metric-pending" style="width: 25%;">
-                <div class="metric-label">Pending Collections</div>
-                <div class="metric-val">{{ $tasks->where('status', 'pending')->count() }}</div>
+            <td class="metric-cell metric-inactive" style="width: 34%;">
+                <div class="metric-label">Inactive / Completed Schedules</div>
+                <div class="metric-val">{{ $schedules->where('status', '!=', 'active')->count() }}</div>
             </td>
         </tr>
     </table>
@@ -97,27 +91,39 @@
         <thead>
             <tr>
                 <th style="width: 30px;">#</th>
-                <th style="width: 75px;">Date</th>
-                <th style="width: 110px;">Purok / Zone</th>
+                <th style="width: 110px;">Purok</th>
+                <th>Schedule Title</th>
+                <th style="width: 75px;">Frequency</th>
+                <th style="width: 80px;">Collection Time</th>
                 <th>Assigned Personnel</th>
-                <th style="width: 75px;">Status</th>
-                <th>Remarks / Field Notes</th>
+                <th style="width: 65px;">Status</th>
             </tr>
         </thead>
         <tbody>
-            @forelse($tasks as $i => $task)
+            @forelse($schedules as $i => $sched)
             <tr>
                 <td>{{ $i + 1 }}</td>
-                <td>{{ \Carbon\Carbon::parse($task->collection_date)->format('M d, Y') }}</td>
-                <td><strong>{{ $task->schedule->zone->name ?? '—' }}</strong></td>
-                <td>{{ $task->personnel->name ?? 'Unassigned' }}</td>
-                <td><span class="badge badge-{{ $task->status }}">{{ ucfirst($task->status) }}</span></td>
-                <td>{{ $task->remarks ?: '—' }}</td>
+                <td><strong>{{ $sched->zone->name ?? '—' }}</strong></td>
+                <td>{{ $sched->title }}</td>
+                <td style="text-transform: capitalize;">{{ $sched->frequency }}</td>
+                <td>{{ $sched->collection_time }}</td>
+                <td>
+                    @if($sched->assignments && $sched->assignments->count() > 0)
+                        {{ $sched->assignments->map(fn($a) => $a->personnel?->name)->filter()->join(', ') }}
+                    @else
+                        <span style="color: #94a3b8; font-style: italic;">None assigned</span>
+                    @endif
+                </td>
+                <td>
+                    <span class="badge badge-{{ $sched->status }}">
+                        {{ ucfirst($sched->status) }}
+                    </span>
+                </td>
             </tr>
             @empty
             <tr>
-                <td colspan="6" style="text-align: center; padding: 20px; color: #94a3b8;">
-                    No collection tasks recorded matching the selected filter criteria.
+                <td colspan="7" style="text-align: center; padding: 20px; color: #94a3b8;">
+                    No schedules found matching the filter criteria.
                 </td>
             </tr>
             @endforelse

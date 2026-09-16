@@ -1,7 +1,16 @@
 <template>
     <AuthLayout page-title="Reports">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold text-rose-950 tracking-tight">Submitted Reports</h2>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+            <div>
+                <h2 class="text-xl font-bold text-rose-950 tracking-tight">Submitted Reports</h2>
+                <p class="text-xs text-rose-900/60 mt-0.5">Resident complaints for missed garbage collection and illegal dumping.</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <a :href="route('official.pdf.complaints-summary') + '?action=stream'" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-900 hover:bg-rose-800 text-white rounded-xl text-xs font-semibold shadow-md transition-all">
+                    <component :is="Printer" class="w-3.5 h-3.5" />
+                    <span>Print Summary (PDF)</span>
+                </a>
+            </div>
         </div>
 
         <div class="bg-white/70 backdrop-blur-2xl sm:rounded-2xl shadow-xl shadow-rose-900/5 sm:border border-white/60 -mx-4 sm:mx-0 overflow-hidden">
@@ -38,6 +47,10 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-2">
                                 <button @click="viewReport(report)" class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0">View</button>
+                                <button @click="printIncident(report)" class="text-rose-700 hover:text-rose-900 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0 flex items-center gap-1">
+                                    <component :is="Printer" class="w-3.5 h-3.5" />
+                                    <span>Print</span>
+                                </button>
                                 <button @click="deleteReport(report)" class="text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0">Delete</button>
                             </div>
                         </td>
@@ -53,6 +66,17 @@
         <!-- View/Respond Modal -->
         <Modal :show="showViewModal" title="Report Details" max-width="lg" @close="showViewModal = false">
             <div v-if="selectedReport" class="space-y-4">
+                <div class="flex items-center justify-between p-3 bg-rose-50/70 rounded-xl border border-rose-100">
+                    <div>
+                        <span class="text-[11px] font-mono font-bold text-rose-950">IR-{{ String(selectedReport.id).padStart(5, '0') }}</span>
+                        <p class="text-xs text-rose-900/70">Official Incident Record</p>
+                    </div>
+                    <button @click="printIncident(selectedReport)" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-900 hover:bg-rose-800 text-white rounded-lg text-xs font-semibold shadow transition-colors">
+                        <component :is="Printer" class="w-3.5 h-3.5" />
+                        <span>Print Sheet</span>
+                    </button>
+                </div>
+
                 <div class="grid grid-cols-2 gap-4 text-sm">
                     <div>
                         <p class="text-gray-500 text-xs mb-1">Resident</p>
@@ -125,7 +149,7 @@
 </template>
 
 <script setup>
-import { X, User, Box, FileText, Activity, Calendar, Settings } from '@lucide/vue';
+import { X, User, Box, FileText, Activity, Calendar, Settings, Printer } from '@lucide/vue';
 import { ref } from 'vue'
 import { useForm, router } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'
@@ -159,6 +183,10 @@ const viewReport = (report) => {
     selectedReport.value = report
     respondForm.reset()
     showViewModal.value = true
+}
+
+const printIncident = (report) => {
+    window.open(route('official.pdf.single-complaint', report.id) + '?action=stream', '_blank')
 }
 
 const submitResponse = () => {

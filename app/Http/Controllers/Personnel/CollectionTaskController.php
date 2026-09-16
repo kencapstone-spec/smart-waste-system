@@ -99,10 +99,24 @@ class CollectionTaskController extends Controller
         abort_if($task->personnel_id !== Auth::id(), 403);
 
         $request->validate([
-            'resident_id' => ['required', 'exists:users,id'],
+            'resident_id' => [
+                'required',
+                \Illuminate\Validation\Rule::exists('users', 'id')
+                    ->where('role', 'resident')
+                    ->where('status', 'active'),
+            ],
             'points' => ['nullable', 'integer', 'min:1', 'max:100'],
             'remarks' => ['nullable', 'string', 'max:500'],
         ]);
+
+        // Prevent duplicate point awarding for the same resident on this task
+        $alreadyAwarded = Point::where('collection_task_id', $task->id)
+            ->where('resident_id', $request->resident_id)
+            ->exists();
+
+        if ($alreadyAwarded) {
+            return back()->withErrors(['resident_id' => 'Points have already been awarded to this resident for this task.']);
+        }
 
         $points = $request->filled('points') ? (int) $request->points : Point::FIXED_AWARD_POINTS;
 

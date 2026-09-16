@@ -1,13 +1,22 @@
 <template>
     <AuthLayout page-title="Schedule Management">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold text-rose-950 tracking-tight">Collection Schedules</h2>
-            <button
-                @click="showCreateModal = true"
-                class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all transition"
-            >
-                + Add Schedule
-            </button>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+            <div>
+                <h2 class="text-xl font-bold text-rose-950 tracking-tight">Collection Schedules</h2>
+                <p class="text-xs text-rose-900/60 mt-0.5">Manage waste collection timetables and assignments across puroks.</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <a :href="route('official.pdf.schedules') + '?action=stream'" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-900 border border-rose-200 rounded-xl text-sm font-semibold transition-all">
+                    <component :is="Printer" class="w-4 h-4" />
+                    <span>Print Schedules (PDF)</span>
+                </a>
+                <button
+                    @click="showCreateModal = true"
+                    class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all transition"
+                >
+                    + Add Schedule
+                </button>
+            </div>
         </div>
 
         <div class="bg-white/70 backdrop-blur-2xl sm:rounded-2xl shadow-xl shadow-rose-900/5 sm:border border-white/60 -mx-4 sm:mx-0 overflow-hidden">
@@ -253,7 +262,7 @@
 </template>
 
 <script setup>
-import { MapPin, Clock, Activity, Settings, Calendar } from '@lucide/vue'
+import { MapPin, Clock, Activity, Settings, Calendar, Printer } from '@lucide/vue'
 import { ref, reactive } from 'vue'
 import { useForm, router } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'

@@ -1,12 +1,16 @@
 <template>
     <AuthLayout page-title="Report Details">
-        <div class="mb-6">
-            <Link :href="route('official.reports.index')" class="inline-flex items-center gap-2 text-sm text-rose-900/60 hover:text-rose-900 transition-colors transition">
+        <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <Link :href="route('official.reports.index')" class="inline-flex items-center gap-2 text-sm text-rose-900/60 hover:text-rose-900 transition-colors">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
                 Back to Reports
             </Link>
+            <a :href="route('official.pdf.single-complaint', report.id) + '?action=stream'" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-900 hover:bg-rose-800 text-white rounded-xl text-xs font-semibold shadow-md transition-all">
+                <component :is="Printer" class="w-3.5 h-3.5" />
+                <span>Print Incident Report (PDF)</span>
+            </a>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -101,6 +105,7 @@
 <script setup>
 import { useForm, Link } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'
+import { Printer } from '@lucide/vue'
 
 const props = defineProps({
     report: Object,

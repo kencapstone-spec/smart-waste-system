@@ -181,6 +181,66 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Printed Reports Quick Access Hub -->
+            <div class="mt-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                        <span class="w-1.5 h-6 bg-rose-500 rounded-full"></span>
+                        Printed Reports &amp; Exports
+                    </h3>
+                    <Link :href="route('official.printed-reports.index')" class="text-xs font-bold text-rose-600 hover:text-rose-800 flex items-center gap-1">
+                        <span>Open Reports Center</span>
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </Link>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <a :href="route('official.pdf.collection-summary') + '?action=stream'" target="_blank" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all group block">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <component :is="CheckCircle" class="w-5 h-5" />
+                            </div>
+                            <span class="text-[10px] uppercase font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">PDF</span>
+                        </div>
+                        <p class="font-bold text-gray-900 text-sm group-hover:text-emerald-600 transition-colors">Collection Activity</p>
+                        <p class="text-xs text-gray-500 mt-1">Print task completion logs</p>
+                    </a>
+
+                    <a :href="route('official.pdf.complaints-summary') + '?action=stream'" target="_blank" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-rose-200 transition-all group block">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <component :is="FileText" class="w-5 h-5" />
+                            </div>
+                            <span class="text-[10px] uppercase font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md">PDF</span>
+                        </div>
+                        <p class="font-bold text-gray-900 text-sm group-hover:text-rose-600 transition-colors">Complaints Summary</p>
+                        <p class="text-xs text-gray-500 mt-1">Citizen grievances report</p>
+                    </a>
+
+                    <a :href="route('official.pdf.resident-participation') + '?action=stream'" target="_blank" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-sky-200 transition-all group block">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <component :is="Users" class="w-5 h-5" />
+                            </div>
+                            <span class="text-[10px] uppercase font-bold text-sky-600 bg-sky-50 px-2 py-0.5 rounded-md">PDF</span>
+                        </div>
+                        <p class="font-bold text-gray-900 text-sm group-hover:text-sky-600 transition-colors">Resident Rankings</p>
+                        <p class="text-xs text-gray-500 mt-1">Incentive points leaderboard</p>
+                    </a>
+
+                    <a :href="route('official.pdf.schedules') + '?action=stream'" target="_blank" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all group block">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <component :is="Calendar" class="w-5 h-5" />
+                            </div>
+                            <span class="text-[10px] uppercase font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">PDF</span>
+                        </div>
+                        <p class="font-bold text-gray-900 text-sm group-hover:text-indigo-600 transition-colors">Schedules Master List</p>
+                        <p class="text-xs text-gray-500 mt-1">Official collection timetable</p>
+                    </a>
+                </div>
+            </div>
         </div>
 
         <!-- Personnel Dashboard -->

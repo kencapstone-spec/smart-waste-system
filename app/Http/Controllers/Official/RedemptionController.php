@@ -25,6 +25,10 @@ class RedemptionController extends Controller
 
     public function approve(Redemption $redemption)
     {
+        if ($redemption->status !== 'pending') {
+            return back()->with('error', 'This redemption has already been processed.');
+        }
+
         $redemption->update([
             'status' => 'approved',
             'processed_by' => Auth::id(),
@@ -40,6 +44,10 @@ class RedemptionController extends Controller
 
     public function reject(Redemption $redemption)
     {
+        if ($redemption->status !== 'pending') {
+            return back()->with('error', 'This redemption has already been processed.');
+        }
+
         $redemption->update([
             'status' => 'rejected',
             'processed_by' => Auth::id(),

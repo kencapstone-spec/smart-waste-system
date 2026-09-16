@@ -41,7 +41,11 @@ class ScheduleController extends Controller
             'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
             'collection_time' => ['required'],
             'personnel_ids' => ['required', 'array', 'min:1'],
-            'personnel_ids.*' => ['exists:users,id'],
+            'personnel_ids.*' => [
+                \Illuminate\Validation\Rule::exists('users', 'id')
+                    ->where('role', 'personnel')
+                    ->where('status', 'active'),
+            ],
         ]);
 
         $schedule = Schedule::create([
@@ -78,7 +82,11 @@ class ScheduleController extends Controller
             'collection_time' => ['required'],
             'status' => ['required', 'in:active,inactive'],
             'personnel_ids' => ['required', 'array', 'min:1'],
-            'personnel_ids.*' => ['exists:users,id'],
+            'personnel_ids.*' => [
+                \Illuminate\Validation\Rule::exists('users', 'id')
+                    ->where('role', 'personnel')
+                    ->where('status', 'active'),
+            ],
         ]);
 
         $schedule->update($request->only(
@@ -119,7 +127,12 @@ class ScheduleController extends Controller
     public function reassignTask(Request $request, CollectionTask $task)
     {
         $request->validate([
-            'personnel_id' => ['required', 'exists:users,id'],
+            'personnel_id' => [
+                'required',
+                \Illuminate\Validation\Rule::exists('users', 'id')
+                    ->where('role', 'personnel')
+                    ->where('status', 'active'),
+            ],
         ]);
 
         $task->update([

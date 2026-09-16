@@ -1,13 +1,22 @@
 <template>
     <AuthLayout page-title="Resident Management">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold text-rose-950 tracking-tight">Residents</h2>
-            <button
-                @click="showRegisterModal = true"
-                class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all"
-            >
-                + Register Resident
-            </button>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+            <div>
+                <h2 class="text-xl font-bold text-rose-950 tracking-tight">Residents</h2>
+                <p class="text-xs text-rose-900/60 mt-0.5">Manage citizen accounts, verify registrations, and review incentive points.</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <a :href="route('official.pdf.resident-participation') + '?action=stream'" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-900 border border-rose-200 rounded-xl text-sm font-semibold transition-all">
+                    <component :is="Printer" class="w-4 h-4" />
+                    <span>Participation Report (PDF)</span>
+                </a>
+                <button
+                    @click="showRegisterModal = true"
+                    class="bg-rose-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-800 shadow-md transition-all"
+                >
+                    + Register Resident
+                </button>
+            </div>
         </div>
 
         <div class="mb-6 flex gap-3 flex-wrap">
@@ -252,7 +261,7 @@
 </template>
 
 <script setup>
-import { User, Phone, MapPin, Activity, Settings } from '@lucide/vue'
+import { User, Phone, MapPin, Activity, Settings, Printer } from '@lucide/vue'
 import { ref, computed } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import AuthLayout from '@/Layouts/AuthLayout.vue'

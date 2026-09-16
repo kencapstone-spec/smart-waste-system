@@ -76,10 +76,10 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function () {
     Route::get('/login', [OtpController::class, 'showLoginForm'])->name('login');
     Route::post('/login/send-otp', [OtpController::class, 'sendOtp'])->middleware('throttle:3,1')->name('login.send-otp');
-    Route::post('/login/verify-otp', [OtpController::class, 'verifyOtp'])->name('login.verify-otp');
+    Route::post('/login/verify-otp', [OtpController::class, 'verifyOtp'])->middleware('throttle:5,1')->name('login.verify-otp');
 
     Route::get('/register', [RegisterController::class, 'show'])->name('register');
-    Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+    Route::post('/register', [RegisterController::class, 'store'])->middleware('throttle:5,1')->name('register.store');
 });
 
 // Authenticated routes
@@ -127,9 +127,12 @@ Route::middleware('auth')->group(function () {
         Route::post('announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
         Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
 
+        Route::get('printed-reports', [PdfReportController::class, 'index'])->name('printed-reports.index');
         Route::get('pdf/collection-summary', [PdfReportController::class, 'collectionSummary'])->name('pdf.collection-summary');
         Route::get('pdf/complaints-summary', [PdfReportController::class, 'complaintsSummary'])->name('pdf.complaints-summary');
         Route::get('pdf/resident-participation', [PdfReportController::class, 'residentParticipation'])->name('pdf.resident-participation');
+        Route::get('pdf/complaints/{report}', [PdfReportController::class, 'singleComplaint'])->name('pdf.single-complaint');
+        Route::get('pdf/schedules', [PdfReportController::class, 'schedulesSummary'])->name('pdf.schedules');
     });
 
     // Personnel routes
@@ -157,8 +160,8 @@ Route::middleware('auth')->group(function () {
 Route::get('/run-background-jobs', function (\Illuminate\Http\Request $request) {
     $secret = config('app.cron_secret');
 
-    // Reject if no secret configured or secret mismatch
-    if (empty($secret) || $request->query('secret') !== $secret) {
+    // Reject if no secret configured or secret mismatch (constant-time comparison)
+    if (empty($secret) || ! hash_equals((string) $secret, (string) $request->query('secret'))) {
         abort(403, 'Unauthorized');
     }
 
@@ -179,9 +182,13 @@ Route::get('/run-background-jobs', function (\Illuminate\Http\Request $request) 
 
 // Dedicated route to serve user-uploaded storage files with fallback for missing/ephemeral uploads
 Route::get('/storage/{path}', function (string $path) {
-    $filePath = storage_path('app/public/' . $path);
-    if (file_exists($filePath) && is_file($filePath)) {
-        return response()->file($filePath);
+    $baseDir = realpath(storage_path('app/public'));
+    $targetPath = storage_path('app/public/' . $path);
+    $realPath = realpath($targetPath);
+
+    // Prevent directory traversal: path must exist and reside inside app/public
+    if ($realPath && $baseDir && str_starts_with($realPath, $baseDir) && is_file($realPath)) {
+        return response()->file($realPath);
     }
 
     // Clean placeholder SVG if file is missing or was uploaded prior to a server redeploy

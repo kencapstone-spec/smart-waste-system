@@ -6,10 +6,14 @@
 
         <title>{{ config('app.name', 'Smart Waste System') }}</title>
 
-        <!-- Google Fonts: Instrument Sans (CDN-hosted with instant swap) -->
+        <!-- Google Fonts: Instrument Sans (CDN-hosted, non-render-blocking) -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap">
+        <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+        <noscript>
+            <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+        </noscript>
 
         @routes
         @vite(['resources/css/app.css', 'resources/js/app.js'])

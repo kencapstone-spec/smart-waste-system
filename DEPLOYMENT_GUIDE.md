@@ -1,6 +1,58 @@
-# Laravel + Render Deployment Guide (100% Free Tier)
+# Deployment Guide: Railway & Render
 
-This guide provides a step-by-step process for deploying this Laravel + Inertia.js application for free using **Render** (for web hosting) and a free external database provider, bypassing the usual free tier limits.
+This guide provides step-by-step instructions for deploying this Laravel + Inertia.js application to **Railway** (recommended) or **Render**.
+
+---
+
+## Deploying on Railway (Recommended)
+
+Railway offers persistent execution, automatic Docker builds, instant zero-downtime deploys, and one-click database plugins.
+
+### 1. Connect Repository
+1. Log into [Railway.app](https://railway.app).
+2. Click **New Project** > **Deploy from GitHub repo**.
+3. Select your `smart-waste-system` repository.
+4. Railway will automatically detect [railway.json](file:///c:/xampp/htdocs/smart-waste-system/railway.json) and [Dockerfile](file:///c:/xampp/htdocs/smart-waste-system/Dockerfile).
+
+### 2. Add MySQL Database (1-Click)
+1. In your Railway project canvas, click **+ New** > **Database** > **Add MySQL**.
+2. Railway will provision a private MySQL container and generate environment variables (`MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, `MYSQLDATABASE`, `MYSQL_URL`).
+3. Click your application service > **Variables** > **Add Reference** and select the MySQL variables (or Railway links them automatically if connected). Our `config/database.php` automatically recognizes these!
+
+### 3. Add Application Environment Variables
+Under your Web Service > **Variables**, add:
+
+| Key | Value | Notes |
+|---|---|---|
+| `APP_NAME` | `Smart Waste System` | App name |
+| `APP_ENV` | `production` | Production environment |
+| `APP_KEY` | *(Run `php artisan key:generate --show` and paste)* | Required 32-char key |
+| `APP_DEBUG` | `false` | Security: hide traces |
+| `APP_URL` | `https://${{RAILWAY_PUBLIC_DOMAIN}}` | Your Railway domain |
+| `APP_TIMEZONE` | `Asia/Manila` | Philippines Time |
+| `DB_CONNECTION` | `mysql` | Database driver |
+| `PHP_CLI_SERVER_WORKERS` | `4` | 4x concurrency workers |
+| `SESSION_DRIVER` | `cookie` | Zero DB query overhead |
+| `CACHE_STORE` | `file` | Fast file caching |
+| `OTP_DEV_MODE` | `true` *(or `false` with Semaphore)* | Test OTP `123456` |
+| `CRON_SECRET` | *(Random secret string)* | For `/run-background-jobs` |
+
+### 4. Database Migrations & Auto-Seeding
+- Database migrations run **automatically** upon container startup via `docker-entrypoint.sh`.
+- To seed default barangay zones and test accounts on first deploy:
+  1. Go to your Web Service in Railway.
+  2. Open the **Deployments** tab > click the active deployment > open the **Terminal / Exec** console.
+  3. Run:
+     ```bash
+     php artisan db:seed --force
+     ```
+  4. Predefined accounts are now active:
+     - **Super Admin**: `09111111111` (OTP: `123456`)
+     - **Barangay Official**: `09333333333` (OTP: `123456`)
+     - **Personnel**: `09555555555` (OTP: `123456`)
+     - **Resident**: `09666666666` (OTP: `123456`)
+
+---
 
 ## Prerequisites
 - A GitHub account with your code pushed to a repository.

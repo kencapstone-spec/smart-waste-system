@@ -36,6 +36,9 @@ class RewardController extends Controller
 
         // Wrap the critical section in a transaction to prevent race conditions
         $result = DB::transaction(function () use ($user, $reward) {
+            // Lock the user row to serialize redemptions and prevent concurrency double-spending
+            \App\Models\User::where('id', $user->id)->lockForUpdate()->first();
+
             // Lock the reward row to prevent concurrent redemptions of the same stock
             $lockedReward = Reward::where('id', $reward->id)->lockForUpdate()->first();
 

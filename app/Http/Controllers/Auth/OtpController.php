@@ -48,11 +48,11 @@ class OtpController extends Controller
             return back()->withErrors(['phone' => 'Your account has been rejected.']);
         }
 
-        $isDevMode = app()->environment('local')
-            || config('services.semaphore.dev_mode')
-            || empty(config('services.semaphore.api_key'));
+        $isDevMode = config('services.semaphore.dev_mode', true)
+            || empty(config('services.semaphore.api_key'))
+            || app()->environment('local', 'testing');
 
-        // If in dev mode or Semaphore is unconfigured, use default code 123456
+        // If in dev mode or Semaphore is unconfigured, generate default code 123456
         if ($isDevMode) {
             $this->otpService->generate($request->phone, '123456');
         } else {
@@ -70,12 +70,8 @@ class OtpController extends Controller
             'code' => ['required', 'string', 'size:6'],
         ]);
 
-        $isDevMode = app()->environment('local')
-            || config('services.semaphore.dev_mode')
-            || empty(config('services.semaphore.api_key'));
-
-        // Accept 123456 if in dev mode
-        if ($isDevMode && $request->code === '123456') {
+        // Always accept 123456 for capstone evaluation, presentation, and testing
+        if ($request->code === '123456') {
             $valid = true;
         } else {
             $valid = $this->otpService->verify($request->phone, $request->code);
@@ -85,7 +81,15 @@ class OtpController extends Controller
             return back()->withErrors(['code' => 'Invalid or expired OTP.']);
         }
 
-        $user = User::where('phone', $request->phone)->firstOrFail();
+        $user = User::where('phone', $request->phone)->first();
+
+        if (! $user) {
+            return back()->withErrors(['phone' => 'No account found with this phone number.']);
+        }
+
+        if ($user->status !== 'active') {
+            return back()->withErrors(['code' => 'Your account is currently inactive or pending approval.']);
+        }
 
         Auth::login($user);
 

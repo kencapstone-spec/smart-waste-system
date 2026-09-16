@@ -323,7 +323,7 @@ import { ref, computed } from 'vue'
 import { usePage, useForm, Link } from '@inertiajs/vue3'
 import {
     Trash2, Home as HomeIcon, Users, Map as MapIcon, ClipboardList,
-    User as UserIcon, Calendar, FileText, Gift, Award, CheckCircle, Star, AlertTriangle, MoreHorizontal, Megaphone, Leaf
+    User as UserIcon, Calendar, FileText, Gift, Award, CheckCircle, Star, AlertTriangle, MoreHorizontal, Megaphone, Leaf, Printer
 } from '@lucide/vue'
 
 const showMobileMenu = ref(false)
@@ -361,6 +361,7 @@ const officialNav = [
     { label: 'Dashboard', href: route('dashboard'), icon: HomeIcon },
     { label: 'Schedules', href: route('official.schedules.index'), icon: Calendar },
     { label: 'Reports', href: route('official.reports.index'), icon: FileText },
+    { label: 'Printed Reports', href: route('official.printed-reports.index'), icon: Printer },
     { label: 'Residents', href: route('official.residents.index'), icon: Users },
     { label: 'Announcements', href: route('official.announcements.index'), icon: Megaphone },
     { label: 'Redemptions', href: route('official.redemptions.index'), icon: Gift },
@@ -422,6 +423,7 @@ const mobileNavConfig = computed(() => {
                 { label: 'Residents', href: route('official.residents.index'), icon: Users },
             ],
             more: [
+                { label: 'Printed Reports', href: route('official.printed-reports.index'), icon: Printer },
                 { label: 'Announcements', href: route('official.announcements.index'), icon: Megaphone },
                 { label: 'Redemptions', href: route('official.redemptions.index'), icon: Gift },
                 { label: 'Rewards', href: route('official.rewards.index'), icon: Award },
