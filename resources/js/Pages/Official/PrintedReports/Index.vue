@@ -26,54 +26,7 @@
             </div>
         </div>
 
-        <!-- Quick Summary Stats -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-4 sm:p-5 border border-white/60 shadow-lg shadow-rose-900/5 hover:-translate-y-0.5 transition-all">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Tasks</span>
-                    <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                        <component :is="CheckCircle" class="w-4 h-4" />
-                    </div>
-                </div>
-                <div class="flex items-baseline gap-2">
-                    <p class="text-2xl sm:text-3xl font-black text-gray-900">{{ stats.totalTasks }}</p>
-                    <span class="text-xs text-emerald-600 font-semibold">{{ stats.completedTasks }} done</span>
-                </div>
-            </div>
 
-            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-4 sm:p-5 border border-white/60 shadow-lg shadow-rose-900/5 hover:-translate-y-0.5 transition-all">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Reports Logged</span>
-                    <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
-                        <component :is="FileText" class="w-4 h-4" />
-                    </div>
-                </div>
-                <div class="flex items-baseline gap-2">
-                    <p class="text-2xl sm:text-3xl font-black text-gray-900">{{ stats.totalReports }}</p>
-                    <span class="text-xs text-amber-600 font-semibold">{{ stats.pendingReports }} pending</span>
-                </div>
-            </div>
-
-            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-4 sm:p-5 border border-white/60 shadow-lg shadow-rose-900/5 hover:-translate-y-0.5 transition-all">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Active Residents</span>
-                    <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                        <component :is="Users" class="w-4 h-4" />
-                    </div>
-                </div>
-                <p class="text-2xl sm:text-3xl font-black text-gray-900">{{ stats.activeResidents }}</p>
-            </div>
-
-            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-4 sm:p-5 border border-white/60 shadow-lg shadow-rose-900/5 hover:-translate-y-0.5 transition-all">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Active Schedules</span>
-                    <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-                        <component :is="Calendar" class="w-4 h-4" />
-                    </div>
-                </div>
-                <p class="text-2xl sm:text-3xl font-black text-gray-900">{{ stats.activeSchedules }}</p>
-            </div>
-        </div>
 
         <!-- 4 Main Report Generator Cards -->
         <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
