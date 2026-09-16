@@ -17,7 +17,7 @@ php artisan route:cache || true
 php artisan view:cache || true
 php artisan event:cache || true
 
-PORT_TO_USE="${PORT:-8080}"
+PORT_TO_USE="${PORT:-10000}"
 echo "Starting high-performance multi-worker server on port $PORT_TO_USE..."
 
 export PHP_CLI_SERVER_WORKERS="${PHP_CLI_SERVER_WORKERS:-4}"
